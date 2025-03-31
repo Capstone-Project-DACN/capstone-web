@@ -23,6 +23,7 @@
     "@reduxjs/toolkit": "2.4.0",
     "autosuggest-highlight": "3.3.4",
     "aws-amplify": "6.10.2",
+    "axios": "^1.8.4",
     "clsx": "2.1.1",
     "crypto-js": "4.2.0",
     "date-fns": "4.1.0",
@@ -59,6 +60,7 @@
     "stylis-plugin-rtl": "2.1.1",
     "type-fest": "4.30.0",
     "uuid": "11.0.3",
+    "yup": "^1.6.1",
     "zod": "3.23.8"
   },
   "peerDependencies": {
@@ -77,8 +79,8 @@
     "@eslint/js": "9.16.0",
     "@hookform/devtools": "4.3.1",
     "@tailwindcss/aspect-ratio": "0.4.2",
-    "@tailwindcss/vite": "4.0.0",
     "@tailwindcss/typography": "0.5.15",
+    "@tailwindcss/vite": "4.0.0",
     "@types/autosuggest-highlight": "3.2.3",
     "@types/crypto-js": "4.2.2",
     "@types/draft-js": "0.11.18",

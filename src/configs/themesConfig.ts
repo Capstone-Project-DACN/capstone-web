@@ -49,8 +49,8 @@ export const themesConfig: FuseThemesType = {
 				contrastText: '#FFFFFF'
 			},
 			background: {
-				paper: '#F4F4F4',
-				default: '#E8E8E8'
+				paper: '#FFFFFF',
+				default: '#F4F4F4'
 			},
 			error: {
 				light: '#FFCDD2',

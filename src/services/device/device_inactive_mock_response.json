@@ -1,0 +1,89 @@
+{
+    "inactive_thresold": "0 days, 0 hours, 0 minutes, 10 seconds",
+    "inactiveDevices": [
+        {
+            "deviceId": "area-HCMC-Q1",
+            "lastSeen": "2025-03-31T13:25:26.698Z"
+        },
+        {
+            "deviceId": "area-HCMC-Q2",
+            "lastSeen": "2025-03-31T13:25:40.699Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-0",
+            "lastSeen": "2025-03-31T13:25:45.622Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-1",
+            "lastSeen": "2025-03-31T13:25:45.623Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-2",
+            "lastSeen": "2025-03-31T13:25:45.623Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-3",
+            "lastSeen": "2025-03-31T13:25:45.624Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-4",
+            "lastSeen": "2025-03-31T13:25:45.624Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-5",
+            "lastSeen": "2025-03-31T13:25:45.624Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-6",
+            "lastSeen": "2025-03-31T13:25:45.624Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-7",
+            "lastSeen": "2025-03-31T13:25:45.624Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-10",
+            "lastSeen": "2025-03-31T13:25:45.625Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-11",
+            "lastSeen": "2025-03-31T13:25:45.625Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-12",
+            "lastSeen": "2025-03-31T13:25:45.625Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-13",
+            "lastSeen": "2025-03-31T13:25:45.625Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-14",
+            "lastSeen": "2025-03-31T13:25:45.625Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-8",
+            "lastSeen": "2025-03-31T13:25:45.625Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-9",
+            "lastSeen": "2025-03-31T13:25:45.625Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-15",
+            "lastSeen": "2025-03-31T13:25:45.626Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-16",
+            "lastSeen": "2025-03-31T13:25:45.626Z"
+        },
+        {
+            "deviceId": "household-HCMC-Q2-17",
+            "lastSeen": "2025-03-31T13:25:45.626Z"
+        }
+    ],
+    "pageNumber": 1,
+    "pageSize": 20,
+    "total": 2065,
+    "totalPages": 104
+}

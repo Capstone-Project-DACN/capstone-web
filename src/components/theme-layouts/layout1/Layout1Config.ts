@@ -1,5 +1,3 @@
-import { truncate } from "lodash";
-
 /**
  * The Layout1 Config object.
  */
@@ -11,7 +9,7 @@ const Layout1Config = {
 		navbar: {
 			display: true,
 			style: 'style-1',
-			folded: true,
+			folded: false,
 			position: 'left',
 			open: true
 		},

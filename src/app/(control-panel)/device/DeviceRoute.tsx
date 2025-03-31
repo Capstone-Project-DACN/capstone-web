@@ -4,19 +4,29 @@ import { FuseRouteItemType } from '@fuse/utils/FuseUtils';
 import en from './i18n/en';
 import tr from './i18n/tr';
 import ar from './i18n/ar';
+import { Navigate } from 'react-router';
 
 i18next.addResourceBundle('en', 'devicesPage', en);
 i18next.addResourceBundle('tr', 'devicesPage', tr);
 i18next.addResourceBundle('ar', 'devicesPage', ar);
 
-const Devices = lazy(() => import('./Devices'));
+const Device = lazy(() => import('./Device'));
 
 /**
  * The Example page route.
  */
-const DevicesRoute: FuseRouteItemType = {
-	path: '/devices',
-	element: <Devices />
+const DeviceRoute: FuseRouteItemType = {
+	path: 'device',
+	children: [
+		{
+			path: '',
+			element: <Navigate to='overview' />
+		},
+		{
+			path: ':tab',
+			element: <Device />
+		}
+	]
 };
 
-export default DevicesRoute;
+export default DeviceRoute;
