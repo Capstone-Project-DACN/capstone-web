@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import deviceService from "@/services/device/deviceService"
 import _ from "lodash";
 
-export const searchDevice = createAsyncThunk<any, any>(
+export const searchInactiveDevice = createAsyncThunk<any, any>(
   "device/search",
   async (params: { pageNumber?: number; pageSize?: number; dateTime?: boolean}, { getState }: any) => {
     try {
@@ -114,7 +114,7 @@ const deviceSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(searchDevice.fulfilled, (state, action: any) => {
+    builder.addCase(searchInactiveDevice.fulfilled, (state, action: any) => {
       state.data = action.payload.data;
       state.inactive_thresold = action.payload.inactive_thresold;
     });

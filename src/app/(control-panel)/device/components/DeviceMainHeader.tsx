@@ -13,7 +13,7 @@ const DeviceMainHeader = ({rightSidebarOpen, setRightSidebarOpen}) => {
 	}
 
     return (
-        <div className='w-full flex items-center justify-between'>
+        <div className='w-full flex items-center justify-between mb-5'>
             <Tabs value={params?.tab || "overview"} onChange={handleChange} centered>
                 <Tab value={"overview"} label="Overview" />
                 <Tab value={"districts"} label="Districts" />

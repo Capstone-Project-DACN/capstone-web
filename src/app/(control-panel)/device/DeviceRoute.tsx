@@ -10,7 +10,7 @@ i18next.addResourceBundle('en', 'devicesPage', en);
 i18next.addResourceBundle('tr', 'devicesPage', tr);
 i18next.addResourceBundle('ar', 'devicesPage', ar);
 
-const Device = lazy(() => import('./Device'));
+const Device = lazy(() => import('./DevicePage'));
 
 /**
  * The Example page route.
