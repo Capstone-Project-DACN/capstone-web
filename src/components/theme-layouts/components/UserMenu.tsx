@@ -64,7 +64,7 @@ function UserMenu(props: UserMenuProps) {
 							background: theme.palette.background.default,
 							color: theme.palette.text.secondary
 						})}
-						className="avatar w-10 h-10 rounded-lg"
+						className="avatar w-8 h-8 rounded-md"
 						alt="user photo"
 						src={user?.photoURL}
 						variant="rounded"

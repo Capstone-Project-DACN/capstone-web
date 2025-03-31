@@ -2,11 +2,11 @@
   "users": [
     {
       "id": "0",
-      "password": "5;4+0IOx:\\Dy",
+      "password": "Password1!",
       "role": "admin",
-      "displayName": "Abbott Keitch",
-      "photoURL": "/assets/images/avatars/brian-hughes.jpg",
-      "email": "admin@fusetheme.com",
+      "displayName": "Admin User",
+      "photoURL": "/assets/images/avatars/hcmut.png",
+      "email": "capstone@gmail.com",
       "settings": {
         "layout": {},
         "theme": {}

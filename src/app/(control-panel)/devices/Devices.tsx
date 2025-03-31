@@ -15,16 +15,15 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-sidebarContent': {}
 }));
 
-function Example() {
-	const { t } = useTranslation('examplePage');
+function Devices() {
 
 	return (
 		<Root
-			header={
-				<div className="p-6">
-					<h4>{t('TITLE')}</h4>
-				</div>
-			}
+			// header={
+			// 	<div className="p-6">
+			// 		<h4>{t('TITLE')}</h4>
+			// 	</div>
+			// }
 			content={
 				<div className="p-6">
 					<h4>Content</h4>
@@ -36,4 +35,4 @@ function Example() {
 	);
 }
 
-export default Example;
+export default Devices;

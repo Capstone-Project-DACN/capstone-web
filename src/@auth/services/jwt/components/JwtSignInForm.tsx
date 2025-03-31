@@ -46,8 +46,8 @@ function JwtSignInForm() {
 	const { isValid, dirtyFields, errors } = formState;
 
 	useEffect(() => {
-		setValue('email', 'admin@fusetheme.com', { shouldDirty: true, shouldValidate: true });
-		setValue('password', '5;4+0IOx:\\Dy', { shouldDirty: true, shouldValidate: true });
+		setValue('email', 'capstone@gmail.com', { shouldDirty: true, shouldValidate: true });
+		setValue('password', 'Password1!', { shouldDirty: true, shouldValidate: true });
 	}, [setValue]);
 
 	function onSubmit(formData: FormType) {

@@ -49,16 +49,32 @@ function SignInPage() {
 		<div className="flex min-w-0 flex-1 flex-col items-center sm:flex-row sm:justify-center md:items-start md:justify-start">
 			<Paper className="h-full w-full px-4 py-2 ltr:border-r-1 rtl:border-l-1 sm:h-auto sm:w-auto sm:rounded-xl sm:p-12 sm:shadow-sm md:flex md:h-full md:w-1/2 md:items-center md:justify-end md:rounded-none md:p-16 md:shadow-none">
 				<CardContent className="mx-auto w-full max-w-80 sm:mx-0 sm:w-80">
-					<img
-						className="w-12"
-						src="/assets/images/logo/logo.svg"
-						alt="logo"
-					/>
+					<div className='flex gap-4 items-center'> 
+						{/* <Typography className="mt-8 text-4xl font-extrabold leading-[1.25] tracking-tight">
+							Sign in
+						</Typography> */}
 
-					<Typography className="mt-8 text-4xl font-extrabold leading-[1.25] tracking-tight">
-						Sign in
-					</Typography>
-					<div className="mt-0.5 flex items-baseline font-medium">
+						<div className="flex flex-1 items-center space-x-2">
+							<img
+								className="w-12"
+								src="/assets/images/logo/logo.svg"
+								alt="logo"
+							/>
+							<div className="logo-text flex flex-col flex-auto gap-0.5">
+								<Typography className="text-2xl tracking-light font-semibold leading-none">CAPSTONE</Typography>
+								<Typography
+									className="text-[13.6px] tracking-light font-semibold leading-none"
+									color="primary"
+									sx={{
+										color: '#82d7f7'
+									}}
+								>
+									ELECTRO CITY
+								</Typography>
+							</div>
+						</div>
+					</div>
+					{/* <div className="mt-0.5 flex items-baseline font-medium">
 						<Typography>Don't have an account?</Typography>
 						<Link
 							className="ml-1"
@@ -66,9 +82,9 @@ function SignInPage() {
 						>
 							Sign up
 						</Link>
-					</div>
+					</div> */}
 
-					<Box
+					{/* <Box
 						className="mt-6 text-md leading-[1.625] rounded-lg py-2 px-4"
 						sx={{
 							backgroundColor: (theme) => lighten(theme.palette.primary.main, 0.8),
@@ -77,9 +93,9 @@ function SignInPage() {
 					>
 						You are browsing <b>Fuse React Demo</b>. Click on the "Sign in" button to access the Demo and
 						Documentation.
-					</Box>
+					</Box> */}
 
-					<Tabs
+					{/* <Tabs
 						value={_.findIndex(tabs, { id: selectedTabId })}
 						variant="fullWidth"
 						className="w-full mt-6 mb-8"
@@ -111,11 +127,11 @@ function SignInPage() {
 								label={item.title}
 							/>
 						))}
-					</Tabs>
+					</Tabs> */}
 
 					{selectedTabId === 'jwt' && <JwtLoginTab />}
-					{selectedTabId === 'firebase' && <FirebaseSignInTab />}
-					{selectedTabId === 'aws' && <AwsSignInTab />}
+					{/* {selectedTabId === 'firebase' && <FirebaseSignInTab />}
+					{selectedTabId === 'aws' && <AwsSignInTab />} */}
 				</CardContent>
 			</Paper>
 
@@ -186,12 +202,12 @@ function SignInPage() {
 
 				<div className="relative z-10 w-full max-w-4xl">
 					<div className="text-7xl font-bold leading-none text-gray-100">
-						<div>Welcome to</div>
-						<div>our community</div>
+						<div>Welcome to </div>
+						<div>our smart energy community</div>
 					</div>
 					<div className="mt-6 text-lg leading-6 tracking-tight text-gray-400">
-						Fuse helps developers to build organized and well coded dashboards full of beautiful and rich
-						modules. Join us and start building your application today.
+						Our system helps you monitor and manage electricity consumption efficiently while detecting anomalies in real-time. 
+						Join us to ensure a more stable and optimized energy network.
 					</div>
 					<div className="mt-8 flex items-center">
 						<AvatarGroup
