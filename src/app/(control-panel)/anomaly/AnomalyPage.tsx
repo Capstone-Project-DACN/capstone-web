@@ -2,12 +2,12 @@ import { styled } from '@mui/material/styles';
 import withReducer from '@/store/withReducer';
 import reducer from './store';
 import { useMediaQuery } from '@mui/material';
-import { useLocation, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import StyledFusePageSimple from '@fuse/core/FusePageSimple';
-import DeviceMainHeader from './components/DeviceMainHeader';
-import AddDeviceForm from './components/AddDeviceForm';
-import DeviceMainContent from './components/DeviceMainContent';
+import AnomalyMainHeader from './components/AnomalyMainHeader';
+import AnomalyDetail from './components/AnomalyDetail';
+import AnomalyMainContent from './components/AnomalyMainContent';
 
 const Root = styled(StyledFusePageSimple)(({ theme }) => ({
 	"& .FusePageSimple-header": {
@@ -24,27 +24,28 @@ const Root = styled(StyledFusePageSimple)(({ theme }) => ({
 	}
   }));
 
-function DevicePage() {
+function AnomalyPage() {
 	const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 	const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
-	const location = useLocation();
-	const addNew = new URLSearchParams(location.search).get("new") || "";
+	const params = useParams();
 
 	useEffect(() => {
-		setRightSidebarOpen(addNew === "true");
-	}, []);
+		if(params?.id) setRightSidebarOpen(true);
+		else setRightSidebarOpen(false);
+	}, [params?.id]);
  
 	return (
 		<Root
-			header={<DeviceMainHeader rightSidebarOpen={rightSidebarOpen} setRightSidebarOpen={setRightSidebarOpen} />}
-			content={<DeviceMainContent />}
+			header={<AnomalyMainHeader rightSidebarOpen={rightSidebarOpen} setRightSidebarOpen={setRightSidebarOpen} />}
+			content={<AnomalyMainContent />}
 			rightSidebarOpen={rightSidebarOpen}
-			rightSidebarContent={<AddDeviceForm setRightSidebarOpen={setRightSidebarOpen}  />}
+			rightSidebarContent={<AnomalyDetail setRightSidebarOpen={setRightSidebarOpen}  />}
 			rightSidebarOnClose={() => setRightSidebarOpen(false)}
 			rightSidebarWidth={500}
+			rightSidebarVariant={isMobile ? "temporary" : "permanent"}
 			scroll={isMobile ? "normal" : "content"}
 		/>
 	);
 }
 
-export default withReducer("device", reducer)(DevicePage);
+export default withReducer("anomaly", reducer)(AnomalyPage);

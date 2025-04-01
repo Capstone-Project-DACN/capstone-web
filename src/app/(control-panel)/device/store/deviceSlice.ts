@@ -135,8 +135,4 @@ export const {
   resetSearchText
 } = deviceSlice.actions;
 
-export const selectFeeds = ({ feeds }) => feeds.feedsManagement.data ;
-
-export const selectSearchText = ({ feeds }) => feeds.feedsManagement.searchText;
-
 export default deviceSlice.reducer;

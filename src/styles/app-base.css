@@ -134,3 +134,13 @@ input:-webkit-autofill:active
 .fc-scrollgrid-section-liquid {
     height: 1px !important;
 }
+
+.scrollbar-hide {
+    overflow: auto;  
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+  
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;  
+}

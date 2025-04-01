@@ -1,5 +1,5 @@
 import FuseUtils from "@fuse/utils";
-import deviceResponse from "./device_inactive_mock_response.json";
+import deviceResponse from "./inactiveResponse.json";
 import axios from "axios";
 
 class deviceService extends FuseUtils.EventEmitter {
