@@ -57,7 +57,7 @@ const DeviceItem = ({ device }) => {
       }}
       className="flex items-center font-normal justify-between h-15 px-4 border-b border-r border-l"
     >
-      <div className="w-2/12 pl-2">Device {device.id}</div>
+      <div className="w-3/12 pl-2 line-clamp-1 trucate">{device.deviceId}</div>
       <div className="w-2/12">
         <Typography variant="body2">
          {device.electricity_usage_kwh.toFixed(2)} kWh
@@ -73,7 +73,7 @@ const DeviceItem = ({ device }) => {
            {device.current} A
         </Typography>
       </div>
-      <div className="w-3/12 flex items-center justify-between">
+      <div className="w-2/12 flex items-center justify-between">
         <Typography variant="body2">
             {device.voltage} V
         </Typography>

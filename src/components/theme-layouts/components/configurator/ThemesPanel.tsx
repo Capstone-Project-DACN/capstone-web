@@ -11,7 +11,6 @@ import themeOptions from 'src/configs/themeOptions';
 import { FuseThemeOption } from '@fuse/core/FuseThemeSelector/ThemePreview';
 import useUser from '@auth/useUser';
 import useFuseSettings from '@fuse/core/FuseSettings/hooks/useFuseSettings';
-
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import { FuseSettingsConfigType } from '@fuse/core/FuseSettings/FuseSettings';
 import { useAppDispatch } from '@/store/hooks';

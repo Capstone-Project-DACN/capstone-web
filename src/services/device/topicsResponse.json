@@ -1,0 +1,19 @@
+{
+    "topics": [
+      { "id": 1, "name": "area_HCMC_Q1", "deviceCount": 12 },
+      { "id": 2, "name": "area_HCMC_Q3", "deviceCount": 8 },
+      { "id": 3, "name": "area_HCMC_Q4", "deviceCount": 15 },
+      { "id": 4, "name": "area_HCMC_Q5", "deviceCount": 6 },
+      { "id": 5, "name": "area_HCMC_Q6", "deviceCount": 9 },
+      { "id": 6, "name": "area_HCMC_Q7", "deviceCount": 10 },
+      { "id": 7, "name": "area_HCMC_Q8", "deviceCount": 8 },
+      { "id": 8, "name": "area_HCMC_Q9", "deviceCount": 11 },
+      { "id": 9, "name": "area_HCMC_Q10", "deviceCount": 7 },
+      { "id": 10, "name": "area_HCMC_Q11", "deviceCount": 9 },
+      { "id": 13, "name": "household_HCMC_QBTHANH", "deviceCount": 9 },
+      { "id": 14, "name": "household_HCMC_QTP", "deviceCount": 3 },
+      { "id": 15, "name": "household_data", "deviceCount": 4 },
+      { "id": 16, "name": "anomaly-alerts", "deviceCount": 4 }
+    ]
+}
+  

@@ -41,7 +41,7 @@ function DevicePage() {
 			rightSidebarOpen={rightSidebarOpen}
 			rightSidebarContent={<AddDeviceForm setRightSidebarOpen={setRightSidebarOpen}  />}
 			rightSidebarOnClose={() => setRightSidebarOpen(false)}
-			rightSidebarWidth={500}
+			rightSidebarWidth={450}
 			scroll={isMobile ? "normal" : "content"}
 		/>
 	);

@@ -1,0 +1,183 @@
+{
+    "devices" : [
+    {
+      "deviceId": "household_HCMC_Q1_001",
+      "created_at": 1743098696813,
+      "electricity_usage_kwh": 6206.73,
+      "voltage": 464,
+      "current": 416.78,
+      "last_seen": 1743272907607,
+      "isFollowed": true
+    },{
+        "deviceId": "household_HCMC_Q1_001",
+        "created_at": 1743098696813,
+        "electricity_usage_kwh": 6206.73,
+        "voltage": 464,
+        "current": 416.78,
+        "last_seen": 1743272907607,
+        "isFollowed": true
+      },
+      {
+        "deviceId": "household_HCMC_Q3_002",
+        "created_at": 1743098696813,
+        "electricity_usage_kwh": 5102.35,
+        "voltage": 435,
+        "current": 398.42,
+        "last_seen": 1743272807607,
+        "isFollowed": false
+      },
+      {
+        "deviceId": "household_HCMC_Q4_003",
+        "created_at": 1743098696813,
+        "electricity_usage_kwh": 7304.21,
+        "voltage": 472,
+        "current": 425.16,
+        "last_seen": 1743272707607,
+        "isFollowed": false
+      },
+      {
+        "deviceId": "household_HCMC_Q5_004",
+        "created_at": 1743098696813,
+        "electricity_usage_kwh": 6789.48,
+        "voltage": 458,
+        "current": 412.93,
+        "last_seen": 1743272607607,
+        "isFollowed": true
+      },
+      {
+        "deviceId": "household_HCMC_Q6_005",
+        "created_at": 1743098696813,
+        "electricity_usage_kwh": 4987.62,
+        "voltage": 440,
+        "current": 402.27,
+        "last_seen": 1743272507607,
+        "isFollowed": false
+      },
+      {
+        "deviceId": "household_HCMC_Q7_006",
+        "created_at": 1743098696813,
+        "electricity_usage_kwh": 5320.89,
+        "voltage": 450,
+        "current": 407.15,
+        "last_seen": 1743272407607,
+        "isFollowed": true
+      },
+      {
+        "deviceId": "household_HCMC_Q8_007",
+        "created_at": 1743098696813,
+        "electricity_usage_kwh": 6290.34,
+        "voltage": 470,
+        "current": 420.78,
+        "last_seen": 1743272307607,
+        "isFollowed": false
+      },
+      {
+        "deviceId": "household_HCMC_Q9_008",
+        "created_at": 1743098696813,
+        "electricity_usage_kwh": 5897.23,
+        "voltage": 455,
+        "current": 410.92,
+        "last_seen": 1743272207607,
+        "isFollowed": true
+      },
+      {
+        "deviceId": "household_HCMC_Q10_009",
+        "created_at": 1743098696813,
+        "electricity_usage_kwh": 4732.15,
+        "voltage": 430,
+        "current": 395.27,
+        "last_seen": 1743272107607,
+        "isFollowed": false
+      },
+      {
+        "deviceId": "household_HCMC_Q11_010",
+        "created_at": 1743098696813,
+        "electricity_usage_kwh": 5482.67,
+        "voltage": 460,
+        "current": 415.78,
+        "last_seen": 1743272007607,
+        "isFollowed": true
+      },
+    {
+      "deviceId": "household_HCMC_Q3_002",
+      "created_at": 1743098696813,
+      "electricity_usage_kwh": 5102.35,
+      "voltage": 435,
+      "current": 398.42,
+      "last_seen": 1743272807607,
+      "isFollowed": false
+    },
+    {
+      "deviceId": "household_HCMC_Q4_003",
+      "created_at": 1743098696813,
+      "electricity_usage_kwh": 7304.21,
+      "voltage": 472,
+      "current": 425.16,
+      "last_seen": 1743272707607,
+      "isFollowed": false
+    },
+    {
+      "deviceId": "household_HCMC_Q5_004",
+      "created_at": 1743098696813,
+      "electricity_usage_kwh": 6789.48,
+      "voltage": 458,
+      "current": 412.93,
+      "last_seen": 1743272607607,
+      "isFollowed": true
+    },
+    {
+      "deviceId": "household_HCMC_Q6_005",
+      "created_at": 1743098696813,
+      "electricity_usage_kwh": 4987.62,
+      "voltage": 440,
+      "current": 402.27,
+      "last_seen": 1743272507607,
+      "isFollowed": false
+    },
+    {
+      "deviceId": "household_HCMC_Q7_006",
+      "created_at": 1743098696813,
+      "electricity_usage_kwh": 5320.89,
+      "voltage": 450,
+      "current": 407.15,
+      "last_seen": 1743272407607,
+      "isFollowed": true
+    },
+    {
+      "deviceId": "household_HCMC_Q8_007",
+      "created_at": 1743098696813,
+      "electricity_usage_kwh": 6290.34,
+      "voltage": 470,
+      "current": 420.78,
+      "last_seen": 1743272307607,
+      "isFollowed": false
+    },
+    {
+      "deviceId": "household_HCMC_Q9_008",
+      "created_at": 1743098696813,
+      "electricity_usage_kwh": 5897.23,
+      "voltage": 455,
+      "current": 410.92,
+      "last_seen": 1743272207607,
+      "isFollowed": true
+    },
+    {
+      "deviceId": "household_HCMC_Q10_009",
+      "created_at": 1743098696813,
+      "electricity_usage_kwh": 4732.15,
+      "voltage": 430,
+      "current": 395.27,
+      "last_seen": 1743272107607,
+      "isFollowed": false
+    },
+    {
+      "deviceId": "household_HCMC_Q11_010",
+      "created_at": 1743098696813,
+      "electricity_usage_kwh": 5482.67,
+      "voltage": 460,
+      "current": 415.78,
+      "last_seen": 1743272007607,
+      "isFollowed": true
+    }
+  ]
+  }

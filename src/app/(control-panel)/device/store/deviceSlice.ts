@@ -51,10 +51,39 @@ export const addHouseholdDevice = createAsyncThunk<any, any>(
         console.log(err);
       }
     }
-  );
+);
+
+export const getDeviceTopics = createAsyncThunk<any, any>(
+  "device/getTopics",
+  async (params: any, { getState }: any) => {
+      
+    try {
+      const response = (await deviceService.getDeviceTopics()) as any;
+      console.log(response.topics);
+      return {topics: response.topics};
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const getDeviceByTopic = createAsyncThunk<any, any>(
+  "device/getDeviceByTopic",
+  async (params: {topic: string}, { getState }: any) => {
+      
+    try {
+      const response = (await deviceService.getDevicesByTopic(params)) as any;
+      console.log(response?.devices);
+      return {devices: response?.devices};
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
  
 interface deviceSliceState {
-  data: [];
+  data: [],
+  topics: [],
   loading: boolean,
   searchText: any,
   totalElements: number,
@@ -71,6 +100,7 @@ interface deviceSliceState {
 const initialState: deviceSliceState = {
   data: [],
   loading: false,
+  topics: [],
   searchText: '',
   totalElements: 0,
   totalPages: 0,
@@ -119,10 +149,16 @@ const deviceSlice = createSlice({
       state.inactive_thresold = action.payload.inactive_thresold;
     });
     builder.addCase(addHouseholdDevice.fulfilled, (state, action: any) => {
-      state.feedDetail.data = action.payload;
+      // state.feedDetail.data = action.payload;
     });
     builder.addCase(addAreaDevice.fulfilled, (state, action: any) => {
-      state.feedDetail.data = action.payload;
+      // state.feedDetail.data = action.payload;
+    });
+    builder.addCase(getDeviceTopics.fulfilled, (state, action: any) => {
+      state.topics = action.payload.topics;
+    });
+    builder.addCase(getDeviceByTopic.fulfilled, (state, action: any) => {
+      state.data = action.payload.devices;
     });
   },
 }); 

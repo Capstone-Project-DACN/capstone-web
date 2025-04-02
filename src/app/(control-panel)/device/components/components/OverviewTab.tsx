@@ -13,54 +13,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import FuseLoading from "@fuse/core/FuseLoading";
 import DeviceItem from "@/components/device/DeviceItem";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { getDeviceByTopic, getDeviceTopics } from "../../store/deviceSlice";
+import { useSelector } from "react-redux";
 
-const fakeDevices = [
-  {
-    id: "dev-001",
-    created_at: 1743098696813,
-    electricity_usage_kwh: 6206.73,
-    voltage: 464,
-    current: 416.78,
-    last_seen: 1743272907607,
-    isFollowed: true,
-  },
-  {
-    id: "dev-002",
-    created_at: 1743098696813,
-    electricity_usage_kwh: 5102.35,
-    voltage: 435,
-    current: 398.42,
-    last_seen: 1743272807607,
-    isFollowed: false,
-  },
-  {
-    id: "dev-003",
-    created_at: 1743098696813,
-    electricity_usage_kwh: 7304.21,
-    voltage: 472,
-    current: 425.16,
-    last_seen: 1743272707607,
-    isFollowed: false,
-  },
-  {
-    id: "dev-004",
-    created_at: 1743098696813,
-    electricity_usage_kwh: 6789.48,
-    voltage: 458,
-    current: 412.93,
-    last_seen: 1743272607607,
-    isFollowed: true,
-  },
-  {
-    id: "dev-005",
-    created_at: 1743098696813,
-    electricity_usage_kwh: 4987.62,
-    voltage: 440,
-    current: 402.27,
-    last_seen: 1743272507607,
-    isFollowed: false,
-  },
-];
+
 // Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -113,30 +71,31 @@ const StickyHeader = styled(Box)(({ theme }) => ({
 }));
 const OverviewTab = () => {
   const theme = useTheme();
-  const [topics, setTopics] = useState([]);
-  const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(false);
   const searchParams = new URLSearchParams(window.location.search);
   const topicParam = searchParams.get("topic");
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const topics = useSelector((state: any) => state?.device?.deviceSlice?.topics);
+  const data = useSelector((state: any) => state?.device?.deviceSlice?.data);
 
   useEffect(() => {
-    const fakeTopics = [
-      { id: 1, name: "Area Q1", deviceCount: 12 },
-      { id: 2, name: "Area Q4", deviceCount: 8 },
-      { id: 3, name: "Area BT", deviceCount: 15 },
-      { id: 4, name: "Area W5", deviceCount: 6 },
-    ];
-    setTopics(fakeTopics);
-    if (!topicParam && fakeTopics.length > 0) navigate(`/device/overview?topic=${fakeTopics[0].name}`);
+    setLoading(true);
+    dispatch(getDeviceTopics({})).then((res) => {
+        console.log(res);
+        if (!topicParam && res.payload.topics.length > 0) navigate(`/device/overview?topic=${res.payload?.topics[0].name}`);
+    })
   }, []);
 
   useEffect(() => {
     if (topicParam) {
       setLoading(true);
       setTimeout(() => {
-        setDevices([...fakeDevices, ...fakeDevices, ...fakeDevices]);
-        setLoading(false);
+        dispatch(getDeviceByTopic({topic: topicParam})).then((res) => {
+            setLoading(false);
+        }).finally(() => {
+            setLoading(false);
+        })
       }, 300);
     }
   }, [topicParam]);
@@ -148,68 +107,68 @@ const OverviewTab = () => {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="h-full overflow-hidden"
+      className="h-full flex justify-between gap-x-5 relative"
     >
-      <div className="flex justify-between gap-x-5 relative">
-        <Box className="w-1/4">
-          <Box className="flex items-center justify-between mb-4">
+        <Box className="w-1/4 h-full overflow-y-auto  scrollbar-hide">
+          {/* <Box className="flex items-center justify-between mb-4">
             <Typography className="font-semibold text-lg">
               Topics (Areas)
             </Typography>
-          </Box>
-
-          <AnimatePresence>
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="flex flex-col"
-            >
-              {topics.map((topic) => {
-                const updatedParams = new URLSearchParams(
-                  window.location.search
-                );
-                updatedParams.set("topic", topic.name);
-                return (
-                  <motion.div key={topic.id} variants={itemVariants}>
-                    <Box
-                      role="button"
-                      component={Link}
-                      to={`/device/overview?${updatedParams.toString()}`}
-                      className={`flex items-center justify-between px-4 py-4 cursor-pointer border-b`}
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: theme.palette.action.hover,
-                        },
-                        backgroundColor:
-                          topicParam === topic.name
-                            ? theme.palette.action.hover
-                            : "",
-                      }}
+          </Box> */}
+            <Box className="flex flex-col   overflow-y-scroll scrollbar-hide">
+                <AnimatePresence>
+                    <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
                     >
-                      <Typography
-                        variant="body1"
-                        fontWeight={topicParam === topic.name ? 500 : 400}
-                      >
-                        {topic.name}
-                      </Typography>
-                      <Chip
-                        size="small"
-                        label={`${topic.deviceCount} devices`}
-                        color={
-                          topicParam === topic.name ? "secondary" : "default"
-                        }
-                      />
-                    </Box>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          </AnimatePresence>
+                    {topics?.map((topic: any) => {
+                        const updatedParams = new URLSearchParams(
+                        window.location.search
+                        );
+                        updatedParams.set("topic", topic.name);
+                        return (
+                        <motion.div key={topic.id} variants={itemVariants}>
+                            <Box
+                            role="button"
+                            component={Link}
+                            to={`/device/overview?${updatedParams.toString()}`}
+                            className={`flex items-center justify-between px-4 py-4 cursor-pointer border-b`}
+                            sx={{
+                                "&:hover": {
+                                backgroundColor: theme.palette.action.hover,
+                                },
+                                backgroundColor:
+                                topicParam === topic.name
+                                    ? theme.palette.action.hover
+                                    : "",
+                            }}
+                            >
+                            <Typography
+                                variant="body1"
+                                fontWeight={topicParam === topic.name ? 500 : 400}
+                                className="line-clamp-1 trucate w-[65%]" 
+                            >
+                                {topic.name}
+                            </Typography>
+                            <Chip
+                                size="small"
+                                label={`${topic.deviceCount} devices`}
+                                color={
+                                topicParam === topic.name ? "secondary" : "default"
+                                }
+                            />
+                            </Box>
+                        </motion.div>
+                        );
+                    })}
+                    </motion.div>
+                </AnimatePresence>
+            </Box>
         </Box>
 
-        <Box className="w-3/4 h-full rounded-md">
-          <Box className="flex items-center justify-between mb-4 w-full h-full overflow-y-scroll scrollbar-hide">
+        <Box className="w-3/4 h-full rounded-md overflow-y-auto scrollbar-hide">
+          <Box className="flex items-center justify-between mb-4 w-full h-full">
             {loading ? (
               <FuseLoading />
             ) : !topicParam ? (
@@ -226,9 +185,9 @@ const OverviewTab = () => {
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="w-full h-full"
+                  className="w-full h-full "
                 >
-                  <div className="flex sticky top-0 items-stretch pt-1 mb-4 w-full">
+                  <div className="flex  top-0 items-stretch pt-1 mb-4 w-full">
                     <TextField
                       id="outlined-basic"
                       label="Search device"
@@ -254,29 +213,29 @@ const OverviewTab = () => {
                       </FuseSvgIcon>
                     </Button>
                   </div>
-                  <StickyHeader>
+                  <StickyHeader className="border-t border-r border-l rounded-t-md">
                     <motion.div
-                      className="flex items-center font-semibold justify-between h-12 px-4 text-blue-600 uppercase"
+                      className="flex items-center font-semibold bg-gray-50 justify-between h-12 px-4 text-blue-600 uppercase"
                       initial={{ y: 0, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="w-2/12 pl-2">Device ID</div>
+                      <div className="w-3/12 pl-2">Device ID</div>
                       <div className="w-2/12">Usage</div>
                       <div className="w-3/12">Last seen</div>
                       <div className="w-2/12">Current</div>
-                      <div className="w-3/12">Voltage</div>
+                      <div className="w-2/12">Voltage</div>
                     </motion.div>
                   </StickyHeader>
-                  <Box className="h-150 overflow-y-scroll scrollbar-hide">
+                  <Box>
                     <motion.div
                       variants={containerVariants}
                       initial="hidden"
                       animate="visible"
                       className="flex flex-col"
                     >
-                      {devices?.map((device) => (
-                        <DeviceItem key={device.id} device={device} />
+                      {data?.map((device: any) => (
+                        <DeviceItem key={device.deviceId} device={device} />
                       ))}
                     </motion.div>
                   </Box>
@@ -285,7 +244,6 @@ const OverviewTab = () => {
             )}
           </Box>
         </Box>
-      </div>
     </motion.div>
   );
 };
