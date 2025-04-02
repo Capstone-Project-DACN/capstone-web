@@ -16,6 +16,20 @@ export const searchAnomaly = createAsyncThunk<any, any>(
   }
 );
 
+export const searchAnomalyByType = createAsyncThunk<any, any>(
+  "anomaly/filter/type",
+  async (params: { filterType : string }, { getState }: any) => {
+    try {
+      const response = (await anomalyService.searchAnomalyByType(params)) as any;
+      const anomalies = response?.anomalies || [];
+
+      return {data: anomalies};
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 export const searchAnomalyDetail = createAsyncThunk<any, any>(
   "anomaly/detail",
   async (params: { timestamp : string }, { getState }: any) => {
@@ -97,10 +111,14 @@ const anomalySlice = createSlice({
     builder.addCase(searchAnomaly.fulfilled, (state, action: any) => {
       state.data = action.payload.data;
     });
+
+    builder.addCase(searchAnomalyByType.fulfilled, (state, action: any) => {
+      state.data = action.payload.data;
+    });
+
     builder.addCase(searchAnomalyDetail.fulfilled, (state, action: any) => {
       state.detail = action.payload;
     });
-    
   },
 }); 
 

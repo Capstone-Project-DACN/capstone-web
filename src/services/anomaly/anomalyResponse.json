@@ -1,23 +1,25 @@
 {
     "anomalies": [
       {
+        "type": "AREA",
         "areaId": "area_HCMC_Q3",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q3: -15% difference, its a big anomaly, check it out",
         "analysisType": "RxJS Window",
-        "timestamp": 1743429628491,
-        "areaMeterTotal": 0,
+        "timestamp": 1743229628491,
+        "areaMeterTotal": 339.49,
         "householdMeterTotal": 384.49,
         "difference": 384.49,
-        "percentageDifference": null,
+        "percentageDifference": 3,
         "windowSize": null
       },
       {
-        "areaId": "area_HCMC_Q4",
+        "type": "HOUSEHOLD",
+        "areaId": "household_HCMC_Q4_10",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q4: -15% difference",
         "analysisType": "RxJS Window",
-        "timestamp": 1743429629542,
+        "timestamp": 1742429629542,
         "areaMeterTotal": 0,
         "householdMeterTotal": 61.57,
         "difference": 61.57,
@@ -25,11 +27,12 @@
         "windowSize": null
       },
       {
-        "areaId": "area_HCMC_Q3",
+        "type": "HOUSEHOLD",
+        "areaId": "household_HCMC_Q3_22",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q3: -15% difference",
         "analysisType": "RxJS Window",
-        "timestamp": 1743429631513,
+        "timestamp": 1743449631513,
         "areaMeterTotal": 0,
         "householdMeterTotal": 203.98,
         "difference": 203.98,
@@ -37,11 +40,12 @@
         "windowSize": null
       },
       {
+        "type": "AREA",
         "areaId": "area_HCMC_Q3",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q3: -9.98% difference",
         "analysisType": "RxJS Window",
-        "timestamp": 1743430290008,
+        "timestamp": 1743432290008,
         "areaMeterTotal": 327554.35000000056,
         "householdMeterTotal": 360250.2,
         "difference": 32695.849999999453,
@@ -49,6 +53,7 @@
         "windowSize": 90000
       },
       {
+        "type": "AREA",
         "areaId": "area_HCMC_Q5",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q5: -15% difference",
@@ -60,7 +65,8 @@
         "percentageDifference": null,
         "windowSize": null
       }, {
-        "areaId": "area_HCMC_Q3",
+        "type": "HOUSEHOLD",
+        "areaId": "household_HCMC_Q3_100",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q3: -15% difference",
         "analysisType": "RxJS Window",
@@ -71,11 +77,12 @@
         "percentageDifference": null,
         "windowSize": null
       }, {
+        "type": "AREA",
         "areaId": "area_HCMC_Q3",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q3: -15% difference",
         "analysisType": "RxJS Window",
-        "timestamp": 1743429628491,
+        "timestamp": 17434219628491,
         "areaMeterTotal": 0,
         "householdMeterTotal": 384.49,
         "difference": 384.49,
@@ -83,6 +90,7 @@
         "windowSize": null
       },
       {
+        "type": "AREA",
         "areaId": "area_HCMC_Q4",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q4: -15% difference",
@@ -95,6 +103,7 @@
         "windowSize": null
       },
       {
+        "type": "AREA",
         "areaId": "area_HCMC_Q3",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q3: -15% difference",
@@ -107,6 +116,7 @@
         "windowSize": null
       },
       {
+        "type": "AREA",
         "areaId": "area_HCMC_Q3",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q3: -9.98% difference",
@@ -119,11 +129,12 @@
         "windowSize": 90000
       },
       {
+        "type": "AREA",
         "areaId": "area_HCMC_Q4",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q4: -15% difference",
         "analysisType": "RxJS Window",
-        "timestamp": 1743429629542,
+        "timestamp": 1743429629541,
         "areaMeterTotal": 0,
         "householdMeterTotal": 61.57,
         "difference": 61.57,
@@ -131,11 +142,12 @@
         "windowSize": null
       },
       {
+        "type": "AREA",
         "areaId": "area_HCMC_Q3",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q3: -15% difference",
         "analysisType": "RxJS Window",
-        "timestamp": 1743429631513,
+        "timestamp": 1743429031513,
         "areaMeterTotal": 0,
         "householdMeterTotal": 203.98,
         "difference": 203.98,
@@ -143,11 +155,12 @@
         "windowSize": null
       },
       {
+        "type": "AREA",
         "areaId": "area_HCMC_Q3",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q3: -9.98% difference",
         "analysisType": "RxJS Window",
-        "timestamp": 1743430290008,
+        "timestamp": 1743439290008,
         "areaMeterTotal": 327554.35000000056,
         "householdMeterTotal": 360250.2,
         "difference": 32695.849999999453,
@@ -155,6 +168,7 @@
         "windowSize": 90000
       },
       {
+        "type": "AREA",
         "areaId": "area_HCMC_Q5",
         "severity": "MEDIUM",
         "message": "Anomaly detected in area area_HCMC_Q5: -15% difference",

@@ -19,6 +19,13 @@ const navigationConfig: FuseNavItemType[] = [
     type: "group",
     icon: "heroicons-outline:home",
     children: [
+    {
+      id: "dashboards.metric",
+      title: "Data Analytics Metrics",
+      type: "item",
+      icon: "heroicons-outline:globe-asia-australia",
+      url: "/dashboard",
+    },
 		{
 			id: "dashboards.device",
 			title: "Device Management",
@@ -32,13 +39,6 @@ const navigationConfig: FuseNavItemType[] = [
 			type: "item",
 			icon: "heroicons-outline:exclamation-triangle",
 			url: "/anomaly",
-		},
-		{
-			id: "dashboards.overview",
-			title: "District Overview",
-			type: "item",
-			icon: "heroicons-outline:globe-asia-australia",
-			url: "",
 		},
 		{
 			id: "dashboards.energy",

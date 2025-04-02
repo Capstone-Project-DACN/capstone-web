@@ -7,14 +7,12 @@ import { AppDispatch } from "@/store/store";
 const AmomalyHeader = ({ rightSidebarOpen, setRightSidebarOpen }) => {
   const navigation = useNavigate();
   const params = useParams();
-  const dispatch = useDispatch<AppDispatch>();
-  const newSidebarOpen =
-    new URLSearchParams(window.location.search).get("new") || "";
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     event.stopPropagation();
     event.preventDefault();
-    navigation(`/anomaly/${newValue}`);
+    if(params?.id) navigation(`/anomaly/${newValue}/${params?.id}`);
+    else navigation(`/anomaly/${newValue}`);
   };
 
   return (
