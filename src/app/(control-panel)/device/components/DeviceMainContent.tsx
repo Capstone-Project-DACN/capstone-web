@@ -1,8 +1,8 @@
 import { useParams } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import SettingsTab from "./components/SettingsTab";
 import InactiveTab from "./components/InactiveTab";
 import OverviewTab from "./components/OverviewTab";
+import ProduceDataTab from "./components/ProduceDataTab";
 
 const DeviceMainContent = () => {
   const params = useParams();
@@ -19,7 +19,7 @@ const DeviceMainContent = () => {
 
         {params.tab === "inactive" && <InactiveTab />}
 
-        {params.tab === "setting" && <SettingsTab />}
+        {params.tab === "produce" && <ProduceDataTab />}
       </AnimatePresence>
     </motion.div>
   );

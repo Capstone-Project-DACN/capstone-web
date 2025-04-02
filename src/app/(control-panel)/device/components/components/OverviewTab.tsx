@@ -128,7 +128,7 @@ const OverviewTab = () => {
       { id: 4, name: "Area W5", deviceCount: 6 },
     ];
     setTopics(fakeTopics);
-    if (!topicParam) navigate(`/device/overview?topic=${fakeTopics[0].name}`);
+    if (!topicParam && fakeTopics.length > 0) navigate(`/device/overview?topic=${fakeTopics[0].name}`);
   }, []);
 
   useEffect(() => {

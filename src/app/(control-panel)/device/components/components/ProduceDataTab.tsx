@@ -14,7 +14,8 @@ import {
   import { useState } from "react";
   import InfoIcon from '@mui/icons-material/Info';
   import SaveIcon from '@mui/icons-material/Save';
-  
+  import SensorsIcon from '@mui/icons-material/Sensors';
+
   const distributionMethods = ["Random", "Round-robin", "Custom"];
   const dataTypes = ["household", "area", "errors", "performance"];
   
@@ -36,7 +37,7 @@ import {
     }
   };
   
-  const SettingsTab = () => {
+  const ProduceDataTab = () => {
     const [cronTime, setCronTime] = useState("*/5 * * * *"); // Default every 5 minutes
     const [distribution, setDistribution] = useState("Random");
     const [batchSize, setBatchSize] = useState(10);
@@ -120,7 +121,7 @@ import {
             </FormControl>
   
             <FormControl fullWidth>
-              <Typography className="mb-2 font-medium flex items-center">
+              <Typography className="mb-2 mt-2 font-medium flex items-center">
                 📊 Distribution Method
               </Typography>
               <Select
@@ -136,7 +137,7 @@ import {
               </Select>
             </FormControl>
   
-            <Box className="mt-1">
+            <Box className="mt-2">
               <Typography className="font-medium flex items-center mb-2">
                 📦 Batch Size: <span className="ml-2 font-bold">{batchSize}</span>
               </Typography>
@@ -147,7 +148,7 @@ import {
                 step={1}
                 onChange={(_, newValue: any) => setBatchSize(newValue)}
                 valueLabelDisplay="auto"
-                color="primary"
+                color="secondary"
               />
             </Box>
   
@@ -170,19 +171,30 @@ import {
               </Select>
             </FormControl>
   
-            <Button 
-              variant="contained" 
-              color="secondary" 
-              startIcon={<SaveIcon />}
-              className="mt-4 rounded-sm hover:shadow-lg transition-all"
-              fullWidth
-            >
-              Save Configuration
-            </Button>
+            <div className="flex items-center gap-x-4">
+              <Button 
+                variant="outlined" 
+                color="secondary" 
+                startIcon={<SaveIcon />}
+                className="mt-4 rounded-sm hover:shadow-lg transition-all"
+                fullWidth
+              >
+                Save Configuration
+              </Button>
+              <Button 
+                variant="contained" 
+                color="primary" 
+                startIcon={<SensorsIcon />}
+                className="mt-4 rounded-sm hover:shadow-lg transition-all"
+                fullWidth
+              >
+                Produce Data
+              </Button>
+            </div>
           </motion.div>
         </Box>
       </motion.div>
     );
   };
   
-  export default SettingsTab;
+  export default ProduceDataTab;

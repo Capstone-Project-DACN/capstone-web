@@ -29,7 +29,7 @@ const DeviceMainHeader = ({rightSidebarOpen, setRightSidebarOpen}) => {
             <Tabs value={params?.tab || "overview"} onChange={handleChange} centered>
                 <Tab value={"overview"} label="Overview" />
                 <Tab value={"inactive"} label="Inactive" />
-                <Tab value={"setting"} label="Settings" />
+                <Tab value={"produce"} label="Produce Data" />
             </Tabs>
             {!rightSidebarOpen && <Button variant='contained' color="secondary" startIcon={<FuseSvgIcon>heroicons-outline:plus-small</FuseSvgIcon>} onClick={handleAddDevice} >Add Device</Button>}
         </div>
