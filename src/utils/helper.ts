@@ -2,7 +2,8 @@
 export function timeDifferenceLocalized(timestamp: any, locale = 'en') {
     const now = new Date();
     const past = new Date(timestamp);
-    const diffInSeconds = Math.floor((now - past) / 1000);
+    // const diffInSeconds = Math.floor((now - past) / 1000);
+    const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000);
   
     if (!isFinite(diffInSeconds)) {
       return ""

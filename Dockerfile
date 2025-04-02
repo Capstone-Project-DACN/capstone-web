@@ -1,4 +1,4 @@
-FROM node:18-alpine AS build
+FROM node:22-alpine AS build
 
 # Thiết lập thư mục làm việc trong container
 WORKDIR /app

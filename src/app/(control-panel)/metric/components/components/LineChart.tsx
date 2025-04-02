@@ -24,21 +24,21 @@ const dates = [
 const LineChart = () => {
     const [state, setState] = useState({
         series: [{
-          name: 'XYZ MOTORS',
+          name: "XYZ MOTORS",
           data: dates
         }],
         options: {
           chart: {
-            type: 'area',
+            type: "area" as const,
             stacked: false,
             height: 350,
             zoom: {
-              type: 'x',
+              type: "x" as const,
               enabled: true,
               autoScaleYaxis: true
             },
             toolbar: {
-              autoSelected: 'zoom'
+              autoSelected: "zoom" as const
             }
           },
           dataLabels: {
@@ -48,11 +48,11 @@ const LineChart = () => {
             size: 0,
           },
           title: {
-            text: 'Usage Statistics',
-            align: 'left'
+            text: "Usage Statistics" as const,
+            align: "left" as const
           },
           fill: {
-            type: 'gradient',
+            type: "gradient" as const,
             gradient: {
               shadeIntensity: 1,
               inverseColors: false,
@@ -63,21 +63,21 @@ const LineChart = () => {
           },
           yaxis: {
             labels: {
-              formatter: function (val) {
+              formatter: function (val: any) {
                 return (val / 1000000).toFixed(0);
               },
             },
             title: {
-              text: 'Price'
+              text: "Price" as const
             },
           },
           xaxis: {
-            type: 'datetime',
+            type: "datetime" as const,
           },
           tooltip: {
             shared: false,
             y: {
-              formatter: function (val) {
+              formatter: function (val: any) {
                 return (val / 1000000).toFixed(0)
               }
             }
