@@ -2,9 +2,39 @@ import FuseUtils from "@fuse/utils";
 import deviceResponse from "./inactiveResponse.json";
 import topicsResponse from "./topicsResponse.json";
 import devicesResponse from "./devicesResponse.json";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 class deviceService extends FuseUtils.EventEmitter {
+  constructor() {
+    super();
+    this.init();
+  }
+
+  init(): void {
+    this.setInterceptors();
+  }
+
+  setInterceptors = (): void => {
+    axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+    axios.defaults.headers.common["Content-Type"] = "application/json";
+    axios.interceptors.response.use(
+      (response: AxiosResponse) => {
+        return response;
+      },
+      async (err: AxiosError) => {
+        try {
+          return await new Promise((resolve, reject) => {
+            if (!err.response) {
+              reject(err);
+            }
+            throw err;
+          });
+        } catch (err_1: any) {
+        }
+      }
+    );
+  };
+
     searchInactiveDevice (params: {
       pageNumber?: number;
       pageSize?: number;

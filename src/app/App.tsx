@@ -13,6 +13,8 @@ import MainThemeProvider from '../contexts/MainThemeProvider';
 import store from '@/store/store';
 import routes from '@/configs/routesConfig';
 import AppContext from '@/contexts/AppContext';
+import { useEffect } from 'react';
+import deviceService from "@/services/device/deviceService"
 
 /**
  * The main App component.
@@ -21,6 +23,8 @@ function App() {
 	const AppContextValue = {
 		routes
 	};
+
+	useEffect(() => {deviceService.init()}, [])
 
 	return (
 		<ErrorBoundary>
