@@ -1,9 +1,4 @@
-import {
-  Box,
-  Typography,
-  IconButton,
-  useTheme
-} from "@mui/material";
+import { Box, Typography, IconButton, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import { useDispatch } from "react-redux";
@@ -26,7 +21,7 @@ const itemVariants = {
 };
 
 const JobItem = ({ job, index, onClick }: any) => {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const theme = useTheme();
   const [loading, setLoading] = useState<boolean>(false);
@@ -62,13 +57,49 @@ const JobItem = ({ job, index, onClick }: any) => {
       }}
     >
       <Box
-      sx={{
-        backgroundColor: jobQuickViewId == job.id && theme.palette.action.selected
-      }}
+        sx={{
+          backgroundColor:
+            jobQuickViewId == job.id && theme.palette.action.selected,
+        }}
         onClick={handleOnClick}
         className="flex items-center font-normal justify-between h-15 px-4 border-b border-r border-l cursor-pointer"
       >
-        <div className="w-3/10 pl-2 line-clamp-1 trucate">{job?.cron_type}</div>
+        <div className="w-3/10 pl-2 line-clamp-1 trucate flex gap-x-2">
+          {job?.cron_type == "HouseholdData" && (
+            <FuseSvgIcon
+              className="text-7xl"
+              size={18}
+              color={job.status === "running" ? "info" : "action"}
+            >
+              {job.status === "running"
+                ? "heroicons-solid:building-office"
+                : "heroicons-outline:building-office"}
+            </FuseSvgIcon>
+          )}
+          {job?.cron_type == "AreaData" && (
+            <FuseSvgIcon
+              className="text-7xl"
+              size={18}
+              color={job.status === "running" ? "info" : "action"}
+            >
+              {job.status === "running"
+                ? "heroicons-solid:globe-asia-australia"
+                : "heroicons-outline:globe-asia-australia"}
+            </FuseSvgIcon>
+          )}
+          {job?.cron_type == "AnomalyData" && (
+            <FuseSvgIcon
+              className="text-7xl"
+              size={18}
+              color={job.status === "running" ? "info" : "action"}
+            >
+              {job.status === "running"
+                ? "heroicons-solid:bug-ant"
+                : "heroicons-outline:bug-ant"}
+            </FuseSvgIcon>
+          )}
+          {job?.cron_type}
+        </div>
         <div className="w-2/10">
           <Typography variant="body2">{job.city_id}</Typography>
         </div>

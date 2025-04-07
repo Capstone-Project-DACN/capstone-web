@@ -202,7 +202,40 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
               }}
             >
               <Box className="flex justify-between items-center p-4">
-                <Typography className="text-lg font-medium">
+                <Typography className="text-lg font-medium flex gap-x-2 items-center">
+                  {jobDetail?.cron_type == "HouseholdData" && (
+                    <FuseSvgIcon
+                      className="text-7xl"
+                      size={22}
+                      color={jobDetail.status === "running" ? "info" : "action"}
+                    >
+                      {jobDetail.status === "running"
+                        ? "heroicons-solid:building-office"
+                        : "heroicons-outline:building-office"}
+                    </FuseSvgIcon>
+                  )}
+                  {jobDetail?.cron_type == "AreaData" && (
+                    <FuseSvgIcon
+                      className="text-7xl"
+                      size={22}
+                      color={jobDetail.status === "running" ? "info" : "action"}
+                    >
+                      {jobDetail.status === "running"
+                        ? "heroicons-solid:globe-asia-australia"
+                        : "heroicons-outline:globe-asia-australia"}
+                    </FuseSvgIcon>
+                  )}
+                  {jobDetail?.cron_type == "AnomalyData" && (
+                    <FuseSvgIcon
+                      className="text-7xl"
+                      size={22}
+                      color={jobDetail.status === "running" ? "info" : "action"}
+                    >
+                      {jobDetail.status === "running"
+                        ? "heroicons-solid:bug-ant"
+                        : "heroicons-outline:bug-ant"}
+                    </FuseSvgIcon>
+                  )}
                   {jobDetail?.cron_type} - {jobDetail?.city_id || "N/A"} -{" "}
                   {jobDetail?.district_id || "N/A"}
                 </Typography>

@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import ReactApexChart from 'react-apexcharts';
-import { Box, Typography, CircularProgress, Paper } from '@mui/material';
-import { ApexOptions } from 'apexcharts';
+import React, { useState, useEffect } from "react";
+import ReactApexChart from "react-apexcharts";
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  Paper,
+  IconButton,
+} from "@mui/material";
+import { ApexOptions } from "apexcharts";
+import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 
 interface DistributionChartProps {
   data: {
@@ -12,14 +19,14 @@ interface DistributionChartProps {
   height?: number;
 }
 
-const DistributionChart: React.FC<DistributionChartProps> = ({ 
-  data, 
+const DistributionChart: React.FC<DistributionChartProps> = ({
+  data,
   loading = false,
-  height = 350 
+  height = 350,
 }) => {
   // Filter out zero values and keep first set of non-zero values
   const processedData = React.useMemo(() => {
-    const nonZeroData = data.chart_data.filter(value => value > 0);
+    const nonZeroData = data.chart_data.filter((value) => value > 0);
     return nonZeroData;
   }, [data.chart_data]);
 
@@ -27,15 +34,15 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
   const categories = React.useMemo(() => {
     return Array.from({ length: processedData.length }, (_, i) => `${i + 1}`);
   }, [processedData.length]);
-  
+
   const [chartOptions, setChartOptions] = useState<ApexOptions>({
     chart: {
       height: height,
-      type: 'bar',
+      type: "bar",
       toolbar: {
         show: false,
       },
-      fontFamily: 'inherit',
+      fontFamily: "inherit",
       animations: {
         enabled: true,
         speed: 800,
@@ -44,9 +51,9 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
     plotOptions: {
       bar: {
         borderRadius: 4,
-        columnWidth: '90%',
+        columnWidth: "90%",
         dataLabels: {
-          position: 'top',
+          position: "top",
         },
       },
     },
@@ -57,13 +64,13 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
       },
       offsetY: -20,
       style: {
-        fontSize: '12px',
-        colors: ["#304758"]
-      }
+        fontSize: "12px",
+        colors: ["#304758"],
+      },
     },
     xaxis: {
       categories: categories,
-      position: 'bottom',
+      position: "bottom",
       labels: {
         show: true,
         rotate: -45,
@@ -71,97 +78,97 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
         hideOverlappingLabels: true,
         trim: true,
         style: {
-          fontSize: '10px',
+          fontSize: "10px",
         },
-        formatter: function(value) {
+        formatter: function (value) {
           // Show every 5th label to avoid crowding
           const index = parseInt(value);
-          return index % 5 === 0 ? value : '';
-        }
+          return index % 5 === 0 ? value : "";
+        },
       },
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
+        show: false,
       },
       tooltip: {
         enabled: false,
-      }
+      },
     },
     yaxis: {
       labels: {
         show: true,
         formatter: function (val: number) {
           return val.toFixed(0);
-        }
+        },
       },
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
+        show: false,
       },
     },
     grid: {
-      borderColor: '#f1f1f1',
+      borderColor: "#f1f1f1",
       strokeDashArray: 4,
       xaxis: {
         lines: {
-          show: false
-        }
+          show: false,
+        },
       },
       yaxis: {
         lines: {
-          show: true
-        }
+          show: true,
+        },
       },
     },
-    colors: ['#2E93fA'],
+    colors: ["#2E93fA"],
     title: {
       text: data.chart_title,
-      align: 'center',
+      align: "center",
       style: {
-        fontSize: '16px',
-        fontWeight: 'bold',
-        color: '#444'
-      }
+        fontSize: "16px",
+        fontWeight: "bold",
+        color: "#444",
+      },
     },
     tooltip: {
       enabled: true,
-      theme: 'light',
+      theme: "light",
       y: {
-        formatter: (val: number) => val.toFixed(0)
-      }
+        formatter: (val: number) => val.toFixed(0),
+      },
     },
   });
 
   const [series, setSeries] = useState<ApexAxisChartSeries>([
     {
-      name: 'Frequency',
-      data: processedData
-    }
+      name: "Frequency",
+      data: processedData,
+    },
   ]);
 
   useEffect(() => {
     // Update chart data when props change
-    setChartOptions(prevOptions => ({
+    setChartOptions((prevOptions) => ({
       ...prevOptions,
       title: {
         ...prevOptions.title,
-        text: data.chart_title
+        text: data.chart_title,
       },
       xaxis: {
         ...prevOptions.xaxis,
-        categories: categories
-      }
+        categories: categories,
+      },
     }));
 
     setSeries([
       {
-        name: 'Frequency',
-        data: processedData
-      }
+        name: "Frequency",
+        data: processedData,
+      },
     ]);
   }, [data, processedData, categories]);
 
@@ -187,7 +194,10 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
               height={height}
             />
           ) : (
-            <Box className="flex justify-center items-center" style={{ height: height }}>
+            <Box
+              className="flex justify-center items-center"
+              style={{ height: height }}
+            >
               <Typography variant="body1" color="textSecondary">
                 No data available to display
               </Typography>
@@ -204,15 +214,25 @@ const DistributedChart: React.FC = () => {
   const sampleData: any = {
     data: {
       chart_data: [
-        8, 10, 13, 15, 19, 23, 28, 34, 42, 50, 60, 71, 85, 100, 118, 138,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-      ]
-    }
+        8, 10, 13, 15, 19, 23, 28, 34, 42, 50, 60, 71, 85, 100, 118, 138, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0,
+      ],
+    },
   };
 
   return (
     <div className="w-full">
-      <Typography variant="body2"  className="font-semibold mb-2">Distribution Visualization</Typography>
+      <div className="flex items-center justify-between">
+        <Typography variant="body2" className="font-semibold mb-2">
+          Distribution Visualization
+        </Typography>
+        <IconButton>
+          <FuseSvgIcon className="text-7xl" size={22} color="action">
+            heroicons-outline:arrow-path
+          </FuseSvgIcon>
+        </IconButton>
+      </div>
       <DistributionChart data={sampleData.data} />
     </div>
   );
