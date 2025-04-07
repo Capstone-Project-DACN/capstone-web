@@ -1,0 +1,329 @@
+{
+    "total": 54,
+    "data": [
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "Q1",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "Q3",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "Q4",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "Q5",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "Q6",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "Q7",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "Q8",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "Q10",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "Q11",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "Q12",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "QGV",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "QTB",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "QBTAN",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "QBTHANH",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "QTP",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "HCMC",
+            "district_id": "QPN",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "TDUC",
+            "district_id": "Q2",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "HouseholdData",
+            "city_id": "TDUC",
+            "district_id": "Q9",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "Q1",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "Q3",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "Q4",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "Q5",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "Q6",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "Q7",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "Q8",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "Q10",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "Q11",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "Q12",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "QGV",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "QTB",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "QBTAN",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "QBTHANH",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "QTP",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "HCMC",
+            "district_id": "QPN",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "TDUC",
+            "district_id": "Q2",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AreaData",
+            "city_id": "TDUC",
+            "district_id": "Q9",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "Q1",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "Q3",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "Q4",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "Q5",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "Q6",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "Q7",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "Q8",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "Q10",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "Q11",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "Q12",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "QGV",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "QTB",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "QBTAN",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "QBTHANH",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "QTP",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "HCMC",
+            "district_id": "QPN",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "TDUC",
+            "district_id": "Q2",
+            "status": "stopped"
+        },
+        {
+            "cron_type": "AnomalyData",
+            "city_id": "TDUC",
+            "district_id": "Q9",
+            "status": "stopped"
+        }
+    ]
+}

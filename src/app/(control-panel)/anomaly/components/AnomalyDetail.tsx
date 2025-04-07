@@ -15,61 +15,69 @@ import { useNavigate, useParams } from "react-router";
 import { searchAnomalyDetail } from "../store/anomalySlice";
 import FuseLoading from "@fuse/core/FuseLoading";
 import { motion, AnimatePresence } from "framer-motion";
-import InfoIcon from '@mui/icons-material/Info';
-import WarningIcon from '@mui/icons-material/Warning';
-import ErrorIcon from '@mui/icons-material/Error';
+import InfoIcon from "@mui/icons-material/Info";
+import WarningIcon from "@mui/icons-material/Warning";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { 
+  visible: {
     opacity: 1,
-    transition: { 
+    transition: {
       when: "beforeChildren",
-      staggerChildren: 0.05
-    }
+      staggerChildren: 0.05,
+    },
   },
-  exit: { 
+  exit: {
     opacity: 0,
-    transition: { when: "afterChildren", staggerChildren: 0.01, staggerDirection: -1 }
-  }
+    transition: {
+      when: "afterChildren",
+      staggerChildren: 0.01,
+      staggerDirection: -1,
+    },
+  },
 };
 
 const itemVariants = {
   hidden: { y: 15, opacity: 0 },
-  visible: { 
-    y: 0, 
+  visible: {
+    y: 0,
     opacity: 1,
-    transition: { type: "spring", stiffness: 300, damping: 24 }
+    transition: { type: "spring", stiffness: 300, damping: 24 },
   },
-  exit: { y: -15, opacity: 0 }
+  exit: { y: -15, opacity: 0 },
 };
 
 const headerVariants = {
   hidden: { opacity: 0, y: -15 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } },
-  exit: { opacity: 0, y: -15 }
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 300, damping: 24 },
+  },
+  exit: { opacity: 0, y: -15 },
 };
 
 const getSeverityIcon = (severity) => {
   switch (severity?.toUpperCase()) {
-    case 'HIGH':
-      return <ErrorIcon color="error" fontSize="small"/>;
-    case 'MEDIUM':
-      return <WarningIcon color="warning" fontSize="small"/>;
-    case 'LOW':
-      return <InfoIcon color="info" fontSize="small"/>; 
+    case "HIGH":
+      return <ErrorIcon color="error" fontSize="small" />;
+    case "MEDIUM":
+      return <WarningIcon color="warning" fontSize="small" />;
+    case "LOW":
+      return <InfoIcon color="info" fontSize="small" />;
     default:
-      return <InfoIcon fontSize="small"/>;
+      return <InfoIcon fontSize="small" />;
   }
 };
 
 const getSeverityColor = (severity) => {
   switch (severity?.toUpperCase()) {
-    case 'HIGH':
+    case "HIGH":
       return "error";
-    case 'MEDIUM':
+    case "MEDIUM":
       return "warning";
-    case 'LOW':
+    case "LOW":
       return "info";
     default:
       return "default";
@@ -77,28 +85,31 @@ const getSeverityColor = (severity) => {
 };
 
 const formatAreaId = (areaId) => {
-  if (!areaId) return '';
-  return areaId.replace('area_', '').replace(/_/g, ' ');
+  if (!areaId) return "";
+  return areaId.replace("area_", "").replace(/_/g, " ");
 };
 
-const AnomalyDetail = ({setRightSidebarOpen}) => {
+const AnomalyDetail = ({ setRightSidebarOpen }) => {
   const navigate = useNavigate();
   const params = useParams();
-  const dispatch = useDispatch<AppDispatch>(); 
+  const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
-  const detail = useSelector((state: any) => state.anomaly?.anomalySlice?.detail);
+  const detail = useSelector(
+    (state: any) => state.anomaly?.anomalySlice?.detail
+  );
   const data = detail?.data;
 
   useEffect(() => {
     setLoading(true);
-    dispatch(searchAnomalyDetail({ timestamp: params.id }))
-      .then((response: any) => { 
+    dispatch(searchAnomalyDetail({ timestamp: params.id })).then(
+      (response: any) => {
         setTimeout(() => {
           setTimeout(() => {
             setLoading(false);
           }, 150);
-        }, 350); 
-      });
+        }, 350);
+      }
+    );
   }, [params.id, dispatch]);
 
   const handleBack = () => {
@@ -120,7 +131,7 @@ const AnomalyDetail = ({setRightSidebarOpen}) => {
         <div className="flex items-center mt-1">
           <IconButton onClick={handleBack} className="">
             <FuseSvgIcon className="text-7xl" size={22} color="action">
-              heroicons-outline:arrow-left
+              heroicons-outline:arrow-long-left
             </FuseSvgIcon>
           </IconButton>
           <Typography className="font-semibold text-lg">
@@ -375,7 +386,7 @@ const AnomalyDetail = ({setRightSidebarOpen}) => {
               </motion.div>
 
               <motion.div
-                className="bg-gray-100 rounded-lg mt-6 bg-transparent px-2 mb-5"
+                className="bg-gray-100 rounded-lg mt-6 px-2 mb-5"
                 variants={itemVariants}
               >
                 <Box
@@ -426,6 +437,6 @@ const AnomalyDetail = ({setRightSidebarOpen}) => {
       </AnimatePresence>
     </div>
   );
-}
+};
 
 export default AnomalyDetail;

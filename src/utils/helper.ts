@@ -54,3 +54,69 @@ export function timeDifferenceLocalized(timestamp: any, locale = 'en') {
     }
     return num.toString();
   }
+
+  export function cronToMilliseconds(cron: string) {
+    if(!cron) return 0;
+    
+    const [second, minute, hour, day, month, dayOfWeek] = cron.split(" ");
+  
+    // Mặc định khoảng thời gian là null
+    let intervalInMs = null;
+  
+    if (second.includes("*/")) {
+      intervalInMs = parseInt(second.split("*/")[1]) * 1000;
+    } else if (minute.includes("*/")) {
+      intervalInMs = parseInt(minute.split("*/")[1]) * 60 * 1000;
+    } else if (hour.includes("*/")) {
+      intervalInMs = parseInt(hour.split("*/")[1]) * 60 * 60 * 1000;
+    } else if (day.includes("*/")) {
+      intervalInMs = parseInt(day.split("*/")[1]) * 24 * 60 * 60 * 1000;
+    } else if (month.includes("*/")) {
+      intervalInMs = parseInt(month.split("*/")[1]) * 30 * 24 * 60 * 60 * 1000; 
+    }
+  
+    return intervalInMs;
+  }
+
+  export function convertMillisecondsToTimeUnit(ms: any) {
+    if (ms % (24 * 60 * 60 * 1000) === 0) {
+      return `${ms / (24 * 60 * 60 * 1000)}d`; // ngày
+    } else if (ms % (60 * 60 * 1000) === 0) {
+      return `${ms / (60 * 60 * 1000)}h`; // giờ
+    } else if (ms % (60 * 1000) === 0) {
+      return `${ms / (60 * 1000)}m`; // phút
+    } else if (ms % 1000 === 0) {
+      return `${ms / 1000}s`; // giây
+    } else {
+      return `${ms}ms`; // giữ nguyên nếu không chia hết
+    }
+  }
+  
+
+export function millisecondsToCron(ms: any) {
+    const sec = 1000;
+    const min = 60 * sec;
+    const hour = 60 * min;
+    const day = 24 * hour;
+    const month = 30 * day; // xấp xỉ
+  
+    if (ms % month === 0) {
+      const every = ms / month;
+      return `0 0 0 1 */${every} *`; // mỗi N tháng
+    } else if (ms % day === 0) {
+      const every = ms / day;
+      return `0 0 0 */${every} * *`; // mỗi N ngày
+    } else if (ms % hour === 0) {
+      const every = ms / hour;
+      return `0 0 */${every} * * *`; // mỗi N giờ
+    } else if (ms % min === 0) {
+      const every = ms / min;
+      return `0 */${every} * * * *`; // mỗi N phút
+    } else if (ms % sec === 0) {
+      const every = ms / sec;
+      return `*/${every} * * * * *`; // mỗi N giây
+    } else {
+      return "Invalid input: milliseconds must be divisible by 1000 to convert to a cron expression.";
+    }
+  }
+  

@@ -215,7 +215,7 @@ const OverviewTab = () => {
                   </div>
                   <StickyHeader className="border-t border-r border-l rounded-t-md">
                     <motion.div
-                      className="flex items-center font-semibold bg-gray-50 justify-between h-12 px-4 text-blue-600 uppercase"
+                      className="flex items-center font-semibold justify-between h-12 px-4 text-blue-600 uppercase"
                       initial={{ y: 0, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ duration: 0.3 }}

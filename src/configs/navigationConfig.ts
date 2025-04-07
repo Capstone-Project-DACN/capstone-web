@@ -34,6 +34,13 @@ const navigationConfig: FuseNavItemType[] = [
 			url: "/device",
 		},
     {
+			id: "dashboards.metrics",
+			title: "Job Management",
+			type: "item",
+			icon: "heroicons-outline:adjustments-horizontal",
+			url: "/cronjob",
+		},
+    {
 			id: "dashboards.anomaly",
 			title: "Anomaly Detection",
 			type: "item",
@@ -45,13 +52,6 @@ const navigationConfig: FuseNavItemType[] = [
 			title: "Energy Monitoring",
 			type: "item",
 			icon: "heroicons-outline:battery-100",
-			url: "",
-		},
-		{
-			id: "dashboards.metrics",
-			title: "Performance Metrics",
-			type: "item",
-			icon: "heroicons-outline:chart-bar",
 			url: "",
 		},
     ],

@@ -1,0 +1,11 @@
+{
+    "data": {
+        "cron_type": "HouseholdData",
+        "city_id": "HCMC",
+        "district_id": "Q1",
+        "distribution_type": "Bell Curve",
+        "random_order": false,
+        "cron_time": "0 0 */2 * * *",
+        "status": "stopped"
+    }
+}
