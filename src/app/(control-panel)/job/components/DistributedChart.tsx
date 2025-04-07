@@ -38,7 +38,6 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
       fontFamily: 'inherit',
       animations: {
         enabled: true,
-        easing: 'easeinout',
         speed: 800,
       },
     },

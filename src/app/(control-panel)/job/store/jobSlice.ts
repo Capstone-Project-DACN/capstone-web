@@ -33,7 +33,7 @@ export const getJobDetail = createAsyncThunk<any, any>(
   "cronjob/getJobDetail",
   async (params: {id : any}, { getState }: any) => {
     try {
-      const response = (await jobService.getJobDetail(params)) as ay;
+      const response = (await jobService.getJobDetail(params)) as any;
       
       return {id: response?.id, data: response.data};
     } catch (err) {
