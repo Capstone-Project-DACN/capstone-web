@@ -403,7 +403,6 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.3 }}
-            className=" overflow-y-scroll mt-10 scrollbar-hide"
           >
             <DistributedChart />
           </motion.div>

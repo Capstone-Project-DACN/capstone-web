@@ -222,7 +222,7 @@ const DistributedChart: React.FC = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-10">
       <div className="flex items-center justify-between">
         <Typography variant="body2" className="font-semibold mb-2">
           Distribution Visualization
@@ -233,7 +233,9 @@ const DistributedChart: React.FC = () => {
           </FuseSvgIcon>
         </IconButton>
       </div>
-      <DistributionChart data={sampleData.data} />
+      <div className=" overflow-y-scroll scrollbar-hide">
+        <DistributionChart data={sampleData.data} />
+      </div>
     </div>
   );
 };
