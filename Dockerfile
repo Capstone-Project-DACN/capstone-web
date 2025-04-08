@@ -22,7 +22,7 @@ FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Expose port 80 để truy cập ứng dụng
-EXPOSE 80
+EXPOSE 9090
 
 # Khởi động Nginx
 CMD ["nginx", "-g", "daemon off;"]

@@ -9,6 +9,9 @@ import {
 } from "@mui/material";
 import { ApexOptions } from "apexcharts";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { openJobDialog } from "@/dialogs/job/JobDialogSlice";
 
 interface DistributionChartProps {
   data: {
@@ -173,7 +176,7 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
   }, [data, processedData, categories]);
 
   return (
-    <Paper elevation={2} className="p-4 rounded-lg">
+    <Box className="p-4 rounded-lg w-full">
       <Box className="relative">
         {loading && (
           <Box className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
@@ -205,37 +208,26 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
           )}
         </Box>
       </Box>
-    </Paper>
+    </Box>
   );
 };
 
 // Usage example component
 const DistributedChart: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const sampleData: any = {
     data: {
       chart_data: [
         8, 10, 13, 15, 19, 23, 28, 34, 42, 50, 60, 71, 85, 100, 118, 138, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        34, 42, 50, 60, 71, 85, 100, 118, 138, 0, 8, 10, 13, 15, 19, 23, 28, 0,
         0, 0, 0, 0,
       ],
     },
   };
 
   return (
-    <div className="w-full mt-10">
-      <div className="flex items-center justify-between">
-        <Typography variant="body2" className="font-semibold mb-2">
-          Distribution Visualization
-        </Typography>
-        <IconButton>
-          <FuseSvgIcon className="text-7xl" size={22} color="action">
-            heroicons-outline:arrow-path
-          </FuseSvgIcon>
-        </IconButton>
-      </div>
-      <div className=" overflow-y-scroll scrollbar-hide">
-        <DistributionChart data={sampleData.data} />
-      </div>
+    <div className="overflow-y-scroll scrollbar-hide w-full">
+      <DistributionChart data={sampleData.data} />
     </div>
   );
 };

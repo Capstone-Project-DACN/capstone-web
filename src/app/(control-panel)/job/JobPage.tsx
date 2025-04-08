@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import StyledFusePageSimple from "@fuse/core/FusePageSimple";
 import JobsTable from "./components/JobsTable";
 import JobDetail from "./components/JobQuickView";
+import JobDialog from "@/dialogs/job/JobDialog";
 
 const Root = styled(StyledFusePageSimple)(({ theme }) => ({
   "& .FusePageSimple-header": {
@@ -28,23 +29,26 @@ function JobPage() {
   const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
   const location = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
- 
+
   useEffect(() => {
-	if(searchParams.get("jobQuickView")) setRightSidebarOpen(true);
-	else setRightSidebarOpen(false);
-  }, [searchParams])
+    if (searchParams.get("jobQuickView")) setRightSidebarOpen(true);
+    else setRightSidebarOpen(false);
+  }, [searchParams]);
 
   return (
-    <Root
-      content={<JobsTable setRightSidebarOpen={setRightSidebarOpen} />}
-      rightSidebarOpen={rightSidebarOpen}
-      rightSidebarContent={
-		<JobDetail setRightSidebarOpen={setRightSidebarOpen} />
-      }
-      rightSidebarOnClose={() => setRightSidebarOpen(false)}
-      rightSidebarWidth={550}
-      scroll={isMobile ? "normal" : "content"}
-    />
+    <>
+      <Root
+        content={<JobsTable setRightSidebarOpen={setRightSidebarOpen} />}
+        rightSidebarOpen={rightSidebarOpen}
+        rightSidebarContent={
+          <JobDetail setRightSidebarOpen={setRightSidebarOpen} />
+        }
+        rightSidebarOnClose={() => setRightSidebarOpen(false)}
+        rightSidebarWidth={500}
+        scroll={isMobile ? "normal" : "content"}
+      />
+      <JobDialog />
+    </>
   );
 }
 

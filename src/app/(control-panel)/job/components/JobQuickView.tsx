@@ -33,6 +33,7 @@ import ApiRoundedIcon from "@mui/icons-material/ApiRounded";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FuseLoading from "@fuse/core/FuseLoading";
 import DistributedChart from "./DistributedChart";
+import { openJobDialog } from "@/dialogs/job/JobDialogSlice";
 
 const itemVariants = {
   hidden: { y: 15, opacity: 0 },
@@ -358,6 +359,24 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                 transition={{ delay: 0.5, duration: 0.3 }}
                 className="flex gap-x-2 items-center mt-4"
               >
+             
+                <Button
+                  variant="contained"
+                  color={jobDetail?.status === "stopped" ? "info" : "warning"}
+                  startIcon={
+                    jobDetail?.status === "stopped" ? (
+                      <SensorsIcon className="mt-[1px]" />
+                    ) : (
+                      <SensorsOffTwoToneIcon className="mt-[1px]" />
+                    )
+                  }
+                  className="rounded-sm hover:shadow-lg transition-all"
+                  fullWidth
+                  onClick={updateStatus}
+                  disabled={updateLoading}
+                >
+                  {jobDetail?.status === "stopped" ? "Start" : "Stop"}
+                </Button>
                 {jobDetail?.status === "stopped" && (
                   <Button
                     type="submit"
@@ -376,36 +395,45 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                     {updateLoading ? <CircularProgress size={24} /> : "Update"}
                   </Button>
                 )}
-                <Button
-                  variant="contained"
-                  color={jobDetail?.status === "stopped" ? "info" : "info"}
-                  startIcon={
-                    jobDetail?.status === "stopped" ? (
-                      <SensorsIcon className="mt-[1px]" />
-                    ) : (
-                      <SensorsOffTwoToneIcon className="mt-[1px]" />
-                    )
-                  }
-                  className="rounded-sm hover:shadow-lg transition-all"
-                  fullWidth
-                  onClick={updateStatus}
-                  disabled={updateLoading}
-                >
-                  {jobDetail?.status === "stopped" ? "Start" : "Stop"}
-                </Button>
               </motion.div>
             </form>
           </Box>
 
           <Divider className="mt-10"></Divider>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.3 }}
-          >
-            <DistributedChart />
-          </motion.div>
+          {jobDetail.status === "running" && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.3 }}
+            >
+              <div className="flex items-center justify-between mt-10">
+                <Typography variant="body2" className="font-semibold mb-2">
+                  Distribution Visualization ({jobDetail?.distribution_type})
+                </Typography>
+                <div className="flex items-center gap-x-2">
+                  <IconButton>
+                    <FuseSvgIcon className="text-7xl" size={22} color="primary">
+                      heroicons-outline:arrow-path
+                    </FuseSvgIcon>
+                  </IconButton>
+                  <IconButton>
+                    <FuseSvgIcon
+                      className="text-7xl"
+                      size={22}
+                      color="action"
+                      onClick={() => {
+                        dispatch(openJobDialog(null));
+                      }}
+                    >
+                      heroicons-outline:arrows-pointing-out
+                    </FuseSvgIcon>
+                  </IconButton>
+                </div>
+              </div>
+              <DistributedChart />
+            </motion.div>
+          )}
         </motion.div>
       </AnimatePresence>
     </div>
