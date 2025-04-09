@@ -5,25 +5,22 @@ import {
   Tabs,
   Tab,
   Typography,
-  Paper,
   TextField,
   Button,
   CircularProgress,
-  Alert,
-  Divider,
-  Tooltip,
   IconButton,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import InfoIcon from "@mui/icons-material/Info";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
-import { addAreaDevice, addHouseholdDevice } from "../store/deviceSlice";
+import { addAreaDevice, addHouseholdDevice, setTab } from "../../store/deviceSlice";
 import { useNavigate, useParams } from "react-router";
+import { showMessage } from "@fuse/core/FuseMessage/fuseMessageSlice";
+import { ac } from "node_modules/react-router/dist/development/route-data-DuV3tXo2.mjs";
 
 // Validation schemas
 const areaSchema = yup.object({
@@ -63,9 +60,8 @@ const householdSchema = yup.object({
     ),
 });
 
-const AddDeviceForm = ({ setRightSidebarOpen }) => {
+const AddDevice = () => {
   const navigate = useNavigate();
-  const params = useParams();
   const [tabValue, setTabValue] = useState(0);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -92,7 +88,23 @@ const AddDeviceForm = ({ setRightSidebarOpen }) => {
   const handleAreaSubmit = async (data: any) => {
     setLoading(true);
     dispatch(addAreaDevice(data)).then((response: any) => {
+      const topic = data?.deviceId.replace(/-/g, "_");
+      navigate(`/device/overview?topic=${topic}`);
+      dispatch(setTab("overview"));
       setLoading(false);
+      areaForm.reset({
+        deviceId: "area-HCMC-Q#",
+      });
+      dispatch(
+        showMessage({
+          message: "Add area device successfully",
+          variant: "success",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          }
+        })
+      );
     });
   };
 
@@ -100,31 +112,31 @@ const AddDeviceForm = ({ setRightSidebarOpen }) => {
     setLoading(true);
     dispatch(addHouseholdDevice(data)).then((response: any) => {
       setLoading(false);
+      const topic = data?.prefix.replace(/-/g, "_");
+      navigate(`/device/overview?topic=${topic}`);
+      dispatch(setTab("overview"));
+      dispatch(
+        showMessage({
+          message: "Add household device successfully",
+          variant: "success",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          }
+        })
+      );  
+      householdForm.reset({
+        prefix: "household-HCMC-Q#",
+        start: 0,
+        end: 100,
+      });
     });
   };
 
   return (
     <div className="px-4 pt-1">
-      <div className="flex justify-between items-center mb-2">
-        <Typography className="font-semibold text-lg mt-2" gutterBottom>
-          New Device
-        </Typography>
-        <IconButton
-          onClick={() => {
-            const updateParams = new URLSearchParams(window.location.search);
-            updateParams.delete("new");
-            navigate(`/device/${params?.tab}?${updateParams.toString()}`);
-            setRightSidebarOpen(false);
-          }}
-        >
-          <FuseSvgIcon size={24} color="action">
-            heroicons-outline:x-mark
-          </FuseSvgIcon>
-        </IconButton>
-      </div>
-
       <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}>
-        <Tabs value={tabValue} onChange={handleTabChange}>
+        <Tabs value={tabValue} onChange={handleTabChange} color="secondary">
           <Tab label="Household Devices" />
           <Tab label="Area Device" />
         </Tabs>
@@ -175,7 +187,7 @@ const AddDeviceForm = ({ setRightSidebarOpen }) => {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.5}}
+                  transition={{ delay: 0.3, duration: 0.5 }}
                 >
                   <Controller
                     name="deviceId"
@@ -368,4 +380,4 @@ const AddDeviceForm = ({ setRightSidebarOpen }) => {
   );
 };
 
-export default AddDeviceForm;
+export default AddDevice;

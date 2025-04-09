@@ -17,7 +17,7 @@ import { AppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
 import { getCronJobs } from "../store/jobSlice";
 import JobItem from "./JobItem";
-import DeviceOption from "@/components/device/DeviceOption";
+import DeviceOption from "@/app/(control-panel)/device/components/components/DeviceOption";
 
 // Animation variants
 const containerVariants = {

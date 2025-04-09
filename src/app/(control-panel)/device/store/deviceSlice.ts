@@ -8,10 +8,7 @@ export const searchInactiveDevice = createAsyncThunk<any, any>(
     try {
       const response = (await deviceService.searchInactiveDevice(params)) as any;
 
-      const inactiveDevices = response?.inactiveDevices || [];
-      const inactive_thresold = response?.inactive_thresold;
-
-      return {data: inactiveDevices, inactive_thresold};
+      return response?.data;
     } catch (err) {
       console.log(err);
     }
@@ -24,6 +21,7 @@ export const addAreaDevice = createAsyncThunk<any, any>(
     
     try {
       const response = (await deviceService.addAreaDevice(params)) as any;
+
       return response;
     } catch (err) {
       console.log(err);
@@ -59,8 +57,7 @@ export const getDeviceTopics = createAsyncThunk<any, any>(
       
     try {
       const response = (await deviceService.getDeviceTopics()) as any;
-      console.log(response.topics);
-      return {topics: response.topics};
+      return {topics: response.data.data};
     } catch (err) {
       console.log(err);
     }
@@ -73,8 +70,23 @@ export const getDeviceByTopic = createAsyncThunk<any, any>(
       
     try {
       const response = (await deviceService.getDevicesByTopic(params)) as any;
-      console.log(response?.devices);
-      return {devices: response?.devices};
+      return {devices: response?.data?.data};
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const getDeviceDetail = createAsyncThunk<any, any>(
+  "device/getDeviceDetail",
+  async (params: {deviceId: any}, { getState }: any) => {
+      
+    try {
+      const response = (await deviceService.getDeviceDetail(params)) as any;
+
+      console.log({response});
+
+      return {detail: response?.data};
     } catch (err) {
       console.log(err);
     }
@@ -82,33 +94,39 @@ export const getDeviceByTopic = createAsyncThunk<any, any>(
 );
  
 interface deviceSliceState {
+  tab: string,
   data: [],
+  inactiveData: [],
   topics: [],
   loading: boolean,
   searchText: any,
+  detail : any,
   totalElements: number,
   totalPages: number,
   pagination: {
-    page: number;
-    size: number;
-    sortBy: string;
-    direction: string;
+    pageNumber: number;
+    pageSize: number;
+    totalElements: number;
+    totalPages: number
   };
   filter: {},
 }
 
 const initialState: deviceSliceState = {
+  tab: "overview",
   data: [],
+  inactiveData: [],
   loading: false,
   topics: [],
+  detail: null,
   searchText: '',
   totalElements: 0,
   totalPages: 0,
   pagination: {
-    page: 0,
-    size: 10,
-    sortBy: "createdDate",
-    direction: "DESC",
+    pageNumber: 0,
+    pageSize: 20,
+    totalElements: 0,
+    totalPages: 10
   },
   filter: {}, 
 };
@@ -119,6 +137,9 @@ const deviceSlice = createSlice({
   reducers: {
     setData(state, action) {
       state.data = action.payload;
+    },
+    setTab(state, action) {
+      state.tab = action.payload;
     },
     setPagination: (state: any, action) => {
       state.pagination = {
@@ -145,8 +166,12 @@ const deviceSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(searchInactiveDevice.fulfilled, (state, action: any) => {
-      state.data = action.payload.data;
+      state.inactiveData = action.payload.inactiveDevices;
       state.inactive_thresold = action.payload.inactive_thresold;
+      state.pagination.totalPages  = action.payload.totalPages;
+      state.pagination.total  = action.payload.total;
+      state.pagination.pageNumber  = action.payload.pageNumber;
+      state.pagination.pageSize  = action.payload.pageSize;
     });
     builder.addCase(addHouseholdDevice.fulfilled, (state, action: any) => {
       // state.feedDetail.data = action.payload;
@@ -155,10 +180,14 @@ const deviceSlice = createSlice({
       // state.feedDetail.data = action.payload;
     });
     builder.addCase(getDeviceTopics.fulfilled, (state, action: any) => {
-      state.topics = action.payload.topics;
+      const sortedTopic = action.payload.topics.sort((a: any, b: any) => a.number_of_devices > b.number_of_devices ? -1 : 1);
+      state.topics = sortedTopic;
     });
     builder.addCase(getDeviceByTopic.fulfilled, (state, action: any) => {
       state.data = action.payload.devices;
+    });
+    builder.addCase(getDeviceDetail.fulfilled, (state, action: any) => {
+      state.detail = action.payload.detail;
     });
   },
 }); 
@@ -168,7 +197,8 @@ export const {
   setPagination,
   setSearchText,
   setFilter,
-  resetSearchText
+  resetSearchText,
+  setTab
 } = deviceSlice.actions;
 
 export default deviceSlice.reducer;

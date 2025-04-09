@@ -35,33 +35,40 @@ class deviceService extends FuseUtils.EventEmitter {
     );
   };
 
+//   curl --location 'http://localhost:3001/devices/inactive?pageNumber=1&pageSize=100&dateTime=true' \
+// --data ''
     searchInactiveDevice (params: {
       pageNumber?: number;
       pageSize?: number;
       dateTime?: boolean; 
     }) {
         return new Promise((resolve, reject) => {
-          resolve(deviceResponse);
-          // axios
-          //   .get(`http://localhost:3001/devices/inactive`, { params })
-          //   .then((response) => resolve(deviceResponse))
-          //   // .then((response) => resolve(response))
-          //   .catch(function (error) {
-          //     if (error.response) {
-          //       // The request was made and the server responded with a status code
-          //       // that falls out of the range of 2xx
-          //     } else if (error.request) {
-          //       // The request was made but no response was received
-          //       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          //       // http.ClientRequest in node.js
-          //       console.log(error.request);
-          //     } else {
-          //       // Something happened in setting up the request that triggered an Error
-          //       console.log("Error", error.message);
-          //     }
-    
-          //     reject(error.response);
-          //   });
+          // resolve(deviceResponse);
+          const finalParams = {
+            pageNumber: params?.pageNumber || 1,
+            pageSize: params?.pageSize || 100,
+            dateTime: params?.dateTime || false
+          }
+          axios
+            .get(`http://localhost:3001/devices/inactive`, { params: finalParams })
+            .then((response) => resolve(response))
+            // .then((response) => resolve(response))
+            .catch(function (error) {
+              if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+              } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                console.log(error.request);
+              } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log("Error", error.message);
+              }
+  
+              reject(error.response);
+            });
         });
       } 
  
@@ -123,51 +130,75 @@ class deviceService extends FuseUtils.EventEmitter {
 
     getDeviceTopics = () => {
       return new Promise((resolve, reject) => {
-        resolve(topicsResponse);
-        // axios
-        //   .get(`http://localhost:3001/topics`)
-        //   .then((response) => resolve(response))
-        //   .catch(function (error) {
-        //     if (error.response) {
-        //       // The request was made and the server responded with a status code
-        //       // that falls out of the range of 2xx
-        //     } else if (error.request) {
-        //       // The request was made but no response was received
-        //       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        //       // http.ClientRequest in node.js
-        //       console.log(error.request);
-        //     } else {
-        //       // Something happened in setting up the request that triggered an Error
-        //       console.log("Error", error.message);
-        //     }
+        axios
+          .get(`http://localhost:3001/devices/topics/all`)
+          .then((response) => resolve(response))
+          .catch(function (error) {
+            if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+            } else if (error.request) {
+              // The request was made but no response was received
+              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", error.message);
+            }
 
-        //     reject(error.response);
-        //   });
+            reject(error.response);
+          });
       });
     };
 
     getDevicesByTopic = (params: {topic: string}) => {
       return new Promise((resolve, reject) => {
-        resolve(devicesResponse);
-        // axios
-        //   .get(`http://localhost:3001/topics`)
-        //   .then((response) => resolve(response))
-        //   .catch(function (error) {
-        //     if (error.response) {
-        //       // The request was made and the server responded with a status code
-        //       // that falls out of the range of 2xx
-        //     } else if (error.request) {
-        //       // The request was made but no response was received
-        //       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        //       // http.ClientRequest in node.js
-        //       console.log(error.request);
-        //     } else {
-        //       // Something happened in setting up the request that triggered an Error
-        //       console.log("Error", error.message);
-        //     }
+        axios
+          .get(`http://localhost:3001/devices/get-by-topic/${params?.topic}`)
+          .then((response) => resolve(response))
+          .catch(function (error) {
+            if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+            } else if (error.request) {
+              // The request was made but no response was received
+              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", error.message);
+            }
 
-        //     reject(error.response);
-        //   });
+            reject(error.response);
+          });
+      });
+    };
+
+    // curl --location 'http://localhost:3001/devices/detail/household-HCMC-Q1-0'
+
+    getDeviceDetail = (params: {deviceId: any}) => {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`http://localhost:3001/devices/detail/${params?.deviceId}`)
+          .then((response) => resolve(response))
+          .catch(function (error) {
+            if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+            } else if (error.request) {
+              // The request was made but no response was received
+              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", error.message);
+            }
+
+            reject(error.response);  
+          });
       });
     };
 }

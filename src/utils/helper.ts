@@ -1,4 +1,3 @@
-
 export function timeDifferenceLocalized(timestamp: any, locale = 'en') {
     const now = new Date();
     const past = new Date(timestamp);
@@ -27,7 +26,6 @@ export function timeDifferenceLocalized(timestamp: any, locale = 'en') {
     }
   }
   
-
   export function formatTimestampToDate(timestamp: any) {
     if (!timestamp) return "";
     

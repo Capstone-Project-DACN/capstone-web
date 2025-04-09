@@ -5,9 +5,9 @@ import { useMediaQuery } from '@mui/material';
 import { useLocation, useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import StyledFusePageSimple from '@fuse/core/FusePageSimple';
-import DeviceMainHeader from './components/DeviceMainHeader';
-import AddDeviceForm from './components/AddDeviceForm';
-import DeviceMainContent from './components/DeviceMainContent';
+import DeviceHeader from './DeviceHeader';
+import AddDevice from './components/components/AddDevice';
+import DeviceContent from './DeviceContent';
 
 const Root = styled(StyledFusePageSimple)(({ theme }) => ({
 	"& .FusePageSimple-header": {
@@ -25,23 +25,13 @@ const Root = styled(StyledFusePageSimple)(({ theme }) => ({
   }));
 
 function DevicePage() {
-	const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-	const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
+	const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 	const location = useLocation();
-	const addNew = new URLSearchParams(location.search).get("new") || "";
-
-	useEffect(() => {
-		setRightSidebarOpen(addNew === "true");
-	}, []);
  
 	return (
 		<Root
-			header={<DeviceMainHeader rightSidebarOpen={rightSidebarOpen} setRightSidebarOpen={setRightSidebarOpen} />}
-			content={<DeviceMainContent />}
-			rightSidebarOpen={rightSidebarOpen}
-			rightSidebarContent={<AddDeviceForm setRightSidebarOpen={setRightSidebarOpen}  />}
-			rightSidebarOnClose={() => setRightSidebarOpen(false)}
-			rightSidebarWidth={450}
+			header={<DeviceHeader />}
+			content={<DeviceContent />}
 			scroll={isMobile ? "normal" : "content"}
 		/>
 	);
