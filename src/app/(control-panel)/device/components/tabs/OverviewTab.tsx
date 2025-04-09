@@ -82,6 +82,7 @@ const OverviewTab = () => {
     (state: any) => state?.device?.deviceSlice?.topics
   );
   const data = useSelector((state: any) => state?.device?.deviceSlice?.data);
+  const selectedDevices = useSelector((state: any) => state?.device?.deviceSlice?.selectedDevices);
   const filteredTopics = searchText.length === 0 ? topics : topics.filter((item: any) => {
     return item.topic.toLowerCase().includes(searchText.toLowerCase());
   });
@@ -291,8 +292,9 @@ const OverviewTab = () => {
                     >
                       {data?.map((device: any) => (
                         <DeviceListItem
-                          key={device?.deviceId}
+                          key={device?.device_id}
                           device={device}
+                          isSelected={selectedDevices.includes(device?.device_id)}
                         />
                       ))}
                     </motion.div>

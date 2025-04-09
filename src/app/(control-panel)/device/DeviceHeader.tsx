@@ -30,7 +30,8 @@ const DeviceHeader = (props: any) => {
             <Tabs value={tab || params?.tab} onChange={handleChange} centered>
                 <Tab value={"overview"} label="Overview" />
                 <Tab value={"inactive"} label="Inactive" />
-                <Tab value={"add-device"} label="Add device" />
+                <Tab value={"add-device"} label="Add Device" />
+                <Tab value={"produce"} label="Produce Data" />
             </Tabs>
         </div>
     )

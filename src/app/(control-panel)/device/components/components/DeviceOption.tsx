@@ -5,6 +5,11 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { add } from "lodash";
+import { addSelectedDevice, removeSelectedDevice } from "../../store/deviceSlice";
 
 const tabVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -24,9 +29,9 @@ const tabVariants = {
   },
 };
 
-const DeviceOption = ({ device }) => {
+const DeviceOption = ({ device,  isSelected = false }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [activeDevice, setActiveDevice] = useState(false);
 
   const handleMenuClick = (event: any, device: any) => {
     setAnchorEl(event.currentTarget);
@@ -36,7 +41,13 @@ const DeviceOption = ({ device }) => {
     setAnchorEl(null);
   };
 
-  const handleFollowDevice = () => {};
+  const handleFollowDevice = () => {
+    console.log({device});
+    if(!isSelected) dispatch(addSelectedDevice(device?.device_id));
+    else dispatch(removeSelectedDevice(device?.device_id));
+    handleMenuClose();
+  };
+
   const handleDeleteDevice = () => {};
 
   return (
@@ -59,17 +70,21 @@ const DeviceOption = ({ device }) => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleFollowDevice}>
-          {activeDevice ? (
-            <>
-              <FavoriteIcon fontSize="small" sx={{ mr: 1 }} />
-              Unfollow Device
-            </>
+        <MenuItem onClick={handleFollowDevice} sx={{ color: "primary.main" }}>
+          {isSelected ? (
+            <div className="flex items-center gap-x-2">
+              <FuseSvgIcon className="text-7xl" size={18}>
+                heroicons-solid:signal-slash
+              </FuseSvgIcon>
+              Stop Produce
+            </div>
           ) : (
-            <>
-              <FavoriteBorderIcon fontSize="small" sx={{ mr: 1 }} />
-              Follow Device
-            </>
+            <div className="flex items-center gap-x-2">
+              <FuseSvgIcon className="text-7xl" size={18}>
+                heroicons-solid:signal
+              </FuseSvgIcon>
+              Produce data
+            </div>
           )}
         </MenuItem>
         <MenuItem onClick={handleDeleteDevice} sx={{ color: "error.main" }}>

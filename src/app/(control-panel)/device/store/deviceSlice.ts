@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import deviceService from "@/services/device/deviceService"
-import _ from "lodash";
+import _, { remove } from "lodash";
 
 export const searchInactiveDevice = createAsyncThunk<any, any>(
   "device/search",
@@ -110,6 +110,7 @@ interface deviceSliceState {
     totalPages: number
   };
   filter: {},
+  selectedDevices: []
 }
 
 const initialState: deviceSliceState = {
@@ -129,6 +130,7 @@ const initialState: deviceSliceState = {
     totalPages: 10
   },
   filter: {}, 
+  selectedDevices: []
 };
 
 const deviceSlice = createSlice({
@@ -140,6 +142,16 @@ const deviceSlice = createSlice({
     },
     setTab(state, action) {
       state.tab = action.payload;
+    },
+    addSelectedDevice(state: any, action: any) {
+      const exited = state.selectedDevices.find((item: any) => item === action.payload);
+      if(!exited) state.selectedDevices = [...state.selectedDevices, action.payload];
+    },
+    removeSelectedDevice(state: any, action: any) {
+      state.selectedDevices = state.selectedDevices.filter((item: any) => item !== action.payload);
+    },
+    setSelectedDevices(state: any, action: any) {
+      state.selectedDevices = action.payload;
     },
     setPagination: (state: any, action) => {
       state.pagination = {
@@ -198,7 +210,10 @@ export const {
   setSearchText,
   setFilter,
   resetSearchText,
-  setTab
+  setTab,
+  addSelectedDevice,
+  removeSelectedDevice,
+  setSelectedDevices
 } = deviceSlice.actions;
 
 export default deviceSlice.reducer;

@@ -3,6 +3,7 @@ import InactiveTab from "./components/tabs/InactiveTab";
 import OverviewTab from "./components/tabs/OverviewTab";
 import AddDeviceTab from "./components/tabs/AddDeviceTab";
 import { useSelector } from "react-redux";
+import ProduceTab from "./components/tabs/ProduceTab";
 
 const DeviceContent = () => {
   const tab = useSelector((state: any) => state?.device?.deviceSlice?.tab);
@@ -18,6 +19,8 @@ const DeviceContent = () => {
         {tab === "overview" && <OverviewTab />}
 
         {tab === "inactive"  && <InactiveTab />}
+        
+        {tab === "produce"  && <ProduceTab />}
 
         {tab === "add-device"  && <AddDeviceTab />}
       </AnimatePresence>
