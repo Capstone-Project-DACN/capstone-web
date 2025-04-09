@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import FuseLoading from "@fuse/core/FuseLoading";
 import DeviceListItem from "@/app/(control-panel)/device/components/components/DeviceListItem";
@@ -68,10 +68,12 @@ const StickyHeader = styled(Box)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
   boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
 }));
+
 const OverviewTab = () => {
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const searchParams = new URLSearchParams(window.location.search);
   const topicParam = searchParams.get("topic");
   const navigate = useNavigate();
@@ -80,6 +82,20 @@ const OverviewTab = () => {
     (state: any) => state?.device?.deviceSlice?.topics
   );
   const data = useSelector((state: any) => state?.device?.deviceSlice?.data);
+  const filteredTopics = searchText.length === 0 ? topics : topics.filter((item: any) => {
+    return item.topic.toLowerCase().includes(searchText.toLowerCase());
+  });
+  
+  const handleSearch = (e: any) => {
+    setSearchText(e.target.value);
+    const updatedParams = new URLSearchParams(window.location.search);
+    updatedParams.set("search", e.target.value);
+    navigate(`/device/overview?${updatedParams.toString()}`);
+  };
+
+  useEffect(() => {
+    setSearchText(searchParams.get("search") || "");
+  }, [searchParams]);
 
   useEffect(() => {
     setLoading(true);
@@ -120,15 +136,42 @@ const OverviewTab = () => {
       exit="exit"
       className="h-full flex justify-between gap-x-5 relative"
     >
-      <Box className="w-1/4 h-full overflow-y-auto scrollbar-hide">
-        <Box className="flex flex-col overflow-y-scroll scrollbar-hide">
+      <Box className="w-1/4 h-full overflow-y-auto scrollbar-hide relative">
+        <Box className="flex z-40 top-0 gap-x-2 items-stretch w-full sticky h-12" sx={{ backgroundColor: theme.palette.background.paper }}>
+          <TextField
+            id="outlined-basic"
+            value={searchText}
+            onInput={handleSearch}
+            placeholder="Search"
+            autoComplete="off"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                paddingTop: "0px",
+              },
+            }}
+            variant="outlined"
+            className="w-full rounded-sm border-none"
+          />
+          <Button
+            className="rounded-sm"
+            onClick={() => {
+              setSearchText("");
+              const updatedParams = new URLSearchParams(window.location.search);
+              updatedParams.delete("search");
+              navigate(`/device/overview?${updatedParams.toString()}`); 
+            }}
+          >
+            Clear
+          </Button>
+        </Box>
+        <Box className="flex flex-col">
           <AnimatePresence>
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="visible"
             >
-              {topics?.map((topic: any) => {
+              {filteredTopics?.map((topic: any) => {
                 const updatedParams = new URLSearchParams(
                   window.location.search
                 );
@@ -137,6 +180,7 @@ const OverviewTab = () => {
                   <motion.div key={topic.id} variants={itemVariants}>
                     <Box
                       role="button"
+                      key={topic.id}
                       component={Link}
                       to={`/device/overview?${updatedParams.toString()}`}
                       className={`flex items-center justify-between px-1 py-4 cursor-pointer border-b`}
@@ -223,28 +267,6 @@ const OverviewTab = () => {
                 exit="exit"
                 className="w-full h-full overflow-y-auto scrollbar-hide"
               >
-                <div className="flex  top-0 items-stretch pt-1 mb-4 w-full">
-                  <TextField
-                    id="outlined-basic"
-                    label="Search device"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        paddingTop: "0px",
-                      },
-                    }}
-                    variant="outlined"
-                    className="w-full rounded-sm border-none"
-                  />
-                  <Button
-                    variant="contained"
-                    className="rounded-sm ml-2"
-                    sx={{ backgroundColor: theme.palette.action.hover }}
-                  >
-                    <FuseSvgIcon className="text-7xl" size={22} color="action">
-                      heroicons-outline:magnifying-glass
-                    </FuseSvgIcon>
-                  </Button>
-                </div>
                 <StickyHeader className="border-t border-r border-l rounded-t-md">
                   <motion.div
                     className="flex items-center font-semibold justify-between h-12 px-4 text-blue-600 uppercase"
@@ -259,7 +281,7 @@ const OverviewTab = () => {
                     <div className="w-2/12">Voltage</div>
                   </motion.div>
                 </StickyHeader>
-                {(!tableLoading && data?.length > 0) ? (
+                {!tableLoading && data?.length > 0 ? (
                   <Box>
                     <motion.div
                       variants={containerVariants}
@@ -276,6 +298,13 @@ const OverviewTab = () => {
                     </motion.div>
                   </Box>
                 ) : (
+                  data?.length === 0 ? (
+                    <Box className="flex items-center justify-center w-full h-20">
+                      <Typography variant="body1" color="text.secondary">
+                        No devices found
+                      </Typography>
+                    </Box>
+                  ) : 
                   <FuseLoading />
                 )}
               </motion.div>
