@@ -40,6 +40,7 @@ import FuseLoading from "@fuse/core/FuseLoading";
 import DistributedChart from "./DistributedChart";
 import { openJobDialog } from "@/dialogs/job/JobDialogSlice";
 import { showMessage } from "@fuse/core/FuseMessage/fuseMessageSlice";
+import { random } from "lodash";
 
 const StickyHeader = styled(Box)(({ theme }) => ({
   position: "sticky",
@@ -137,10 +138,13 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     if (jobDetail) {
       reset({
         ...jobDetail,
+        random_order: jobDetail.random_order === "true",
         cron_time: cronToMilliseconds(jobDetail.cron_time),
       });
     }
   }, [jobDetail, reset]);
+
+  console.log(watch());
 
   // Toggle job status
   const updateStatus = (e: React.MouseEvent) => {
@@ -216,7 +220,6 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
   if (loading) {
     return <FuseLoading />;
   }
-
 
   const myIsDirty = () => {
     const { cron_time, distribution_type, random_order } = watch();
@@ -424,7 +427,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                         control={
                           <Checkbox
                             disabled={jobDetail?.status === "running"}
-                            value={Boolean(field.value)}
+                            checked={Boolean(field.value)}
                             onChange={(e) => field.onChange(e.target.checked)}
                             size="small"
                           />
