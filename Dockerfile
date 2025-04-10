@@ -1,28 +1,21 @@
+# Giai đoạn 1: Build ứng dụng React
 FROM node:22-alpine AS build
 
-# Thiết lập thư mục làm việc trong container
 WORKDIR /app
-
-# Sao chép package.json và package-lock.json vào container
 COPY package.json package-lock.json ./
-
-# Cài đặt dependencies
 RUN npm install --legacy-peer-deps
-
-# Sao chép toàn bộ source code vào container
 COPY . .
-
-# Build ứng dụng
 RUN npm run build
 
-# Sử dụng Nginx để phục vụ ứng dụng React
+# Giai đoạn 2: Dùng nginx để phục vụ ứng dụng
 FROM nginx:alpine
 
-# Sao chép file build từ giai đoạn trước vào Nginx
+# Copy build output vào nginx
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Expose port 80 để truy cập ứng dụng
+# Copy cấu hình nginx tùy chỉnh
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 9090
 
-# Khởi động Nginx
 CMD ["nginx", "-g", "daemon off;"]
