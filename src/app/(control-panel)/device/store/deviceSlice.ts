@@ -152,6 +152,9 @@ const deviceSlice = createSlice({
     clearLogs(state: any) {
       state.logs = [];
     },
+    setLogs(state: any, action: any) {
+      state.logs = action.payload;
+    },
     addSelectedDevice(state: any, action: any) {
       const exited = state.selectedDevices.find((item: any) => item === action.payload);
       if(!exited) state.selectedDevices = [...state.selectedDevices, action.payload];
@@ -224,7 +227,8 @@ export const {
   removeSelectedDevice,
   setSelectedDevices,
   addLogs,
-  clearLogs
+  clearLogs,
+  setLogs
 } = deviceSlice.actions;
 
 export default deviceSlice.reducer;

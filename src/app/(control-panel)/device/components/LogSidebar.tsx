@@ -2,10 +2,11 @@ import { Box, Button, IconButton, styled, Typography } from "@mui/material";
 import ReactJson from "react-json-view";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import { useSelector } from "react-redux";
-import { clearLogs } from "../store/deviceSlice";
+import { clearLogs, setLogs } from "../store/deviceSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 const StickyHeader = styled(Box)(({ theme }) => ({
   position: "sticky",
@@ -16,13 +17,25 @@ const StickyHeader = styled(Box)(({ theme }) => ({
 
 const LogSidebar = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const logs = useSelector((state: any) => state?.device?.deviceSlice?.logs);
+  const logs = useSelector((state: any) => state?.device?.deviceSlice?.logs) || [];
   const navigate = useNavigate();
+
+  useEffect(() => {
+      const localLogs = localStorage.getItem("logs");
+      if (localLogs) { 
+        dispatch(setLogs(JSON.parse(localLogs)));
+      }
+  }, [])
 
   const handleBack = () => {
     const updateParams = new URLSearchParams(window.location.search);
     updateParams.delete("logs");
     navigate(`/device/produce?${updateParams.toString()}`);
+  };
+
+  const handleClearLog = () => {
+    dispatch(clearLogs());
+    localStorage.removeItem("logs");
   };
 
   return (
@@ -43,19 +56,23 @@ const LogSidebar = () => {
         <IconButton
           size="small"
           color="primary"
-          onClick={() => dispatch(clearLogs())}
+          onClick={handleClearLog}
           title="Clear logs"
         >
           <FuseSvgIcon size={18}>heroicons-outline:trash</FuseSvgIcon>
         </IconButton>
       </StickyHeader>
       <Box className="flex flex-col h-full px-4 pt-4">
-        {/* <pre className="whitespace-pre-wrap text-sm">
-            {JSON.stringify(logs, null, 2)}
-        </pre> */}
+        {logs.length === 0 && (
+          <pre className="whitespace-pre-wrap text-sm">
+            <Typography className="text-sm w-full text-center mt-5">
+              No logs yet for all devices
+            </Typography>
+          </pre>
+        )}
 
         <div className="space-y-4 px-1">
-          {logs.map((log: any, index: any) => (
+          {logs?.map((log: any, index: any) => (
             <div key={index} className="rounded">
               <ReactJson
                 src={log}

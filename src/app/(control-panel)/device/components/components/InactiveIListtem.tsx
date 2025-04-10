@@ -1,5 +1,6 @@
 import {
   Box,
+  Typography,
   useTheme,
 } from "@mui/material";
 import { motion } from "framer-motion";
@@ -48,9 +49,9 @@ const InactiveListItem = ({ item, index, currentDeviceId }) => {
             onClick={handleClick}
             className="flex items-center font-normal cursor-pointer justify-between h-15 px-4 border-b border-r border-l"
             >
-            <div className="w-1/10 pl-2">{index}</div>
-            <div className="w-2/5">{item.deviceId}</div>
-            <div className="w-2/5 ">{timeDifferenceLocalized(item?.lastSeen)}</div>
+              <Typography className="w-1/10 pl-2">{index}</Typography>
+              <Typography className="w-2/5">{item.deviceId}</Typography>
+              <Typography className="w-2/5 ">{timeDifferenceLocalized(item?.lastSeen)}</Typography>
             </Box>
         </motion.div>
     </>;

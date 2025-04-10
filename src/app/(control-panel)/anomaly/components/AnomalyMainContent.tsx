@@ -129,7 +129,7 @@ const AnomalyMainContent = () => {
               transition={{ duration: 0.3 }}
             >
               <div className="w-1/15">Stt</div>
-              <div className="w-2/10">AreaId</div>
+              <div className="w-2/10">Area Id</div>
               <div className="w-2/10 pl-10">Difference</div>
               {/* <div className="w-1/10">Type</div> */}
               <div className="w-1/10">Severity</div>

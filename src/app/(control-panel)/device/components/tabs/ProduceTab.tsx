@@ -5,6 +5,7 @@ import {
   styled,
   Tooltip,
   Typography,
+  useTheme
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -18,6 +19,7 @@ import {
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { useNavigate } from "react-router";
+
 
 const StickyHeader = styled(Box)(({ theme }) => ({
   position: "sticky",
@@ -43,6 +45,7 @@ const ProduceTab = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState({});
   const navigate = useNavigate();
+  const theme = useTheme();
   const selectedDevices = useSelector(
     (state: any) => state?.device?.deviceSlice?.selectedDevices || []
   );
@@ -120,7 +123,7 @@ const ProduceTab = () => {
 
       const response = await fetch(url);
       const data = await response.json();
-
+      localStorage.setItem("logs", JSON.stringify([...JSON.parse(localStorage.getItem("logs") || "[]"), data]))
       dispatch(addLogs(data));
     } catch (error: any) {
       console.error(error);
@@ -167,12 +170,14 @@ const ProduceTab = () => {
         {selectedDevices.map((dev: any) => {
           const device = parseDeviceInfo(dev);
           return (
-            <div
+            <Box
+              sx={{
+                "&:hover": { backgroundColor: theme.palette.action.hover },
+              }}
               key={device.id}
-              className="border border-t-0 h-14 px-4 flex items-center"
+              className="border border-t-0 h-14 px-4 flex items-center w-full justify-between"
             >
-              <div className="flex items-center w-full justify-between">
-                <div className="w-1/10 flex items-center gap-x-2">
+                <Typography className="w-1/10 flex items-center gap-x-2">
                   {device.type == "household" && (
                     <FuseSvgIcon className="text-7xl" size={18}>
                       heroicons-outline:building-office
@@ -184,15 +189,15 @@ const ProduceTab = () => {
                     </FuseSvgIcon>
                   )}
                   {device.type}
-                </div>
-                <div className="w-1/10 flex items-center">{device.city}</div>
-                <div className="w-1/10 flex items-center">
+                </Typography>
+                <Typography className="w-1/10 flex items-center">{device.city}</Typography>
+                <Typography className="w-1/10 flex items-center font-semibold">
                   {device.district}
-                </div>
-                <div className="w-1/10 flex items-center">
+                </Typography>
+                <Typography className="w-1/10 flex items-center">
                   {device.householdId || "-"}
-                </div>
-                <div className="w-2/10 flex items-center">
+                </Typography>
+                <Typography className="w-2/10 flex items-center">
                   {device.type === "household" ? (
                     <Button
                       size="small"
@@ -230,8 +235,8 @@ const ProduceTab = () => {
                       {device.loading ? "Loading..." : "Send Area Data"}
                     </Button>
                   )}
-                </div>
-                <div className="w-2/10 flex items-center">
+                </Typography>
+                <Typography className="w-2/10 flex items-center">
                   {device.type === "household" && (
                     <Button
                       size="small"
@@ -251,8 +256,8 @@ const ProduceTab = () => {
                       {device.loading ? "Loading..." : "Send Anomaly"}
                     </Button>
                   )}
-                </div>
-                <div className="w-1/22 flex items-center">
+                </Typography>
+                <Typography className="w-1/22 flex items-center">
                   <IconButton
                     size="small"
                     color="error"
@@ -265,9 +270,8 @@ const ProduceTab = () => {
                       heroicons-outline:trash
                     </FuseSvgIcon>
                   </IconButton>
-                </div>
-              </div>
-            </div>
+                </Typography>
+            </Box>
           );
         })}
       </div>

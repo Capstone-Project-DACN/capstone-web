@@ -30,9 +30,9 @@ const DeviceListItem = ({ device, isSelected = false }) => {
       }}
       className="flex items-center relative font-normal justify-between h-15 px-4 border-b border-r border-l"
     >
-      <div className="w-3/12 pl-2 line-clamp-1 trucate">
+      <Typography className="w-3/12 pl-2 line-clamp-1 trucate">
         {device?.device_id}
-      </div>
+      </Typography>
       <div className="w-2/12">
         <Typography variant="body2">
           {device?.value?.electricity_usage_kwh

@@ -74,6 +74,7 @@ const OverviewTab = () => {
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [noOfDisplay, setNoOfDisplay] = useState(20);
   const searchParams = new URLSearchParams(window.location.search);
   const topicParam = searchParams.get("topic");
   const navigate = useNavigate();
@@ -82,11 +83,21 @@ const OverviewTab = () => {
     (state: any) => state?.device?.deviceSlice?.topics
   );
   const data = useSelector((state: any) => state?.device?.deviceSlice?.data);
-  const selectedDevices = useSelector((state: any) => state?.device?.deviceSlice?.selectedDevices);
-  const filteredTopics = searchText.length === 0 ? topics : topics.filter((item: any) => {
-    return item.topic.toLowerCase().includes(searchText.toLowerCase());
-  });
-  
+  const selectedDevices = useSelector(
+    (state: any) => state?.device?.deviceSlice?.selectedDevices
+  );
+  const filteredTopics =
+    searchText.length === 0
+      ? topics
+      : topics.filter((item: any) => {
+          return item.topic.toLowerCase().includes(searchText.toLowerCase());
+        });
+
+      
+  const handleShowMore = () => {
+    setNoOfDisplay(noOfDisplay + 20);
+  };
+
   const handleSearch = (e: any) => {
     setSearchText(e.target.value);
     const updatedParams = new URLSearchParams(window.location.search);
@@ -122,8 +133,9 @@ const OverviewTab = () => {
           .finally(() => {
             setTableLoading(false);
           });
-      }, 300);
+      }, 150);
     }
+    setNoOfDisplay(20);
   }, [topicParam]);
 
   if (loading) return <FuseLoading />;
@@ -138,7 +150,10 @@ const OverviewTab = () => {
       className="h-full flex justify-between gap-x-5 relative"
     >
       <Box className="w-1/4 h-full overflow-y-auto scrollbar-hide relative">
-        <Box className="flex z-40 top-0 gap-x-2 items-stretch w-full sticky h-12" sx={{ backgroundColor: theme.palette.background.paper }}>
+        <Box
+          className="flex z-40 top-0 gap-x-2 items-stretch w-full sticky h-12"
+          sx={{ backgroundColor: theme.palette.background.paper }}
+        >
           <TextField
             id="outlined-basic"
             value={searchText}
@@ -159,7 +174,7 @@ const OverviewTab = () => {
               setSearchText("");
               const updatedParams = new URLSearchParams(window.location.search);
               updatedParams.delete("search");
-              navigate(`/device/overview?${updatedParams.toString()}`); 
+              navigate(`/device/overview?${updatedParams.toString()}`);
             }}
           >
             Clear
@@ -290,23 +305,33 @@ const OverviewTab = () => {
                       animate="visible"
                       className="flex flex-col"
                     >
-                      {data?.map((device: any) => (
-                        <DeviceListItem
-                          key={device?.device_id}
-                          device={device}
-                          isSelected={selectedDevices.includes(device?.device_id)}
-                        />
-                      ))}
+                      {data?.slice(0, noOfDisplay)?.map((device: any) => (
+                          <DeviceListItem
+                            key={device?.device_id}
+                            device={device}
+                            isSelected={selectedDevices.includes(
+                              device?.device_id
+                            )}
+                          />
+                        ))}
+                        {data?.length > noOfDisplay && (
+                          <motion.div variants={itemVariants}>
+                            <Box className="flex items-center justify-center w-full h-20">
+                              <Button onClick={handleShowMore} color="primary" size="small">
+                                Show more
+                              </Button>
+                            </Box>
+                          </motion.div>
+                        )}
                     </motion.div>
                   </Box>
+                ) : data?.length === 0 ? (
+                  <Box className="flex items-center justify-center w-full h-20">
+                    <Typography variant="body1" color="text.secondary">
+                      No devices found
+                    </Typography>
+                  </Box>
                 ) : (
-                  data?.length === 0 ? (
-                    <Box className="flex items-center justify-center w-full h-20">
-                      <Typography variant="body1" color="text.secondary">
-                        No devices found
-                      </Typography>
-                    </Box>
-                  ) : 
                   <FuseLoading />
                 )}
               </motion.div>
