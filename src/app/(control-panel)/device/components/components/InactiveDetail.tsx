@@ -72,7 +72,7 @@ const InactiveDetail = (props: any) => {
                 <Typography className="text-lg font-medium">{deviceId}</Typography>
                 <Chip
                 icon={<InfoIcon color="info" fontSize="small" />}
-                label={deviceDetail?.type}
+                label={deviceDetail?.type || NaN}
                 color="info"
                 size="small"
                 />

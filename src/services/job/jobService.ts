@@ -1,11 +1,13 @@
 import FuseUtils from "@fuse/utils";
-import axios from "axios";
+import axiosClient from "../axiosClient";
+// import axios from "axios";
+
  
 
 class jobService extends FuseUtils.EventEmitter {
     getCronJobs (params: any) {
         return new Promise((resolve, reject) => {
-          axios.get(`http://localhost:3000/jobs/all`, { params })
+          axiosClient.get(`http://localhost:3000/jobs/all`, { params })
             .then((response) => {
               const jobResponseUpdate = response.data.data.map((job: any, index: any) => ({...job, id:index }));
               resolve({...response.data, data: jobResponseUpdate});
@@ -30,7 +32,7 @@ class jobService extends FuseUtils.EventEmitter {
 
     updateJobStatus (params: {job: any, enable: boolean}) {
         return new Promise((resolve, reject) => {
-          axios.post(`http://localhost:3000/jobs/trigger?cron_type=${params.job.cron_type}&city_id=${params.job.city_id}&district_id=${params.job.district_id}&enable=${params.enable}`)
+          axiosClient.post(`http://localhost:3000/jobs/trigger?cron_type=${params.job.cron_type}&city_id=${params.job.city_id}&district_id=${params.job.district_id}&enable=${params.enable}`)
             .then((response) => resolve({id: params.job.id, status: params.enable ? "running" : "stopped"}))
             .catch(function (error) {
               if (error.response) {
@@ -54,7 +56,7 @@ class jobService extends FuseUtils.EventEmitter {
 
     getJobDetail (params: {job: any}) {
         return new Promise((resolve, reject) => {
-          axios.get(`http://localhost:3000/jobs/detail?cron_type=${params.job.cron_type}&city_id=${params.job.city_id}&district_id=${params.job.district_id}`)
+          axiosClient.get(`http://localhost:3000/jobs/detail?cron_type=${params.job.cron_type}&city_id=${params.job.city_id}&district_id=${params.job.district_id}`)
             .then((response) => resolve(response.data))
             .catch(function (error) {
               if (error.response) {
@@ -78,7 +80,7 @@ class jobService extends FuseUtils.EventEmitter {
     getDistributionData (params: {job: any}) {
       return new Promise((resolve, reject) => {
         const job = params.job;
-        axios.get(`http://localhost:3000/jobs/chart?cron_type=${job.cron_type}&city_id=${job.city_id}&district_id=${job.district_id}`)
+        axiosClient.get(`http://localhost:3000/jobs/chart?cron_type=${job.cron_type}&city_id=${job.city_id}&district_id=${job.district_id}`)
         .then((res) => {
           resolve(res);
         })
@@ -102,7 +104,7 @@ class jobService extends FuseUtils.EventEmitter {
 
     updateJobDetail (params: {data: any}) {
       return new Promise((resolve, reject) => {
-        axios.post(`http://localhost:3000/jobs/update?cron_type=${params.data.cron_type}&city_id=${params.data.city_id}&district_id=${params.data.district_id}&distribution_type=${params.data.distribution_type}&random_order=${params.data.random_order}&cron_time=${params.data.cron_time}`)
+        axiosClient.post(`http://localhost:3000/jobs/update?cron_type=${params.data.cron_type}&city_id=${params.data.city_id}&district_id=${params.data.district_id}&distribution_type=${params.data.distribution_type}&random_order=${params.data.random_order}&cron_time=${params.data.cron_time}`)
           .then((response) => resolve(response.data))
           .catch(function (error) {
             if (error.response) {

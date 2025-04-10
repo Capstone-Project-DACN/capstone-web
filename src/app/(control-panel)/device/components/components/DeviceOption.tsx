@@ -9,8 +9,13 @@ import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { add } from "lodash";
-import { addSelectedDevice, removeDevice, removeSelectedDevice } from "../../store/deviceSlice";
+import {
+  addSelectedDevice,
+  removeDevice,
+  removeSelectedDevice,
+} from "../../store/deviceSlice";
 import { showMessage } from "@fuse/core/FuseMessage/fuseMessageSlice";
+import { useSelector } from "react-redux";
 
 const tabVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -30,10 +35,13 @@ const tabVariants = {
   },
 };
 
-const DeviceOption = ({ device,  isSelected = false }) => {
+const DeviceOption = ({ device, isSelected = false }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [anchorEl, setAnchorEl] = useState(null);
   const topic = new URLSearchParams(window.location.search).get("topic") || "";
+  const selectedDevices = useSelector(
+    (state: any) => state?.device?.deviceSlice?.selectedDevices || []
+  );
 
   const handleMenuClick = (event: any, device: any) => {
     setAnchorEl(event.currentTarget);
@@ -44,19 +52,33 @@ const DeviceOption = ({ device,  isSelected = false }) => {
   };
 
   const handleFollowDevice = () => {
-    console.log({device});
-    if(!isSelected) dispatch(addSelectedDevice(device?.device_id));
+    console.log({ device });
+    if (!isSelected) dispatch(addSelectedDevice(device?.device_id));
     else dispatch(removeSelectedDevice(device?.device_id));
     handleMenuClose();
   };
 
   const handleDeleteDevice = () => {
-    dispatch(removeDevice({ deviceId: device?.device_id , topic})).then((response: any) => {
-      handleMenuClose();
-      dispatch(showMessage({message: "Delete device successfully", variant: "success", anchorOrigin: {vertical: "top", horizontal: "right"}}));
-    }).catch((error: any) => {
-      dispatch(showMessage({message: "Error deleting device", variant: "error", anchorOrigin: {vertical: "top", horizontal: "right"}}));
-    }) 
+    dispatch(removeDevice({ deviceId: device?.device_id, topic }))
+      .then((response: any) => {
+        handleMenuClose();
+        dispatch(
+          showMessage({
+            message: "Delete device successfully",
+            variant: "success",
+            anchorOrigin: { vertical: "top", horizontal: "right" },
+          })
+        );
+      })
+      .catch((error: any) => {
+        dispatch(
+          showMessage({
+            message: "Error deleting device",
+            variant: "error",
+            anchorOrigin: { vertical: "top", horizontal: "right" },
+          })
+        );
+      });
   };
 
   return (
@@ -96,10 +118,12 @@ const DeviceOption = ({ device,  isSelected = false }) => {
             </div>
           )}
         </MenuItem>
-        <MenuItem onClick={handleDeleteDevice} sx={{ color: "error.main" }}>
-          <DeleteOutlineIcon fontSize="small" sx={{ mr: 1 }} />
-          Remove Device
-        </MenuItem>
+        {!isSelected && (
+          <MenuItem onClick={handleDeleteDevice} sx={{ color: "error.main" }}>
+            <DeleteOutlineIcon fontSize="small" sx={{ mr: 1 }} />
+            Remove Device
+          </MenuItem>
+        )}
       </Menu>
     </motion.div>
   );

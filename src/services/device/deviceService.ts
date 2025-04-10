@@ -1,8 +1,6 @@
 import FuseUtils from "@fuse/utils";
-import deviceResponse from "./inactiveResponse.json";
-import topicsResponse from "./topicsResponse.json";
-import devicesResponse from "./devicesResponse.json";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import axiosClient from "../axiosClient";
 
 class deviceService extends FuseUtils.EventEmitter {
   constructor() {
@@ -15,9 +13,9 @@ class deviceService extends FuseUtils.EventEmitter {
   }
 
   setInterceptors = (): void => {
-    axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-    axios.defaults.headers.common["Content-Type"] = "application/json";
-    axios.interceptors.response.use(
+    axiosClient.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+    axiosClient.defaults.headers.common["Content-Type"] = "application/json";
+    axiosClient.interceptors.response.use(
       (response: AxiosResponse) => {
         return response;
       },
@@ -49,7 +47,7 @@ class deviceService extends FuseUtils.EventEmitter {
             pageSize: params?.pageSize || 100,
             dateTime: params?.dateTime || false
           }
-          axios
+          axiosClient
             .get(`http://localhost:3001/devices/inactive`, { params: finalParams })
             .then((response) => resolve(response))
             // .then((response) => resolve(response))
@@ -80,7 +78,7 @@ class deviceService extends FuseUtils.EventEmitter {
       const payload = params;
 
       return new Promise((resolve, reject) => {
-        axios
+        axiosClient
           .post(`http://localhost:3001/devices/add-multiple`, payload)
           .then((response) => resolve(response))
           .catch(function (error) {
@@ -106,7 +104,7 @@ class deviceService extends FuseUtils.EventEmitter {
       deviceId: string
     }) {
       return new Promise((resolve, reject) => {
-        axios
+        axiosClient
           .post(`http://localhost:3001/devices/add`, params)
           .then((response) => resolve(response))
           .catch(function (error) {
@@ -130,7 +128,7 @@ class deviceService extends FuseUtils.EventEmitter {
 
     getDeviceTopics = () => {
       return new Promise((resolve, reject) => {
-        axios
+        axiosClient
           .get(`http://localhost:3001/devices/topics/all`)
           .then((response) => resolve(response))
           .catch(function (error) {
@@ -154,7 +152,7 @@ class deviceService extends FuseUtils.EventEmitter {
 
     getDevicesByTopic = (params: {topic: string}) => {
       return new Promise((resolve, reject) => {
-        axios
+        axiosClient
           .get(`http://localhost:3001/devices/get-by-topic/${params?.topic}`)
           .then((response) => resolve(response))
           .catch(function (error) {
@@ -180,7 +178,7 @@ class deviceService extends FuseUtils.EventEmitter {
 
     getDeviceDetail = (params: {deviceId: any}) => {
       return new Promise((resolve, reject) => {
-        axios
+        axiosClient
           .get(`http://localhost:3001/devices/detail/${params?.deviceId}`)
           .then((response) => resolve(response))
           .catch(function (error) {
@@ -208,7 +206,7 @@ class deviceService extends FuseUtils.EventEmitter {
 // }'
     removeDevice = (params: {deviceId: any}) => {
       return new Promise((resolve, reject) => {
-        axios.post(`http://localhost:3001/devices/remove`, params)
+        axiosClient.post(`http://localhost:3001/devices/remove`, params)
           .then((response) => resolve(response))
           .catch(function (error) {
             if (error.response) {
