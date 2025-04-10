@@ -8,6 +8,7 @@ import StyledFusePageSimple from '@fuse/core/FusePageSimple';
 import DeviceHeader from './DeviceHeader';
 import AddDevice from './components/components/AddDevice';
 import DeviceContent from './DeviceContent';
+import LogSidebar from './components/LogSidebar';
 
 const Root = styled(StyledFusePageSimple)(({ theme }) => ({
 	"& .FusePageSimple-header": {
@@ -26,13 +27,19 @@ const Root = styled(StyledFusePageSimple)(({ theme }) => ({
 
 function DevicePage() {
 	const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-	const location = useLocation();
+	const searchParams = new URLSearchParams(window.location.search);
+	const params = useParams();
+	const logs = searchParams.get("logs");
  
 	return (
 		<Root
 			header={<DeviceHeader />}
 			content={<DeviceContent />}
+			rightSidebarOpen={logs === "true" && params.tab === "produce"}
+			rightSidebarContent={<LogSidebar />}
+			rightSidebarWidth={450}
 			scroll={isMobile ? "normal" : "content"}
+			className='text-sm'
 		/>
 	);
 }

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import deviceService from "@/services/device/deviceService"
 import _, { remove } from "lodash";
+import { clear } from "console";
 
 export const searchInactiveDevice = createAsyncThunk<any, any>(
   "device/search",
@@ -110,7 +111,8 @@ interface deviceSliceState {
     totalPages: number
   };
   filter: {},
-  selectedDevices: []
+  selectedDevices: [],
+  logs: [],
 }
 
 const initialState: deviceSliceState = {
@@ -130,7 +132,8 @@ const initialState: deviceSliceState = {
     totalPages: 10
   },
   filter: {}, 
-  selectedDevices: []
+  selectedDevices: [],
+  logs: [],
 };
 
 const deviceSlice = createSlice({
@@ -142,6 +145,12 @@ const deviceSlice = createSlice({
     },
     setTab(state, action) {
       state.tab = action.payload;
+    },
+    addLogs(state: any, action: any) {
+      state.logs = [...state.logs, action.payload];
+    },
+    clearLogs(state: any) {
+      state.logs = [];
     },
     addSelectedDevice(state: any, action: any) {
       const exited = state.selectedDevices.find((item: any) => item === action.payload);
@@ -213,7 +222,9 @@ export const {
   setTab,
   addSelectedDevice,
   removeSelectedDevice,
-  setSelectedDevices
+  setSelectedDevices,
+  addLogs,
+  clearLogs
 } = deviceSlice.actions;
 
 export default deviceSlice.reducer;

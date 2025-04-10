@@ -1,14 +1,23 @@
-import { Box, Button, IconButton, styled, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  styled,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import {
+  addLogs,
   removeSelectedDevice,
   setSelectedDevices,
 } from "../../store/deviceSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
+import { useNavigate } from "react-router";
 
 const StickyHeader = styled(Box)(({ theme }) => ({
   position: "sticky",
@@ -33,6 +42,7 @@ interface DeviceData {
 const ProduceTab = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState({});
+  const navigate = useNavigate();
   const selectedDevices = useSelector(
     (state: any) => state?.device?.deviceSlice?.selectedDevices || []
   );
@@ -86,10 +96,17 @@ const ProduceTab = () => {
   };
 
   const sendData = async (device: DeviceData, isAnomaly: boolean = false) => {
+    const action =
+      device.type === "household"
+        ? isAnomaly
+          ? "Send Anomaly"
+          : "Send Normal"
+        : "Send Area Data";
+
     try {
-      setLoading(prevLoading => ({
+      setLoading((prevLoading) => ({
         ...prevLoading,
-        [device.id]: true
+        [device.id]: true,
       }));
 
       let url = "";
@@ -103,13 +120,14 @@ const ProduceTab = () => {
 
       const response = await fetch(url);
       const data = await response.json();
-      
-    } catch (error) {
+
+      dispatch(addLogs(data));
+    } catch (error: any) {
       console.error(error);
     } finally {
-      setLoading(prevLoading => ({
+      setLoading((prevLoading) => ({
         ...prevLoading,
-        [device.id]: false
+        [device.id]: false,
       }));
     }
   };
@@ -123,13 +141,25 @@ const ProduceTab = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="w-1/8 flex items-center">Type</div>
-          <div className="w-1/8 flex items-center">City</div>
-          <div className="w-1/8 flex items-center">District</div>
-          <div className="w-1/8 flex items-center">ID</div>
-          <div className="w-1/8 flex items-center">Normal</div>
-          <div className="w-1/8 flex items-center">Anomaly</div>
-          <div className="w-1/22 flex items-center"></div>
+          <div className="w-1/10 flex items-center">Type</div>
+          <div className="w-1/10 flex items-center">City</div>
+          <div className="w-1/10 flex items-center">District</div>
+          <div className="w-1/10 flex items-center">ID</div>
+          <div className="w-2/10 flex items-center">Normal</div>
+          <div className="w-2/10 flex items-center">Anomaly</div>
+          <div className="w-1/22 flex items-center">
+            <Tooltip title="View Logs">
+              <IconButton onClick={() => {
+                const updatedParams = new URLSearchParams(window.location.search);
+                updatedParams.set("logs", "true");
+                navigate(`/device/produce?${updatedParams.toString()}`);
+              }}>
+                <FuseSvgIcon className="text-7xl" size={18} color="primary">
+                  heroicons-solid:code-bracket
+                </FuseSvgIcon>
+              </IconButton>
+            </Tooltip>
+          </div>
         </motion.div>
       </StickyHeader>
 
@@ -142,7 +172,7 @@ const ProduceTab = () => {
               className="border border-t-0 h-14 px-4 flex items-center"
             >
               <div className="flex items-center w-full justify-between">
-                <div className="w-1/8 flex items-center gap-x-2">
+                <div className="w-1/10 flex items-center gap-x-2">
                   {device.type == "household" && (
                     <FuseSvgIcon className="text-7xl" size={18}>
                       heroicons-outline:building-office
@@ -155,12 +185,14 @@ const ProduceTab = () => {
                   )}
                   {device.type}
                 </div>
-                <div className="w-1/8 flex items-center">{device.city}</div>
-                <div className="w-1/8 flex items-center">{device.district}</div>
-                <div className="w-1/8 flex items-center">
+                <div className="w-1/10 flex items-center">{device.city}</div>
+                <div className="w-1/10 flex items-center">
+                  {device.district}
+                </div>
+                <div className="w-1/10 flex items-center">
                   {device.householdId || "-"}
                 </div>
-                <div className="w-1/8 flex items-center">
+                <div className="w-2/10 flex items-center">
                   {device.type === "household" ? (
                     <Button
                       size="small"
@@ -199,7 +231,7 @@ const ProduceTab = () => {
                     </Button>
                   )}
                 </div>
-                <div className="w-1/8 flex items-center">
+                <div className="w-2/10 flex items-center">
                   {device.type === "household" && (
                     <Button
                       size="small"
