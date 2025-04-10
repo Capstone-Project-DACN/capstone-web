@@ -1,18 +1,34 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import jobService from "@/services/job/jobService"
+import { any } from "zod";
 
 export interface jobDialogSliceProps {
-  data: [],
+  data: any,
   props: any,
   loading: boolean
 }
 
 const initialState: jobDialogSliceProps = {
-  data: [],
+  data: null,
   props: {
     open: false
   },
   loading: false
 };
+
+export const getDistributionData = createAsyncThunk<any, any>(
+  "cronjob/getDistributionData",
+  async (params: {job : any}, { getState }: any) => {
+    try {
+      const response = (await jobService.getDistributionData(params)) as any;
+      return {data: response.data};
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+
 
 const jobDialogSlice = createSlice({
   name: "jobDialogSlice",
@@ -25,6 +41,15 @@ const jobDialogSlice = createSlice({
       state.props.open = false;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getDistributionData.fulfilled, (state, action: any) => {
+      state.data = {
+        data: {
+          chart_data: action.payload.data?.data?.chart_data
+        }
+      };
+    })
+    }
 }); 
 
 export const { 

@@ -17,6 +17,7 @@ import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 export default function JobDialog() {
   const dispatch = useDispatch<AppDispatch>();
   const jobDetail = useSelector((state: any) => state?.jobs?.jobSlice?.detail);
+  const [refresh, toggleRefresh] = React.useState(false);
   const dialogProps = useSelector(
     (state: any) => state.jobs?.jobDialogSlice?.props
   );
@@ -34,26 +35,28 @@ export default function JobDialog() {
         onClose={handleClose}
         sx={{
           "& .MuiDialog-paper": {
-            borderRadius: "6px"
+            borderRadius: "6px",
           }
         }}
       >
         <div className="w-full items-center justify-between flex rounded-sm">
           <DialogTitle className="text-xl font-semibold">
-            Distribution Visualization ({jobDetail?.distribution_type}){" "}
+            Distribution Visualization ({jobDetail?.distribution_type})
           </DialogTitle>
           <DialogActions>
-            <IconButton className="mx-2">
+            <IconButton className="" onClick={() => toggleRefresh(prev => !prev)}>
               <FuseSvgIcon className="text-7xl" size={22} color="primary">
                 heroicons-outline:arrow-path
               </FuseSvgIcon>
             </IconButton>
-            <Button onClick={handleClose}>Close</Button>
+            <IconButton onClick={handleClose}>
+              <FuseSvgIcon className="text-7xl mr-2"  size={22} color="primary">heroicons-outline:arrows-pointing-in</FuseSvgIcon>
+            </IconButton>
           </DialogActions>
         </div>
         <DialogContent>
-          <Box className="flex items-center justify-center w-full mt-10">
-            <DistributedChart />
+          <Box className="flex items-center justify-center w-full">
+            <DistributedChart refresh={refresh} toggleRefresh={toggleRefresh} />
           </Box>
         </DialogContent>
       </Dialog>

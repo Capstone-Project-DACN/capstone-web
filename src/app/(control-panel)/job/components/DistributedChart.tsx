@@ -11,7 +11,10 @@ import { ApexOptions } from "apexcharts";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
-import { openJobDialog } from "@/dialogs/job/JobDialogSlice";
+import { getDistributionData, openJobDialog } from "@/dialogs/job/JobDialogSlice";
+import { useSelector } from "react-redux";
+import { set } from "lodash";
+import { stat } from "fs";
 
 interface DistributionChartProps {
   data: {
@@ -128,15 +131,15 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
       },
     },
     colors: ["#2E93fA"],
-    title: {
-      text: data.chart_title,
-      align: "center",
-      style: {
-        fontSize: "16px",
-        fontWeight: "bold",
-        color: "#444",
-      },
-    },
+    // title: {
+    //   text: data.chart_title,
+    //   align: "center",
+    //   style: {
+    //     fontSize: "16px",
+    //     fontWeight: "bold",
+    //     color: "#444",
+    //   },
+    // },
     tooltip: {
       enabled: true,
       theme: "light",
@@ -176,7 +179,7 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
   }, [data, processedData, categories]);
 
   return (
-    <Box className="p-4 rounded-lg w-full">
+    <Box className="py-2 rounded-lg w-full">
       <Box className="relative">
         {loading && (
           <Box className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
@@ -213,21 +216,56 @@ const DistributionChart: React.FC<DistributionChartProps> = ({
 };
 
 // Usage example component
-const DistributedChart: React.FC = () => {
+const DistributedChart = (props: any) => {
+  const { refresh, toggleRefresh } = props;
   const dispatch = useDispatch<AppDispatch>();
-  const sampleData: any = {
-    data: {
-      chart_data: [
-        8, 10, 13, 15, 19, 23, 28, 34, 42, 50, 60, 71, 85, 100, 118, 138, 0, 0,
-        34, 42, 50, 60, 71, 85, 100, 118, 138, 0, 8, 10, 13, 15, 19, 23, 28, 0,
-        0, 0, 0, 0,
-      ],
-    },
-  };
+  const data = useSelector((state: any) => state?.jobs?.jobDialogSlice?.data);
+  const jobDetail = useSelector((state: any) => state?.jobs?.jobSlice?.detail);
+  const job_Id = new URLSearchParams(window.location.search).get("job_id");
+
+  useEffect(() => {
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const job = {
+        cron_type: searchParams.get("cron_type"),
+        city_id: searchParams.get("city_id"),
+        district_id: searchParams.get("district_id"),
+      }
+      if(jobDetail?.status === "running") {
+        dispatch(getDistributionData({job})).then((res) => {
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }, [refresh, job_Id])
+
+  useEffect(() => {
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const job = {
+        cron_type: searchParams.get("cron_type"),
+        city_id: searchParams.get("city_id"),
+        district_id: searchParams.get("district_id"),
+      }
+      dispatch(getDistributionData({job})).then((res) => {})
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
+  useEffect(() => {
+    const invtervalId = setInterval(() => {
+      if(jobDetail?.status === "running") toggleRefresh((prev: boolean) => !prev);
+    }, 3000)
+    return () => clearInterval(invtervalId);
+  })
+
+  if(!data) return;
 
   return (
     <div className="overflow-y-scroll scrollbar-hide w-full">
-      <DistributionChart data={sampleData.data} />
+      <DistributionChart data={data.data} />
     </div>
   );
 };

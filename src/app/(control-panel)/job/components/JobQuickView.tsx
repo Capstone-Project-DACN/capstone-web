@@ -90,6 +90,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
   const [loading, setLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
   const primaryColor = jobDetail?.status === "running" ? "primary" : "warning";
+  const [refresh, toggleRefresh] = React.useState(false);
 
   const {
     control,
@@ -231,6 +232,31 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
         >
           Cron job detail
         </Button>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.3 }}
+          className="flex gap-y-2 flex-col items-center pr-3"
+        >
+          <Button
+            variant="contained"
+            size="small"
+            color={jobDetail?.status === "stopped" ? "secondary" : "warning"}
+            startIcon={
+              jobDetail?.status === "stopped" ? (
+                <SensorsIcon className="mt-[1px]" />
+              ) : (
+                <SensorsOffTwoToneIcon className="mt-[1px]" />
+              )
+            }
+            className="rounded-sm hover:shadow-lg transition-all"
+            fullWidth
+            onClick={updateStatus}
+            disabled={updateLoading}
+          >
+            {jobDetail?.status === "stopped" ? "Start job" : "Stop job"}
+          </Button>
+        </motion.div>
       </StickyHeader>
 
       <AnimatePresence mode="wait">
@@ -349,6 +375,16 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                       <Typography className="mb-2 mt-5 text-md font-medium flex items-center">
                         ⏳ Sending Time (ms)
                       </Typography>
+                      {msValid && (
+                        <div className="flex items-center py-2 rounded-md mb-2">
+                          <Typography className="w-1/2 text-md">
+                            🕒 <strong>Cron:</strong> <code>{cronExpr}</code>
+                          </Typography>
+                          <Typography className="w-1/2 text-md">
+                            🧭 <strong>Detail:</strong> {detailed}
+                          </Typography>
+                        </div>
+                      )}
                       <TextField
                         {...field}
                         disabled={jobDetail?.status === "running"}
@@ -358,16 +394,6 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                         className="rounded-sm"
                         error={!!errors.cron_time}
                       />
-                      {msValid && (
-                        <div className="flex flex-col gap-y-2 p-2 border border-dashed rounded-md mt-4">
-                          <Typography className="mt-2 text-md">
-                            🕒 <strong>Cron:</strong> <code>{cronExpr}</code>
-                          </Typography>
-                          <Typography className="mt-1 text-md">
-                            🧭 <strong>Detail:</strong> {detailed}
-                          </Typography>
-                        </div>
-                      )}
                     </>
                   )}
                 />
@@ -377,7 +403,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
-                className="mt-4"
+                className="mt-4 flex items-center justify-between"
               >
                 <Controller
                   name="random_order"
@@ -398,21 +424,13 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                     );
                   }}
                 />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.3 }}
-                className="flex gap-y-2 flex-col items-center mt-4"
-              >
                 {jobDetail?.status === "stopped" && (
                   <Button
                     type="submit"
-                    variant="outlined"
+                    variant="contained"
                     color="secondary"
                     className="rounded-sm"
-                    fullWidth
+                    size="small"
                     disabled={
                       !isValid ||
                       updateLoading ||
@@ -424,65 +442,43 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                     {updateLoading ? <CircularProgress size={18} /> : "Update"}
                   </Button>
                 )}
-
-                <Button
-                  variant="outlined"
-                  color={
-                    jobDetail?.status === "stopped" ? "secondary" : "warning"
-                  }
-                  startIcon={
-                    jobDetail?.status === "stopped" ? (
-                      <SensorsIcon className="mt-[1px]" />
-                    ) : (
-                      <SensorsOffTwoToneIcon className="mt-[1px]" />
-                    )
-                  }
-                  className="rounded-sm hover:shadow-lg transition-all"
-                  fullWidth
-                  onClick={updateStatus}
-                  disabled={updateLoading}
-                >
-                  {jobDetail?.status === "stopped" ? "Start job" : "Stop job"}
-                </Button>
               </motion.div>
+
+              <Divider className="mt-5 mb-5"></Divider>
             </form>
           </Box>
 
-          <Divider className="mt-10"></Divider>
-
-          {jobDetail.status === "running" && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.3 }}
-            >
-              <div className="flex items-center justify-between mt-10">
-                <Typography variant="body2" className="font-semibold mb-2">
-                  Distribution Visualization ({jobDetail?.distribution_type})
-                </Typography>
-                <div className="flex items-center gap-x-2">
-                  <IconButton>
-                    <FuseSvgIcon className="text-7xl" size={22} color="primary">
-                      heroicons-outline:arrow-path
-                    </FuseSvgIcon>
-                  </IconButton>
-                  <IconButton>
-                    <FuseSvgIcon
-                      className="text-7xl"
-                      size={22}
-                      color="action"
-                      onClick={() => {
-                        dispatch(openJobDialog(null));
-                      }}
-                    >
-                      heroicons-outline:arrows-pointing-out
-                    </FuseSvgIcon>
-                  </IconButton>
-                </div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.3 }}
+          >
+            <div className="flex items-center justify-between mt-4">
+              <Typography variant="body2" className="font-semibold mb-2">
+                Distribution Visualization ({jobDetail?.distribution_type})
+              </Typography>
+              <div className="flex items-center gap-x-2">
+                <IconButton
+                  onClick={() => toggleRefresh((prev) => !prev)}
+                  disabled={jobDetail?.status !== "running"}
+                >
+                  <FuseSvgIcon className="text-7xl" size={20} color="primary">
+                    heroicons-outline:arrow-path
+                  </FuseSvgIcon>
+                </IconButton>
+                <IconButton
+                  onClick={() => {
+                    dispatch(openJobDialog(null));
+                  }}
+                >
+                  <FuseSvgIcon className="text-7xl" size={20} color="primary">
+                    heroicons-outline:arrows-pointing-out
+                  </FuseSvgIcon>
+                </IconButton>
               </div>
-              <DistributedChart />
-            </motion.div>
-          )}
+            </div>
+            <DistributedChart refresh={refresh} toggleRefresh={toggleRefresh} />
+          </motion.div>
         </motion.div>
       </AnimatePresence>
     </div>
