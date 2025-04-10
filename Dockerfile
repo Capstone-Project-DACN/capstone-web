@@ -7,6 +7,8 @@ RUN npm install --legacy-peer-deps
 COPY . .
 RUN npm run build
 
+COPY .env .
+
 # Giai đoạn 2: Dùng nginx để phục vụ ứng dụng
 FROM nginx:alpine
 
@@ -16,6 +18,6 @@ COPY --from=build /app/build /usr/share/nginx/html
 # Copy cấu hình nginx tùy chỉnh
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 9090
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
