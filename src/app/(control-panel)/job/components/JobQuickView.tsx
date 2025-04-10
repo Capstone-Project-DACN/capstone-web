@@ -217,6 +217,16 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     return <FuseLoading />;
   }
 
+
+  const myIsDirty = () => {
+    const { cron_time, distribution_type, random_order } = watch();
+    return (
+      millisecondsToCron(cron_time) !== jobDetail.cron_time ||
+      String(distribution_type) !== String(jobDetail.distribution_type) ||
+      String(random_order) !== String(jobDetail.random_order)
+    );
+  };
+  
   return (
     <div className="px-2">
       <StickyHeader className="flex items-center h-14 justify-between">
@@ -435,7 +445,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                       !isValid ||
                       updateLoading ||
                       !msValid ||
-                      !isDirty ||
+                      !myIsDirty() ||
                       jobDetail.status === "running"
                     }
                   >
