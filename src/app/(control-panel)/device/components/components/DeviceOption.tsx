@@ -9,7 +9,8 @@ import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { add } from "lodash";
-import { addSelectedDevice, removeSelectedDevice } from "../../store/deviceSlice";
+import { addSelectedDevice, removeDevice, removeSelectedDevice } from "../../store/deviceSlice";
+import { showMessage } from "@fuse/core/FuseMessage/fuseMessageSlice";
 
 const tabVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -32,6 +33,7 @@ const tabVariants = {
 const DeviceOption = ({ device,  isSelected = false }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [anchorEl, setAnchorEl] = useState(null);
+  const topic = new URLSearchParams(window.location.search).get("topic") || "";
 
   const handleMenuClick = (event: any, device: any) => {
     setAnchorEl(event.currentTarget);
@@ -48,7 +50,14 @@ const DeviceOption = ({ device,  isSelected = false }) => {
     handleMenuClose();
   };
 
-  const handleDeleteDevice = () => {};
+  const handleDeleteDevice = () => {
+    dispatch(removeDevice({ deviceId: device?.device_id , topic})).then((response: any) => {
+      handleMenuClose();
+      dispatch(showMessage({message: "Delete device successfully", variant: "success", anchorOrigin: {vertical: "top", horizontal: "right"}}));
+    }).catch((error: any) => {
+      dispatch(showMessage({message: "Error deleting device", variant: "error", anchorOrigin: {vertical: "top", horizontal: "right"}}));
+    }) 
+  };
 
   return (
     <motion.div

@@ -93,6 +93,22 @@ export const getDeviceDetail = createAsyncThunk<any, any>(
     }
   }
 );
+
+export const removeDevice = createAsyncThunk<any, any>(
+  "device/removeDevice",
+  async (params: {deviceId: any, topic: any}, { getState }: any) => {
+      
+    try {
+      const response = (await deviceService.removeDevice({deviceId: params.deviceId})) as any;
+
+      console.log({response});
+
+      return {deviceId: params.deviceId, topic: params.topic};
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
  
 interface deviceSliceState {
   tab: string,
@@ -212,6 +228,15 @@ const deviceSlice = createSlice({
     });
     builder.addCase(getDeviceDetail.fulfilled, (state, action: any) => {
       state.detail = action.payload.detail;
+    });
+    builder.addCase(removeDevice.fulfilled, (state, action: any) => {
+      state.data = state.data.filter((item: any) => item.device_id !== action.payload.deviceId);
+      state.topics = state.topics.map((item: any) => {
+        if(item.topic === action.payload.topic) {
+          item.number_of_devices -= 1;
+        }
+        return item;
+      } );
     });
   },
 }); 
