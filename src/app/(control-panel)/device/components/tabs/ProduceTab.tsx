@@ -50,6 +50,17 @@ const ProduceTab = () => {
     (state: any) => state?.device?.deviceSlice?.selectedDevices || []
   );
 
+  const handleShowLogs = () => {
+    const updatedParams = new URLSearchParams(window.location.search);
+    const currentState = updatedParams.get("logs");
+    if (currentState === "true") {
+      updatedParams.delete("logs");
+    } else {
+      updatedParams.set("logs", "true");
+    }
+    navigate(`/device/produce?${updatedParams.toString()}`);
+  }
+
   useEffect(() => {
     if (!selectedDevices.length && !localStorage.getItem("selectedDevices"))
       return;
@@ -152,11 +163,7 @@ const ProduceTab = () => {
           <div className="w-2/10 flex items-center">Anomaly</div>
           <div className="w-1/22 flex items-center">
             <Tooltip title="View Logs">
-              <IconButton onClick={() => {
-                const updatedParams = new URLSearchParams(window.location.search);
-                updatedParams.set("logs", "true");
-                navigate(`/device/produce?${updatedParams.toString()}`);
-              }}>
+              <IconButton onClick={handleShowLogs}>
                 <FuseSvgIcon className="text-7xl" size={18} color="primary">
                   heroicons-solid:code-bracket
                 </FuseSvgIcon>

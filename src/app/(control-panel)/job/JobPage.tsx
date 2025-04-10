@@ -27,11 +27,10 @@ const Root = styled(StyledFusePageSimple)(({ theme }) => ({
 function JobPage() {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
-  const location = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
 
   useEffect(() => {
-    if (searchParams.get("jobQuickView")) setRightSidebarOpen(true);
+    if (searchParams.get("job_id")) setRightSidebarOpen(true);
     else setRightSidebarOpen(false);
   }, [searchParams]);
 
@@ -40,11 +39,9 @@ function JobPage() {
       <Root
         content={<JobsTable setRightSidebarOpen={setRightSidebarOpen} />}
         rightSidebarOpen={rightSidebarOpen}
-        rightSidebarContent={
-          <JobDetail setRightSidebarOpen={setRightSidebarOpen} />
-        }
+        rightSidebarContent={<JobDetail setRightSidebarOpen={setRightSidebarOpen} />}
         rightSidebarOnClose={() => setRightSidebarOpen(false)}
-        rightSidebarWidth={500}
+        rightSidebarWidth={450}
         scroll={isMobile ? "normal" : "content"}
       />
       <JobDialog />

@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import jobService from "@/services/job/jobService"
-import { stat } from "fs";
-import { get } from "lodash";
 
 export const getCronJobs = createAsyncThunk<any, any>(
   "cronjob/getAll",
@@ -18,7 +16,7 @@ export const getCronJobs = createAsyncThunk<any, any>(
 
 export const updateJobStatus = createAsyncThunk<any, any>(
   "cronjob/updateStatus",
-  async (params: {id : number, status: string}, { getState }: any) => {
+  async (params: {job: any, enable: boolean}, { getState }: any) => {
     try {
       const response = (await jobService.updateJobStatus(params)) as any;
       
@@ -31,11 +29,25 @@ export const updateJobStatus = createAsyncThunk<any, any>(
 
 export const getJobDetail = createAsyncThunk<any, any>(
   "cronjob/getJobDetail",
-  async (params: {id : any}, { getState }: any) => {
+  async (params: {job : any}, { getState }: any) => {
     try {
       const response = (await jobService.getJobDetail(params)) as any;
       
-      return {id: response?.id, data: response.data};
+      return {id: params?.job?.id, data: response.data};
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const updateJobDetail = createAsyncThunk<any, any>(
+  "cronjob/updateJobDetail",
+  async (params: {data : any}, { getState }: any) => {
+    try {
+      console.log(params);
+      const response = (await jobService.updateJobDetail(params)) as any;
+      
+      return {data: params.data, message: response?.data?.message};
     } catch (err) {
       console.log(err);
     }
@@ -102,9 +114,10 @@ const jobSlice = createSlice({
             };
         }
         return item;
-    })
+      })
+      console.log(state?.detail?.id , action.payload.id);
       if(state?.detail?.id == action.payload.id) {
-        state.detail.status = action.payload.status
+        state.detail.status = action.payload.status;
       }
       state.data = newData;
     })

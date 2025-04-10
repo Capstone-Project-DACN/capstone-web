@@ -31,10 +31,14 @@ export default function JobDialog() {
         {...dialogProps}
         fullWidth
         maxWidth="md"
-        // open={open}
         onClose={handleClose}
+        sx={{
+          "& .MuiDialog-paper": {
+            borderRadius: "6px"
+          }
+        }}
       >
-        <div className="w-full items-center justify-between flex ">
+        <div className="w-full items-center justify-between flex rounded-sm">
           <DialogTitle className="text-xl font-semibold">
             Distribution Visualization ({jobDetail?.distribution_type}){" "}
           </DialogTitle>

@@ -40,10 +40,11 @@ const LogSidebar = () => {
 
   return (
     <>
-      <StickyHeader className="flex items-center h-12 px-2 justify-between">
+      <StickyHeader className="flex items-center h-14 px-2 justify-between">
         <Button
           color="primary"
           className="font-semibold"
+          size="small"
           startIcon={
             <FuseSvgIcon className="text-7xl" size={18} color="primary">
               heroicons-outline:arrow-left

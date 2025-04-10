@@ -20,18 +20,22 @@ const itemVariants = {
   },
 };
 
-const JobItem = ({ job, index, onClick }: any) => {
+const JobItem = ({ job, index, setRightSidebarOpen }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const theme = useTheme();
   const [loading, setLoading] = useState<boolean>(false);
   const searchParams = new URLSearchParams(window.location.search);
-  const jobQuickViewId = searchParams.get("jobQuickView");
+  const jobQuickViewId = searchParams.get("job_id");
 
   const handleOnClick = () => {
     const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set("jobQuickView", job.id);
+    searchParams.set("job_id", job.id);
+    searchParams.set("cron_type", job.cron_type);
+    searchParams.set("district_id", job.district_id);
+    searchParams.set("city_id", job.city_id);
     navigate(`/cronjob?${searchParams.toString()}`);
+    setRightSidebarOpen(true);
   };
 
   const updateStatus = (e: any) => {
@@ -40,8 +44,8 @@ const JobItem = ({ job, index, onClick }: any) => {
     setLoading(true);
     dispatch(
       updateJobStatus({
-        id: job.id,
-        status: job.status === "stopped" ? "running" : "stopped",
+        job: job,
+        enable: job.status === "running" ? false : true
       })
     ).then(() => setLoading(false));
   };
@@ -125,7 +129,7 @@ const JobItem = ({ job, index, onClick }: any) => {
                 heroicons-solid:play
               </FuseSvgIcon>
             ) : (
-              <FuseSvgIcon className="text-7xl" size={18} color="action">
+              <FuseSvgIcon className="text-7xl" size={18} color="secondary">
                 heroicons-solid:stop
               </FuseSvgIcon>
             )}

@@ -13,6 +13,7 @@ import {
   Checkbox,
   FormControlLabel,
   Divider,
+  styled,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
@@ -22,7 +23,11 @@ import { useNavigate } from "react-router";
 import { AppDispatch } from "@/store/store";
 import SensorsOffTwoToneIcon from "@mui/icons-material/SensorsOffTwoTone";
 import SensorsIcon from "@mui/icons-material/Sensors";
-import { getJobDetail, updateJobStatus } from "../store/jobSlice";
+import {
+  getJobDetail,
+  updateJobDetail,
+  updateJobStatus,
+} from "../store/jobSlice";
 import {
   convertMillisecondsToTimeUnit,
   cronToMilliseconds,
@@ -34,6 +39,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import FuseLoading from "@fuse/core/FuseLoading";
 import DistributedChart from "./DistributedChart";
 import { openJobDialog } from "@/dialogs/job/JobDialogSlice";
+import { showMessage } from "@fuse/core/FuseMessage/fuseMessageSlice";
+
+const StickyHeader = styled(Box)(({ theme }) => ({
+  position: "sticky",
+  top: 0,
+  backgroundColor: theme.palette.background.paper,
+  zIndex: 10,
+}));
 
 const itemVariants = {
   hidden: { y: 15, opacity: 0 },
@@ -71,14 +84,12 @@ interface JobQuickViewProps {
 const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(window.location.search);
-  const jobQuickViewId = searchParams.get("jobQuickView");
+  const jobQuickViewId = searchParams.get("job_id");
   const dispatch = useDispatch<AppDispatch>();
   const jobDetail = useSelector((state: any) => state?.jobs?.jobSlice?.detail);
   const [loading, setLoading] = useState(false);
-  const [saveEnable, setSaveEnable] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
-
-  const primaryColor = jobDetail?.status === "running" ? "info" : "error";
+  const primaryColor = jobDetail?.status === "running" ? "primary" : "warning";
 
   const {
     control,
@@ -108,7 +119,14 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
   useEffect(() => {
     if (jobQuickViewId) {
       setLoading(true);
-      dispatch(getJobDetail({ id: jobQuickViewId }))
+      const searchParams = new URLSearchParams(window.location.search);
+      const job = {
+        id: jobQuickViewId,
+        district_id: searchParams.get("district_id"),
+        city_id: searchParams.get("city_id"),
+        cron_type: searchParams.get("cron_type"),
+      };
+      dispatch(getJobDetail({ job }))
         .then(() => setLoading(false))
         .catch(() => setLoading(false));
     }
@@ -128,64 +146,92 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     e.stopPropagation();
     e.preventDefault();
     setUpdateLoading(true);
-
-    const newStatus = jobDetail.status === "stopped" ? "running" : "stopped";
-
     dispatch(
       updateJobStatus({
-        id: jobQuickViewId,
-        status: newStatus,
+        job: jobDetail,
+        enable: jobDetail.status === "running" ? false : true,
       })
-    ).finally(() => setUpdateLoading(false));
+    )
+      .catch(() => setUpdateLoading(false))
+      .finally(() => setUpdateLoading(false));
   };
 
   // Submit form updates
   const handleJobSubmit = async (data: any) => {
     setUpdateLoading(true);
-    try {
-      setTimeout(() => {
+    const payload = {
+      ...data,
+      cron_time: convertMillisecondsToTimeUnit(data.cron_time),
+    };
+    dispatch(updateJobDetail({ data: payload }))
+      .then(() => {
+        dispatch(
+          showMessage({
+            message: "Job updated successfully",
+            variant: "success",
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+          })
+        );
+      })
+      .catch(() => {
         setUpdateLoading(false);
-      }, 1000);
-    } catch (error) {
-      console.error("Error updating job:", error);
-      setUpdateLoading(false);
-    }
+        dispatch(
+          showMessage({
+            message: "Error updating job",
+            variant: "error",
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+          })
+        );
+      })
+      .finally(() => setUpdateLoading(false));
   };
 
   const handleBack = () => {
-    navigate(`/cronjob`);
+    const updateParams = new URLSearchParams(window.location.search);
+    updateParams.delete("job_id");
+    navigate(`/cronjob?${updateParams.toString()}`);
     setRightSidebarOpen(false);
   };
 
-  if (loading) {
-    return <FuseLoading />;
-  }
-
   if (!jobDetail) {
     return (
-      <Box className="p-4 text-center">
-        <Typography variant="h6">Job not found</Typography>
-        <Button onClick={handleBack} variant="outlined" className="mt-4">
+      <Box className="p-4 text-center flex gap-x-2 items-center justify-center mt-10">
+        <Typography className="text-lg font-semibold mt-1">
+          Job not found
+        </Typography>
+        <Button color="primary" onClick={handleBack} fullWidth={false}>
           Back to Jobs
         </Button>
       </Box>
     );
   }
 
+  if (loading) {
+    return <FuseLoading />;
+  }
+
   return (
-    <div className="px-4 pt-1 ">
-      <div className="flex justify-between items-center mb-2 mt-2">
-        <div className="flex items-center w-full mt-1">
-          <IconButton onClick={handleBack}>
-            <FuseSvgIcon className="text-7xl" size={22} color="action">
-              heroicons-outline:arrow-long-left
+    <div className="px-2">
+      <StickyHeader className="flex items-center h-14 justify-between">
+        <Button
+          color="primary"
+          className="font-semibold"
+          startIcon={
+            <FuseSvgIcon className="text-7xl" size={18} color="primary">
+              heroicons-outline:arrow-left
             </FuseSvgIcon>
-          </IconButton>
-          <Typography className="font-semibold text-lg">
-            Cron Job Details
-          </Typography>
-        </div>
-      </div>
+          }
+          onClick={handleBack}
+        >
+          Cron job detail
+        </Button>
+      </StickyHeader>
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -193,48 +239,49 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
+          className="px-3 pt-2"
         >
           <motion.div variants={itemVariants} className="mb-4">
             <Box
               className="border-l-4 overflow-hidden"
               style={{
                 borderLeftColor:
-                  primaryColor === "info" ? "#2196f3" : "#f44336",
+                  primaryColor === "primary" ? "#2196f3" : "#ED6C02",
               }}
             >
-              <Box className="flex justify-between items-center p-4">
+              <Box className="flex justify-between items-center p-4 pl-2">
                 <Typography className="text-lg font-medium flex gap-x-2 items-center">
                   {jobDetail?.cron_type == "HouseholdData" && (
                     <FuseSvgIcon
                       className="text-7xl"
                       size={22}
-                      color={jobDetail.status === "running" ? "info" : "action"}
+                      color={
+                        jobDetail.status === "running" ? "primary" : "error"
+                      }
                     >
-                      {jobDetail.status === "running"
-                        ? "heroicons-solid:building-office"
-                        : "heroicons-outline:building-office"}
+                      heroicons-solid:building-office
                     </FuseSvgIcon>
                   )}
                   {jobDetail?.cron_type == "AreaData" && (
                     <FuseSvgIcon
                       className="text-7xl"
                       size={22}
-                      color={jobDetail.status === "running" ? "info" : "action"}
+                      color={
+                        jobDetail.status === "running" ? "primary" : "error"
+                      }
                     >
-                      {jobDetail.status === "running"
-                        ? "heroicons-solid:globe-asia-australia"
-                        : "heroicons-outline:globe-asia-australia"}
+                      heroicons-solid:globe-asia-australia
                     </FuseSvgIcon>
                   )}
                   {jobDetail?.cron_type == "AnomalyData" && (
                     <FuseSvgIcon
                       className="text-7xl"
                       size={22}
-                      color={jobDetail.status === "running" ? "info" : "action"}
+                      color={
+                        jobDetail.status === "running" ? "primary" : "error"
+                      }
                     >
-                      {jobDetail.status === "running"
-                        ? "heroicons-solid:bug-ant"
-                        : "heroicons-outline:bug-ant"}
+                      heroicons-solid:bug-ant
                     </FuseSvgIcon>
                   )}
                   {jobDetail?.cron_type} - {jobDetail?.city_id || "N/A"} -{" "}
@@ -357,12 +404,32 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.3 }}
-                className="flex gap-x-2 items-center mt-4"
+                className="flex gap-y-2 flex-col items-center mt-4"
               >
-             
+                {jobDetail?.status === "stopped" && (
+                  <Button
+                    type="submit"
+                    variant="outlined"
+                    color="secondary"
+                    className="rounded-sm"
+                    fullWidth
+                    disabled={
+                      !isValid ||
+                      updateLoading ||
+                      !msValid ||
+                      !isDirty ||
+                      jobDetail.status === "running"
+                    }
+                  >
+                    {updateLoading ? <CircularProgress size={18} /> : "Update"}
+                  </Button>
+                )}
+
                 <Button
-                  variant="contained"
-                  color={jobDetail?.status === "stopped" ? "info" : "warning"}
+                  variant="outlined"
+                  color={
+                    jobDetail?.status === "stopped" ? "secondary" : "warning"
+                  }
                   startIcon={
                     jobDetail?.status === "stopped" ? (
                       <SensorsIcon className="mt-[1px]" />
@@ -375,26 +442,8 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                   onClick={updateStatus}
                   disabled={updateLoading}
                 >
-                  {jobDetail?.status === "stopped" ? "Start" : "Stop"}
+                  {jobDetail?.status === "stopped" ? "Start job" : "Stop job"}
                 </Button>
-                {jobDetail?.status === "stopped" && (
-                  <Button
-                    type="submit"
-                    variant="outlined"
-                    color="secondary"
-                    className="rounded-md"
-                    fullWidth
-                    disabled={
-                      !isValid ||
-                      updateLoading ||
-                      !msValid ||
-                      !isDirty ||
-                      jobDetail.status === "running"
-                    }
-                  >
-                    {updateLoading ? <CircularProgress size={24} /> : "Update"}
-                  </Button>
-                )}
               </motion.div>
             </form>
           </Box>

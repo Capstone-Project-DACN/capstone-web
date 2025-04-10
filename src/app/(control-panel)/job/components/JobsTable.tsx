@@ -71,12 +71,24 @@ const StickyHeader = styled(Box)(({ theme }) => ({
 }));
 
 const JobsTable = (props: any) => {
- 
+  const { setRightSidebarOpen } = props;
   const theme = useTheme();
+  const navigate = useNavigate();
+  const searchTextParams = new URLSearchParams(window.location.search).get("search");
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
-  const [searchText, setSearchText] = useState<string>("");
+  const [searchText, setSearchText] = useState<string>(searchTextParams || "");
   const data = useSelector((state: any) => state?.jobs?.jobSlice?.data || []);
+
+  useEffect(() => {
+    if(searchTextParams) setSearchText(searchTextParams || "");
+  }, []);
+
+  useEffect(() => {
+    const updatePrams = new URLSearchParams(window.location.search);
+    updatePrams.set("search", searchText);
+    navigate(`/cronjob?${updatePrams.toString()}`);
+  }, [searchText])
 
   useEffect(() => {
     setLoading(true);
@@ -102,7 +114,7 @@ const JobsTable = (props: any) => {
         <TextField
           id="outlined-basic"
           autoComplete="off"
-          label="Search all"
+          placeholder="Search..."
           sx={{
             "& .MuiOutlinedInput-root": {
               paddingTop: "0px",
@@ -117,10 +129,9 @@ const JobsTable = (props: any) => {
           variant="contained"
           className="rounded-sm ml-2"
           sx={{ backgroundColor: theme.palette.action.hover }}
+          onClick={() => setSearchText("")}
         >
-          <FuseSvgIcon className="text-7xl" size={22} color="action">
-            heroicons-outline:magnifying-glass
-          </FuseSvgIcon>
+          Clear
         </Button>
       </div>
       <motion.div
@@ -170,7 +181,7 @@ const JobsTable = (props: any) => {
                       <JobItem
                         job={job}
                         index={index}
-                     
+                        setRightSidebarOpen={setRightSidebarOpen}
                       ></JobItem>
                     ))}
                   </motion.div>
