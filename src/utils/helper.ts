@@ -76,6 +76,26 @@ export function timeDifferenceLocalized(timestamp: any, locale = 'en') {
     return intervalInMs;
   }
 
+  export function convertTimeToMs(str: any) {
+    const units = {
+      s: 1000,         // giây
+      m: 60 * 1000,    // phút
+      h: 60 * 60 * 1000 // giờ
+    };
+  
+    const match = /^([\d.]+)([smh])$/i.exec(str.trim());
+  
+    if (!match) {
+      throw new Error("Invalid time format. Use formats like '1s', '2.5m', '1h'");
+    }
+  
+    const value = parseFloat(match[1]);
+    const unit = match[2].toLowerCase();
+  
+    return value * units[unit];
+  }
+  
+
   export function convertMillisecondsToTimeUnit(ms: any) {
     if (ms % (24 * 60 * 60 * 1000) === 0) {
       return `${ms / (24 * 60 * 60 * 1000)}d`; // ngày

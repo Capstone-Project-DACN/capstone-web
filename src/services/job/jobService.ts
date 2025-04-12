@@ -104,7 +104,7 @@ class jobService extends FuseUtils.EventEmitter {
 
     updateJobDetail (params: {data: any}) {
       return new Promise((resolve, reject) => {
-        axiosClient.post(`http://localhost:3000/jobs/update?cron_type=${params.data.cron_type}&city_id=${params.data.city_id}&district_id=${params.data.district_id}&distribution_type=${params.data.distribution_type}&random_order=${params.data.random_order}&cron_time=${params.data.cron_time}`)
+        axiosClient.post(`http://localhost:3000/jobs/update?cron_type=${params.data.cron_type}&city_id=${params.data.city_id}&district_id=${params.data.district_id}&distribution_type=${params.data.distribution_type}&random_order=${params.data.random_order}&cron_time=${params.data.cron_time}&start_id=${params.data.start_id}&end_id=${params.data.end_id}`)
           .then((response) => resolve(response.data))
           .catch(function (error) {
             if (error.response) {

@@ -41,6 +41,7 @@ import DistributedChart from "./DistributedChart";
 import { openJobDialog } from "@/dialogs/job/JobDialogSlice";
 import { showMessage } from "@fuse/core/FuseMessage/fuseMessageSlice";
 import { random } from "lodash";
+import { end } from "@popperjs/core";
 
 const StickyHeader = styled(Box)(({ theme }) => ({
   position: "sticky",
@@ -75,8 +76,20 @@ const validationSchema = yup.object().shape({
     .typeError("Must be a number")
     .positive("Must be positive")
     .required("Required"),
-  distribution_type: yup.string().required("Distribution type is required"),
+
+  distribution_type: yup
+    .string()
+    .required("Distribution type is required"),
+
+  start_id: yup
+    .number()
+    .required("Start ID is required"),
+
+  end_id: yup
+    .number()
+    .required("End ID is required")
 });
+
 
 interface JobQuickViewProps {
   setRightSidebarOpen: (isOpen: boolean) => void;
@@ -99,16 +112,22 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     handleSubmit,
     watch,
     reset,
+    setValue
   } = useForm({
     defaultValues: {
       distribution_type: "",
       cron_time: "",
       random_order: false,
+      start_id: 0,
+      end_id: 10,
       ...jobDetail,
     },
     resolver: yupResolver(validationSchema),
     mode: "onChange",
   });
+
+
+  console.log("jobDetail form", watch());
 
   // Watch cron_time for live updates
   const msValue = watch("cron_time");
@@ -144,7 +163,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     }
   }, [jobDetail, reset]);
 
-  console.log(watch());
+  console.log(jobDetail, watch());
 
   // Toggle job status
   const updateStatus = (e: React.MouseEvent) => {
@@ -163,9 +182,12 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
 
   // Submit form updates
   const handleJobSubmit = async (data: any) => {
+    console.log(data);  
     setUpdateLoading(true);
     const payload = {
       ...data,
+      start_id: parseInt(data.start_id),
+      end_id: parseInt(data.end_id),
       cron_time: convertMillisecondsToTimeUnit(data.cron_time),
     };
     dispatch(updateJobDetail({ data: payload }))
@@ -221,15 +243,15 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     return <FuseLoading />;
   }
 
-  const myIsDirty = () => {
-    const { cron_time, distribution_type, random_order } = watch();
-    return (
-      millisecondsToCron(cron_time) !== jobDetail.cron_time ||
-      String(distribution_type) !== String(jobDetail.distribution_type) ||
-      String(random_order) !== String(jobDetail.random_order)
-    );
-  };
-  
+  const { cron_time, distribution_type, random_order } = watch();
+  const myIsDirty = (
+    millisecondsToCron(cron_time) !== jobDetail.cron_time ||
+    String(distribution_type) !== String(jobDetail.distribution_type) ||
+    String(random_order) !== String(jobDetail.random_order) ||
+    String(jobDetail?.start_id) !== String(watch("start_id")) ||
+    String(jobDetail?.end_id) !== String(watch("end_id"))
+  );
+
   return (
     <div className="px-2">
       <StickyHeader className="flex items-center h-14 justify-between">
@@ -418,6 +440,66 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="mt-4 flex items-center justify-between"
               >
+                <div className="flex flex-col">
+                <Typography className="mb-2text-md font-medium flex items-center">
+                  📊 Range device ids
+                </Typography>
+                <div className="flex items-center mt-2 justify-between gap-x-2">
+                  <Controller
+                    name="start_id"
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <TextField
+                          {...field}
+                          disabled={jobDetail?.status === "running"}
+                          type="number"
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if(Number(value) > 1000) return;
+                            setValue("start_id", value);
+                          }}
+                          fullWidth
+                          placeholder="Enter start"
+                          className="rounded-sm"
+                          error={!!errors.start_id}
+                        />
+                      );
+                    }}
+                  />
+                  <Controller
+                    name="end_id"
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <TextField
+                          {...field}
+                          disabled={jobDetail?.status === "running"}
+                          type="number"
+                          fullWidth
+                          onChange={(e) => {
+                            const value  = e.target.value;
+                            if(Number(value) > 1000) return;
+                            setValue("end_id", value);
+                          }}
+                          placeholder="Enter end"
+                          className="rounded-sm"
+                          error={!!errors.end_id}
+                        />
+                      );
+                    }}
+                  />
+                </div>
+                </div>
+
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                className="mt-4 flex items-center justify-between"
+              >
                 <Controller
                   name="random_order"
                   control={control}
@@ -437,6 +519,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                     );
                   }}
                 />
+
                 {jobDetail?.status === "stopped" && (
                   <Button
                     type="submit"
@@ -448,7 +531,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                       !isValid ||
                       updateLoading ||
                       !msValid ||
-                      !myIsDirty() ||
+                      !myIsDirty ||
                       jobDetail.status === "running"
                     }
                   >

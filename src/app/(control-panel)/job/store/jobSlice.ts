@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import jobService from "@/services/job/jobService"
+import { convertTimeToMs, cronToMilliseconds, millisecondsToCron } from "@/utils/helper";
 
 export const getCronJobs = createAsyncThunk<any, any>(
   "cronjob/getAll",
@@ -105,6 +106,11 @@ const jobSlice = createSlice({
       const jobDetail: any = state.data.filter((item: any) => item.id == action.payload.id)[0];
       state.detail = {...action.payload.data, ...jobDetail};
     });
+    builder.addCase(updateJobDetail.fulfilled, (state, action: any) => {
+      const {cron_time, ...data } = action.payload.data;
+      const formatted_time = millisecondsToCron(convertTimeToMs(cron_time));
+      state.detail = {...state.detail, ...data , cron_time: formatted_time};
+    });
     builder.addCase(updateJobStatus.fulfilled, (state, action: any) => {
       const newData: any = state.data.map((item: any) => {
         if (item.id == action.payload.id) {
@@ -115,7 +121,6 @@ const jobSlice = createSlice({
         }
         return item;
       })
-      console.log(state?.detail?.id , action.payload.id);
       if(state?.detail?.id == action.payload.id) {
         state.detail.status = action.payload.status;
       }
