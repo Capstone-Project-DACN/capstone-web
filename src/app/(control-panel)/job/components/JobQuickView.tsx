@@ -77,19 +77,12 @@ const validationSchema = yup.object().shape({
     .positive("Must be positive")
     .required("Required"),
 
-  distribution_type: yup
-    .string()
-    .required("Distribution type is required"),
+  distribution_type: yup.string().required("Distribution type is required"),
 
-  start_id: yup
-    .number()
-    .required("Start ID is required"),
+  start_id: yup.number().required("Start ID is required"),
 
-  end_id: yup
-    .number()
-    .required("End ID is required")
+  end_id: yup.number().required("End ID is required"),
 });
-
 
 interface JobQuickViewProps {
   setRightSidebarOpen: (isOpen: boolean) => void;
@@ -112,7 +105,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     handleSubmit,
     watch,
     reset,
-    setValue
+    setValue,
   } = useForm({
     defaultValues: {
       distribution_type: "",
@@ -125,7 +118,6 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     resolver: yupResolver(validationSchema),
     mode: "onChange",
   });
-
 
   console.log("jobDetail form", watch());
 
@@ -182,7 +174,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
 
   // Submit form updates
   const handleJobSubmit = async (data: any) => {
-    console.log(data);  
+    console.log(data);
     setUpdateLoading(true);
     const payload = {
       ...data,
@@ -244,13 +236,12 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
   }
 
   const { cron_time, distribution_type, random_order } = watch();
-  const myIsDirty = (
+  const myIsDirty =
     millisecondsToCron(cron_time) !== jobDetail.cron_time ||
     String(distribution_type) !== String(jobDetail.distribution_type) ||
     String(random_order) !== String(jobDetail.random_order) ||
     String(jobDetail?.start_id) !== String(watch("start_id")) ||
-    String(jobDetail?.end_id) !== String(watch("end_id"))
-  );
+    String(jobDetail?.end_id) !== String(watch("end_id"));
 
   return (
     <div className="px-2">
@@ -434,66 +425,66 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                 />
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="mt-4 flex items-center justify-between"
-              >
-                <div className="flex flex-col">
-                <Typography className="mb-2text-md font-medium flex items-center">
-                  📊 Range device ids
-                </Typography>
-                <div className="flex items-center mt-2 justify-between gap-x-2">
-                  <Controller
-                    name="start_id"
-                    control={control}
-                    render={({ field }) => {
-                      return (
-                        <TextField
-                          {...field}
-                          disabled={jobDetail?.status === "running"}
-                          type="number"
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if(Number(value) > 1000) return;
-                            setValue("start_id", value);
-                          }}
-                          fullWidth
-                          placeholder="Enter start"
-                          className="rounded-sm"
-                          error={!!errors.start_id}
-                        />
-                      );
-                    }}
-                  />
-                  <Controller
-                    name="end_id"
-                    control={control}
-                    render={({ field }) => {
-                      return (
-                        <TextField
-                          {...field}
-                          disabled={jobDetail?.status === "running"}
-                          type="number"
-                          fullWidth
-                          onChange={(e) => {
-                            const value  = e.target.value;
-                            if(Number(value) > 1000) return;
-                            setValue("end_id", value);
-                          }}
-                          placeholder="Enter end"
-                          className="rounded-sm"
-                          error={!!errors.end_id}
-                        />
-                      );
-                    }}
-                  />
-                </div>
-                </div>
-
-              </motion.div>
-
+              {jobDetail.cron_type !== "AreaData" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                  className="mt-4 flex items-center justify-between"
+                >
+                  <div className="flex flex-col">
+                    <Typography className="mb-2text-md font-medium flex items-center">
+                      📊 Range device ids
+                    </Typography>
+                    <div className="flex items-center mt-2 justify-between gap-x-2">
+                      <Controller
+                        name="start_id"
+                        control={control}
+                        render={({ field }) => {
+                          return (
+                            <TextField
+                              {...field}
+                              disabled={jobDetail?.status === "running"}
+                              type="number"
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (Number(value) > 1000) return;
+                                setValue("start_id", value);
+                              }}
+                              fullWidth
+                              placeholder="Enter start"
+                              className="rounded-sm"
+                              error={!!errors.start_id}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        name="end_id"
+                        control={control}
+                        render={({ field }) => {
+                          return (
+                            <TextField
+                              {...field}
+                              disabled={jobDetail?.status === "running"}
+                              type="number"
+                              fullWidth
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (Number(value) > 1000) return;
+                                setValue("end_id", value);
+                              }}
+                              placeholder="Enter end"
+                              className="rounded-sm"
+                              error={!!errors.end_id}
+                            />
+                          );
+                        }}
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
