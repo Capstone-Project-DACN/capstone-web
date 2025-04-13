@@ -15,6 +15,7 @@ axiosClient.interceptors.response.use(
     // Chỉ show message nếu response trả về có status ngoài khoảng 2xx
     if (!(response.status >= 200 && response.status < 300)) {
       store.dispatch(showMessage({
+        message: response.data.error.message || response.data.message,
         type: 'error',
         text: 'Something went wrong!',
         anchorOrigin: { vertical: 'top', horizontal: 'right' },

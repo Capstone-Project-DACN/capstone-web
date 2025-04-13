@@ -78,7 +78,7 @@ const LogSidebar = () => {
               <ReactJson
                 src={log}
                 name={false}
-                collapsed={1}
+                collapsed={false}
                 enableClipboard={false}
                 iconStyle="square"
                 displayDataTypes={false}

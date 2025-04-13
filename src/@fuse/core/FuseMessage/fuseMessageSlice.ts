@@ -30,7 +30,7 @@ const initialState: initialStateProps = {
 			horizontal: 'center'
 		},
 		autoHideDuration: 2000,
-		message: 'Hi'
+		message: ''
 	}
 };
 
