@@ -21,7 +21,7 @@ const dates = [
     { x: new Date("2025-09-01"), y: 8800000 },
   ];
 
-const LineChart = () => {
+const DistrictChart = () => {
     const [state, setState] = useState({
         series: [{
           name: "XYZ MOTORS",
@@ -47,10 +47,10 @@ const LineChart = () => {
           markers: {
             size: 0,
           },
-          title: {
-            text: "Usage Statistics" as const,
-            align: "left" as const
-          },
+          // title: {
+          //   text: "Usage Statistics" as const,
+          //   align: "left" as const
+          // },
           fill: {
             type: "gradient" as const,
             gradient: {
@@ -68,7 +68,7 @@ const LineChart = () => {
               },
             },
             title: {
-              text: "Price" as const
+              text: "Kwh" as const
             },
           },
           xaxis: {
@@ -90,4 +90,4 @@ const LineChart = () => {
     );
 }
 
-export default LineChart;
+export default DistrictChart;

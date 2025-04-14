@@ -21,7 +21,7 @@ const navigationConfig: FuseNavItemType[] = [
     children: [
     {
       id: "dashboards.metric",
-      title: "Data Analytics Metrics",
+      title: "Data Dashboard",
       type: "item",
       icon: "heroicons-outline:globe-asia-australia",
       url: "/dashboard",
@@ -34,7 +34,7 @@ const navigationConfig: FuseNavItemType[] = [
 			url: "/device",
 		},
     {
-			id: "dashboards.metrics",
+			id: "dashboards.cronjob",
 			title: "Job Management",
 			type: "item",
 			icon: "heroicons-outline:adjustments-horizontal",

@@ -60,8 +60,7 @@ const StatsWidget = ({
 
   return (
     <Paper
-      className="flex shadow-sm flex-col flex-auto overflow-hidden shadow rounded-md"
-    //   sx={{ backgroundColor: theme.palette.background.default }}
+      className="flex  flex-col flex-auto overflow-hidden shadow rounded-md"
     >
       <div className="my-6 mt-5 text-center flex flex-col px-3 gap-y-3">
         <div className="flex justify-between items-center">
