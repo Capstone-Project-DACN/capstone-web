@@ -77,7 +77,7 @@ const AnomalyMainContent = () => {
   };
 
   useEffect(() => {
-    setLoading(true);6
+    setLoading(true);
     const filterType =
       params.tab === "district"
         ? "districts"

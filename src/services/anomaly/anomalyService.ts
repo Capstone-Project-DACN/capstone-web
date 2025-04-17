@@ -1,6 +1,4 @@
 import FuseUtils from "@fuse/utils";
-import anomalyReponse from "./anomalyResponse.json";
-import axios from "axios";
 import axiosClient from "../axiosClient";
 
 class anomalyService extends FuseUtils.EventEmitter {
