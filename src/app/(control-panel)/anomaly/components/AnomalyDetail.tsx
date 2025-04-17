@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import InfoIcon from "@mui/icons-material/Info";
 import WarningIcon from "@mui/icons-material/Warning";
 import ErrorIcon from "@mui/icons-material/Error";
+import { time, timeStamp } from "console";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -58,7 +59,7 @@ const headerVariants = {
   exit: { opacity: 0, y: -15 },
 };
 
-const getSeverityIcon = (severity) => {
+const getSeverityIcon = (severity: any) => {
   switch (severity?.toUpperCase()) {
     case "HIGH":
       return <ErrorIcon color="error" fontSize="small" />;
@@ -71,7 +72,7 @@ const getSeverityIcon = (severity) => {
   }
 };
 
-const getSeverityColor = (severity) => {
+const getSeverityColor = (severity: any) => {
   switch (severity?.toUpperCase()) {
     case "HIGH":
       return "error";
@@ -84,14 +85,12 @@ const getSeverityColor = (severity) => {
   }
 };
 
-const formatAreaId = (areaId) => {
-  if (!areaId) return "";
-  return areaId.replace("area_", "").replace(/_/g, " ");
-};
-
 const AnomalyDetail = ({ setRightSidebarOpen }) => {
   const navigate = useNavigate();
   const params = useParams();
+  const timestamp = new URLSearchParams(window.location.search).get(
+    "timestamp"
+  );
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
   const detail = useSelector(
@@ -101,10 +100,10 @@ const AnomalyDetail = ({ setRightSidebarOpen }) => {
 
   useEffect(() => {
     setLoading(true);
-    dispatch(searchAnomalyDetail({ deviceId: params.id })).then(
-      () => setLoading(false)
-    ).finally(() => setLoading(false));
-  }, [params.id, dispatch]);
+    dispatch(searchAnomalyDetail({ deviceId: params.id, timestamp: timestamp }))
+      .then(() => setLoading(false))
+      .finally(() => setLoading(false));
+  }, [params.id, dispatch, timestamp]);
 
   const handleBack = () => {
     navigate(`/anomaly/${params.tab}`);
@@ -166,9 +165,31 @@ const AnomalyDetail = ({ setRightSidebarOpen }) => {
                   }}
                 >
                   <Box className="flex justify-between items-center p-4">
-                    <Typography className="text-lg font-medium">
-                      {formatAreaId(data?.areaId) || data?.areaId}
-                    </Typography>
+                    <Box className="flex items-center gap-x-2 text-xl font-medium">
+                      {data?.typeof === "DEVICE" && (
+                        <FuseSvgIcon
+                          className="text-7xl"
+                          size={18}
+                          color={"info"}
+                        >
+                          heroicons-outline:building-office
+                        </FuseSvgIcon>
+                      )}
+
+                      {data?.typeof === "AREA" && (
+                        <FuseSvgIcon
+                          className="text-7xl"
+                          size={18}
+                          color={"info"}
+                        >
+                          heroicons-outline:globe-asia-australia
+                        </FuseSvgIcon>
+                      )}
+
+                      <Typography className="text-xl font-semibold">
+                        {data?.deviceId || data.areaId}
+                      </Typography>
+                    </Box>
                     <Tooltip title={`Severity: ${data?.severity}`}>
                       <Chip
                         icon={getSeverityIcon(data?.severity)}
@@ -202,66 +223,68 @@ const AnomalyDetail = ({ setRightSidebarOpen }) => {
                 </div>
               </motion.div>
 
-              <motion.div variants={itemVariants} className="mb-4 px-2">
-                <Box>
+              {data.typeof === "AREA" && (
+                <motion.div variants={itemVariants} className="mb-4 px-2">
                   <Box>
-                    <Typography
-                      variant="subtitle1"
-                      className="font-medium mb-2"
-                    >
-                      Meter Values
-                    </Typography>
-                    <Divider className="mb-3" />
-
-                    <motion.div
-                      className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                      variants={containerVariants}
-                    >
-                      <motion.div
-                        variants={itemVariants}
-                        className="p-1 px-3 rounded-lg"
+                    <Box>
+                      <Typography
+                        variant="subtitle1"
+                        className="font-medium mb-2"
                       >
-                        <Typography
-                          variant="body2"
-                          className="mb-1"
-                          color="text.secondary"
-                        >
-                          Area Meter Total
-                        </Typography>
-                        <Typography
-                          variant="h6"
-                          className="font-medium text-blue-700"
-                        >
-                          {data?.areaMeterTotal !== undefined
-                            ? `${data.areaMeterTotal.toFixed(2)} kWh`
-                            : "N/A"}
-                        </Typography>
-                      </motion.div>
+                        Meter Values
+                      </Typography>
+                      <Divider className="mb-3" />
 
                       <motion.div
-                        variants={itemVariants}
-                        className="p-1 px-3 rounded-lg"
+                        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                        variants={containerVariants}
                       >
-                        <Typography
-                          variant="body2"
-                          className="mb-1"
-                          color="text.secondary"
+                        <motion.div
+                          variants={itemVariants}
+                          className="p-1 px-3 rounded-lg"
                         >
-                          Household Meter Total
-                        </Typography>
-                        <Typography
-                          variant="h6"
-                          className="font-medium text-blue-700"
+                          <Typography
+                            variant="body2"
+                            className="mb-1"
+                            color="text.secondary"
+                          >
+                            Area Meter Total
+                          </Typography>
+                          <Typography
+                            variant="h6"
+                            className="font-medium text-blue-700"
+                          >
+                            {data?.areaMeterTotal !== undefined
+                              ? `${data.areaMeterTotal.toFixed(2)} kWh`
+                              : "N/A"}
+                          </Typography>
+                        </motion.div>
+
+                        <motion.div
+                          variants={itemVariants}
+                          className="p-1 px-3 rounded-lg"
                         >
-                          {data?.householdMeterTotal !== undefined
-                            ? `${data.householdMeterTotal.toFixed(2)} kWh`
-                            : "N/A"}
-                        </Typography>
+                          <Typography
+                            variant="body2"
+                            className="mb-1"
+                            color="text.secondary"
+                          >
+                            Household Meter Total
+                          </Typography>
+                          <Typography
+                            variant="h6"
+                            className="font-medium text-blue-700"
+                          >
+                            {data?.householdMeterTotal !== undefined
+                              ? `${data.householdMeterTotal.toFixed(2)} kWh`
+                              : "N/A"}
+                          </Typography>
+                        </motion.div>
                       </motion.div>
-                    </motion.div>
+                    </Box>
                   </Box>
-                </Box>
-              </motion.div>
+                </motion.div>
+              )}
 
               <motion.div variants={itemVariants} className="mb-4 px-2">
                 <Box>
@@ -379,10 +402,7 @@ const AnomalyDetail = ({ setRightSidebarOpen }) => {
                 </Box>
               </motion.div>
 
-              <motion.div
-                className="bg-gray-100 rounded-lg mt-6 px-2 mb-5"
-                variants={itemVariants}
-              >
+              <motion.div className="rounded-lg my-5" variants={itemVariants}>
                 <Box
                   className="flex border rounded-md p-4 border-gray-500 flex-col gap-y-2"
                   sx={{ mt: 1, mb: 0 }}

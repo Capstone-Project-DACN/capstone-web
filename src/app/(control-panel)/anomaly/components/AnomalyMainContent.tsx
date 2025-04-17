@@ -3,12 +3,10 @@ import { Box, styled, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import {
-  searchAnomaly,
-  setData,
-} from "../store/anomalySlice";
+import { searchAnomaly } from "../store/anomalySlice";
 import FuseLoading from "@fuse/core/FuseLoading";
 import { motion, AnimatePresence } from "framer-motion";
+import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 
 const StickyHeader = styled(Box)(({ theme }) => ({
   position: "sticky",
@@ -69,11 +67,12 @@ const AnomalyMainContent = () => {
     (state: any) => state?.anomaly?.anomalySlice?.data
   );
   const dispatch = useDispatch<AppDispatch>();
+  const timestamp = new URLSearchParams(window.location.search).get("timestamp");
   const [loading, setLoading] = useState(false);
 
   const handleCliclItem = (item: any) => {
     const id = item?.deviceId || item?.areaId;
-    navigate(`/anomaly/${params?.tab}/${id}`);
+    navigate(`/anomaly/${params?.tab}/${id}?timestamp=${item?.timestamp}`);
   };
 
   useEffect(() => {
@@ -81,14 +80,12 @@ const AnomalyMainContent = () => {
     const filterType =
       params.tab === "district"
         ? "districts"
-        : params.tab === "household"
+        : params.tab === "device"
           ? "devices"
           : "";
-      dispatch(
-        searchAnomaly({type: filterType})
-      ).then(() => {
-        setLoading(false);
-      });
+    dispatch(searchAnomaly({ type: filterType })).then(() => {
+      setLoading(false);
+    });
   }, [params.tab]);
 
   if (loading) {
@@ -141,7 +138,7 @@ const AnomalyMainContent = () => {
                   scale: 1.00005,
                   transition: { duration: 0.15 },
                 }}
-            >
+              >
                 <Box
                   className="flex items-center font-normal justify-between h-16 px-4 border-b border-r border-l cursor-pointer"
                   onClick={() => handleCliclItem(item)}
@@ -150,11 +147,37 @@ const AnomalyMainContent = () => {
                       backgroundColor: theme.palette.action.hover,
                     },
                     backgroundColor:
-                      item.timestamp == params.id ? theme.palette.action.hover : "",
+                        String(item?.timestamp) === String(timestamp)
+                        ? theme.palette.action.hover
+                        : "",
                   }}
                 >
                   <div className="w-1/15 pl-2">{index}</div>
-                  <div className="w-3/15">{item?.deviceId || item.areaId}</div>
+                  <div className="w-3/15 flex items-center gap-x-2">
+                    {item?.typeof === "DEVICE" && (
+                      <FuseSvgIcon
+                        className="text-7xl"
+                        size={18}
+                        color={"info"}
+                      >
+                        heroicons-outline:building-office
+                      </FuseSvgIcon>
+                    )}
+
+                    {item?.typeof === "AREA" && (
+                      <FuseSvgIcon
+                        className="text-7xl"
+                        size={18}
+                        color={"info"}
+                      >
+                        heroicons-outline:globe-asia-australia
+                      </FuseSvgIcon>
+                    )}
+
+                    <Typography className="text-md font-semibold">
+                      {item?.deviceId || item.areaId}
+                    </Typography>
+                  </div>
                   <div className="w-2/10 flex gap-x-3">
                     <Typography>{item?.difference?.toFixed(2)}</Typography>
                     {item?.percentageDifference && (
@@ -165,9 +188,8 @@ const AnomalyMainContent = () => {
                       </Typography>
                     )}
                   </div>
-                  {/* <div className="w-1/10">{item.analysisType}</div> */}
                   <div className="w-1/10 capitalize">{item.severity}</div>
-                  <div className="w-3/10 line-clamp-2 trucate pr-5">
+                  <div className="w-3/10 line-clamp-2 trucate pr-5 font-semibold">
                     {item.message}
                   </div>
                   <div className="w-2/10">

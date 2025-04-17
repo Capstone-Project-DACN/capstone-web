@@ -26,10 +26,12 @@ class anomalyService extends FuseUtils.EventEmitter {
 
     searchAnomalyDetail (params: {
       data: any,
-      deviceId: string
+      deviceId: string,
+      timestamp: string
     }) {
         return new Promise((resolve, reject) => {
-          const data = params.data.find((anomaly: any) => anomaly?.deviceId  === params.deviceId);
+          const data = params.data.find((anomaly: any) => (String(anomaly?.timestamp) === String(params?.timestamp) && anomaly?.deviceId == params?.deviceId));
+          console.log(data);
           resolve({data: data});
         });
     }

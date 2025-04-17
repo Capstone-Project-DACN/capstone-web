@@ -19,12 +19,11 @@ export const searchAnomaly = createAsyncThunk<any, any>(
 
 export const searchAnomalyDetail = createAsyncThunk<any, any>(
   "anomaly/detail",
-  async (params: { deviceId : string }, { getState }: any) => {
+  async (params: { deviceId : string , timestamp: string }, { getState }: any) => {
     const data = getState()?.anomaly?.anomalySlice.data;
-    
+
     try {
-      const response = (await anomalyService.searchAnomalyDetail({data, deviceId: params.deviceId})) as any;
-      console.log(response);
+      const response = (await anomalyService.searchAnomalyDetail({data, ...params})) as any;
       const detail = response || {};
 
       return detail;

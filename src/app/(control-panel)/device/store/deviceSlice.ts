@@ -169,7 +169,7 @@ const deviceSlice = createSlice({
       state.logs = [];
     },
     setLogs(state: any, action: any) {
-      state.logs = action.payload;
+      state.logs = action.payload.reverse();
     },
     addSelectedDevice(state: any, action: any) {
       const exited = state.selectedDevices.find((item: any) => item === action.payload);
