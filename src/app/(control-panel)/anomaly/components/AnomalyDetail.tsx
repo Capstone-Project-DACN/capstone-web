@@ -101,15 +101,9 @@ const AnomalyDetail = ({ setRightSidebarOpen }) => {
 
   useEffect(() => {
     setLoading(true);
-    dispatch(searchAnomalyDetail({ timestamp: params.id })).then(
-      (response: any) => {
-        setTimeout(() => {
-          setTimeout(() => {
-            setLoading(false);
-          }, 150);
-        }, 350);
-      }
-    );
+    dispatch(searchAnomalyDetail({ deviceId: params.id })).then(
+      () => setLoading(false)
+    ).finally(() => setLoading(false));
   }, [params.id, dispatch]);
 
   const handleBack = () => {

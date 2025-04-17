@@ -4,10 +4,10 @@ import _ from "lodash";
 
 export const searchAnomaly = createAsyncThunk<any, any>(
   "anomaly/search",
-  async (params: { pageNumber?: number; pageSize?: number; dateTime?: boolean}, { getState }: any) => {
+  async (params: any, { getState }: any) => {
     try {
-      const response = (await anomalyService.searchAnomaly(params)) as any;
-      const anomalies = response?.anomalies || [];
+      const response = (await anomalyService.searchAnomaly({type : params.type})) as any;
+      const anomalies = response?.data.data || [];
 
       return {data: anomalies};
     } catch (err) {
@@ -16,25 +16,14 @@ export const searchAnomaly = createAsyncThunk<any, any>(
   }
 );
 
-export const searchAnomalyByType = createAsyncThunk<any, any>(
-  "anomaly/filter/type",
-  async (params: { filterType : string }, { getState }: any) => {
-    try {
-      const response = (await anomalyService.searchAnomalyByType(params)) as any;
-      const anomalies = response?.anomalies || [];
-
-      return {data: anomalies};
-    } catch (err) {
-      console.log(err);
-    }
-  }
-);
 
 export const searchAnomalyDetail = createAsyncThunk<any, any>(
   "anomaly/detail",
-  async (params: { timestamp : string }, { getState }: any) => {
+  async (params: { deviceId : string }, { getState }: any) => {
+    const data = getState()?.anomaly?.anomalySlice.data;
+    
     try {
-      const response = (await anomalyService.searchAnomalyDetail(params)) as any;
+      const response = (await anomalyService.searchAnomalyDetail({data, deviceId: params.deviceId})) as any;
       console.log(response);
       const detail = response || {};
 
@@ -109,11 +98,14 @@ const anomalySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(searchAnomaly.fulfilled, (state, action: any) => {
-      state.data = action.payload.data;
-    });
-
-    builder.addCase(searchAnomalyByType.fulfilled, (state, action: any) => {
-      state.data = action.payload.data;
+      state.data = action.payload.data.map((item: any) => {
+        if(!item?.deviceId) {
+          return {
+            ...item,
+            deviceId: item.areaId,
+          }
+        } else return item
+      });
     });
 
     builder.addCase(searchAnomalyDetail.fulfilled, (state, action: any) => {
@@ -125,7 +117,7 @@ const anomalySlice = createSlice({
 export const { 
   setData,
   setPagination,
-  setSearchText,
+  setSearchText, 
   setFilter,
   resetSearchText
 } = anomalySlice.actions;

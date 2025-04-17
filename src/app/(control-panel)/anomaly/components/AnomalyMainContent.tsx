@@ -5,15 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import {
   searchAnomaly,
-  searchAnomalyByType,
   setData,
 } from "../store/anomalySlice";
 import FuseLoading from "@fuse/core/FuseLoading";
 import { motion, AnimatePresence } from "framer-motion";
-import { formatTimestampToDate, timeDifferenceLocalized } from "@/utils/helper";
-import { it } from "node:test";
-import { resolve } from "path";
-import { ComponentPropsToStylePropsMap } from "@aws-amplify/ui-react";
 
 const StickyHeader = styled(Box)(({ theme }) => ({
   position: "sticky",
@@ -77,28 +72,23 @@ const AnomalyMainContent = () => {
   const [loading, setLoading] = useState(false);
 
   const handleCliclItem = (item: any) => {
-    navigate(`/anomaly/${params?.tab}/${item?.timestamp}`);
+    const id = item?.deviceId || item?.areaId;
+    navigate(`/anomaly/${params?.tab}/${id}`);
   };
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(true);6
     const filterType =
       params.tab === "district"
-        ? "AREA"
+        ? "districts"
         : params.tab === "household"
-          ? "HOUSEHOLD"
-          : "ALL";
-    if (filterType === "ALL") {
+          ? "devices"
+          : "";
       dispatch(
-        searchAnomaly({ pageNumber: 1, pageSize: 20, dateTime: true })
+        searchAnomaly({type: filterType})
       ).then(() => {
         setLoading(false);
       });
-    } else {
-      dispatch(searchAnomalyByType({ filterType })).then(() => {
-        setLoading(false);
-      });
-    }
   }, [params.tab]);
 
   if (loading) {
@@ -129,9 +119,8 @@ const AnomalyMainContent = () => {
               transition={{ duration: 0.3 }}
             >
               <div className="w-1/15">Stt</div>
-              <div className="w-2/10">Area Id</div>
-              <div className="w-2/10 pl-10">Difference</div>
-              {/* <div className="w-1/10">Type</div> */}
+              <div className="w-3/15">Device ID</div>
+              <div className="w-2/10">Difference</div>
               <div className="w-1/10">Severity</div>
               <div className="w-3/10">Message</div>
               <div className="w-2/10">Date (time)</div>
@@ -152,7 +141,7 @@ const AnomalyMainContent = () => {
                   scale: 1.00005,
                   transition: { duration: 0.15 },
                 }}
-              >
+            >
                 <Box
                   className="flex items-center font-normal justify-between h-16 px-4 border-b border-r border-l cursor-pointer"
                   onClick={() => handleCliclItem(item)}
@@ -165,8 +154,8 @@ const AnomalyMainContent = () => {
                   }}
                 >
                   <div className="w-1/15 pl-2">{index}</div>
-                  <div className="w-2/10">{item.areaId}</div>
-                  <div className="w-2/10 flex gap-x-3 pl-10">
+                  <div className="w-3/15">{item?.deviceId || item.areaId}</div>
+                  <div className="w-2/10 flex gap-x-3">
                     <Typography>{item?.difference?.toFixed(2)}</Typography>
                     {item?.percentageDifference && (
                       <Typography
@@ -178,7 +167,7 @@ const AnomalyMainContent = () => {
                   </div>
                   {/* <div className="w-1/10">{item.analysisType}</div> */}
                   <div className="w-1/10 capitalize">{item.severity}</div>
-                  <div className="w-3/10 line-clamp-1 trucate pr-3">
+                  <div className="w-3/10 line-clamp-2 trucate pr-5">
                     {item.message}
                   </div>
                   <div className="w-2/10">
