@@ -3,6 +3,11 @@ import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store/store';
+import { useSelector } from 'react-redux';
+import { setDistrictId } from '../../store/dashboardSlice';
+import { useNavigate, useLocation } from 'react-router';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -10,40 +15,36 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 200,
+      width: '150px',
+      margin: '3px',
     },
   },
 };
 
 const districts = [
-  { label: "Quận 1", value: "hcm-q1" },
-  { label: "Quận 3", value: "hcm-q3" },
-  { label: "Quận 4", value: "hcm-q4" },
-  { label: "Quận 5", value: "hcm-q5" },
-  { label: "Quận 6", value: "hcm-q6" },
-  { label: "Quận 7", value: "hcm-q7" },
-  { label: "Quận 8", value: "hcm-q8" },
-  { label: "Quận 10", value: "hcm-q10" },
-  { label: "Quận 11", value: "hcm-q11" },
-  { label: "Quận 12", value: "hcm-q12" },
-  { label: "Quận Bình Tân", value: "hcm-binhtan" },
-  { label: "Quận Bình Thạnh", value: "hcm-binhthanh" },
-  { label: "Quận Gò Vấp", value: "hcm-govap" },
-  { label: "Quận Phú Nhuận", value: "hcm-phunhuan" },
-  { label: "Quận Tân Bình", value: "hcm-tanbinh" },
-  { label: "Quận Tân Phú", value: "hcm-tanphu" },
-  { label: "TP Thủ Đức", value: "hcm-thuduc" },
-  { label: "Huyện Bình Chánh", value: "hcm-binhchanh" },
-  { label: "Huyện Cần Giờ", value: "hcm-cangio" },
-  { label: "Huyện Củ Chi", value: "hcm-cuchi" },
-  { label: "Huyện Hóc Môn", value: "hcm-hocmon" },
-  { label: "Huyện Nhà Bè", value: "hcm-nhabe" },
+  { label: "Quận 1", value: "area-HCMC-Q1" },
+  { label: "Quận 3", value: "area-HCMC-Q3" },
+  { label: "Quận 4", value: "area-HCMC-Q4" },
+  { label: "Quận 5", value: "area-HCMC-Q5" },
+  { label: "Quận 6", value: "area-HCMC-Q6" },
+  { label: "Quận 7", value: "area-HCMC-Q7" },
+  { label: "Quận 8", value: "area-HCMC-Q8" },
+  { label: "Quận 10", value: "area-HCMC-Q10" },
+  { label: "Quận 11", value: "area-HCMC-Q11" },
+  { label: "Quận 12", value: "area-HCMC-Q12" },
+  { label: "Quận Bình Tân", value: "area-HCMC-QTB" },
+  { label: "Quận Bình Thạnh", value: "area-HCMC-QBTHANH" },
+  { label: "Quận Gò Vấp", value: "area-HCMC-QGV" },
+  { label: "Quận Phú Nhuận", value: "area-HCMC-QPN" },
+  { label: "Quận Tân Phú", value: "area-HCMC-QTP" },
+  { label: "TDUC - Quận 2", value: "area-TDUC-Q2" },
+  { label: "TDUC - Quận 9", value: "area-TDUC-Q9" },
 ];
 
-function getStyles(name, personName, theme) {
+function getStyles(name: string, selectedValue: string | null, theme: any) {
   return {
     fontWeight:
-      personName && personName.value === name
+      selectedValue === name
         ? theme.typography.fontWeightMedium
         : theme.typography.fontWeightRegular,
   };
@@ -51,10 +52,46 @@ function getStyles(name, personName, theme) {
 
 export default function DistrictDropdown() {
   const theme = useTheme();
-  const [selectedDistrict, setSelectedDistrict] = React.useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
+  const districtId = useSelector((state: any) => state?.dashboard?.dashboardSlice?.districtId);
+  const [selectedDistrict, setSelectedDistrict] = React.useState<string | null>(null);
 
-  const handleChange = (event: any) => {
-    setSelectedDistrict(event.target.value);
+  React.useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const urlDistrictId = searchParams.get("district-id");
+    
+    if (urlDistrictId) {
+      dispatch(setDistrictId(urlDistrictId));
+      setSelectedDistrict(urlDistrictId);
+    } else if (districtId) {
+      const updateParams = new URLSearchParams(location.search);
+      updateParams.set("district-id", districtId);
+      navigate(`/dashboard?${updateParams}`, { replace: true });
+      setSelectedDistrict(districtId);
+    }
+  }, [location.search, districtId, dispatch, navigate]);
+
+  React.useEffect(() => {
+    if (districtId) {
+      setSelectedDistrict(districtId);
+    }
+  }, [districtId]);
+
+  const handleChange = (event: { target: { value: string } }) => {
+    const newDistrictId = event.target.value;
+    
+    // Update Redux state
+    dispatch(setDistrictId(newDistrictId));
+    
+    // Update URL
+    const updateParams = new URLSearchParams(location.search);
+    updateParams.set("district-id", newDistrictId);
+    navigate(`/dashboard?${updateParams}`, { replace: true });
+    
+    // Update local state
+    setSelectedDistrict(newDistrictId);
   };
 
   return (
@@ -62,7 +99,7 @@ export default function DistrictDropdown() {
       <Select
         displayEmpty
         sx={{ width: "150px" }}
-        value={selectedDistrict}
+        value={selectedDistrict || ''}
         onChange={handleChange}
         input={<OutlinedInput />}
         renderValue={(selected) => {
@@ -70,7 +107,7 @@ export default function DistrictDropdown() {
             return <em>Select District</em>;
           }
           const district = districts.find(d => d.value === selected);
-          return district ? district.label : '';
+          return district ? district.label : 'Select District';
         }}
         MenuProps={MenuProps}
         inputProps={{ 'aria-label': 'Without label' }}

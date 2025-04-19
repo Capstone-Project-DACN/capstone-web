@@ -27,7 +27,7 @@ const AmomalyHeader = ({ rightSidebarOpen, setRightSidebarOpen }) => {
         <Tab value={"device"} label="Devices" />
       </Tabs>
       <Typography className="text-16 font-bold mr-3">
-        {anomalies.length} {anomalies.length === 1 ? "Anomaly" : "Anomalies"}
+        {anomalies?.length} {anomalies?.length === 1 ? "Anomaly" : "Anomalies"}
       </Typography>
       {/* {!rightSidebarOpen && <Button startIcon={<FuseSvgIcon>heroicons-outline:plus-small</FuseSvgIcon>} onClick={handleShowDetail} >Add Device</Button>} */}
     </div>

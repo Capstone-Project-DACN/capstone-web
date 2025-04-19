@@ -1,30 +1,107 @@
-import { useState } from "react";
+import FuseLoading from "@fuse/core/FuseLoading";
+import { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
+import { useSelector } from "react-redux";
 
+// Dữ liệu mẫu nếu không có dữ liệu từ Redux
 const dates = [
-  { x: new Date("2024-01-01"), y: 3200000 },
-  { x: new Date("2024-02-01"), y: 4800000 },
-  { x: new Date("2024-03-01"), y: 4500000 },
-  { x: new Date("2024-04-01"), y: 5100000 },
-  { x: new Date("2024-05-01"), y: 6100000 },
-  { x: new Date("2024-06-01"), y: 5800000 },
-  { x: new Date("2024-07-01"), y: 6200000 },
-  { x: new Date("2024-08-01"), y: 6400000 },
-  { x: new Date("2024-09-01"), y: 6700000 },
-  { x: new Date("2024-10-01"), y: 7100000 },
-  { x: new Date("2024-11-01"), y: 7400000 },
-  { x: new Date("2024-12-01"), y: 7600000 },
-  { x: new Date("2025-01-01"), y: 7900000 },
-  { x: new Date("2025-02-01"), y: 8100000 },
-  { x: new Date("2025-03-01"), y: 8300000 },
+  { x: new Date("2024-01-01").getTime(), y: 0 },
+  { x: new Date("2024-02-01").getTime(), y: 0 },
+  { x: new Date("2024-03-01").getTime(), y: 0 },
+  { x: new Date("2024-04-01").getTime(), y: 0 },
+  { x: new Date("2024-05-01").getTime(), y: 0 },
+  { x: new Date("2024-06-01").getTime(), y: 0 },
+  { x: new Date("2024-07-01").getTime(), y: 0 },
+  { x: new Date("2024-08-01").getTime(), y: 0 },
+  { x: new Date("2024-09-01").getTime(), y: 0 },
+  { x: new Date("2024-10-01").getTime(), y: 0 },
+  { x: new Date("2024-11-01").getTime(), y: 0 },
+  { x: new Date("2024-12-01").getTime(), y: 0 },
+  { x: new Date("2025-01-01").getTime(), y: 0 },
+  { x: new Date("2025-02-01").getTime(), y: 0 },
+  { x: new Date("2025-03-01").getTime(), y: 0 },
 ];
 
-const DeviceChart = () => {
+const DeviceChart = ({loading = false}) => {
+  const rawDeviceData = useSelector(
+    (state: any) => state?.dashboard?.dashboardSlice?.deviceData
+  );
+
+  // Xử lý dữ liệu từ API để định dạng đúng cho ApexCharts
+  const processData = () => {
+    if (!rawDeviceData || !Array.isArray(rawDeviceData)) {
+      return dates;
+    }
+    
+    try {
+      return rawDeviceData.map((item: any) => {
+        // Nếu dữ liệu đã ở định dạng {x, y}
+        if (item && typeof item === 'object' && 'x' in item && 'y' in item) {
+          // Đảm bảo x là timestamp hoặc chuỗi ngày tháng hợp lệ
+          const xValue = typeof item.x === 'string' 
+            ? new Date(item.x).getTime() 
+            : item.x instanceof Date 
+              ? item.x.getTime() 
+              : item.x;
+          
+          // Đảm bảo y là số
+          const yValue = parseFloat(item.y);
+          
+          return {
+            x: xValue,
+            y: isNaN(yValue) ? 0 : yValue
+          };
+        } 
+
+        else if (Array.isArray(item) && item.length === 2) {
+          const xValue = typeof item[0] === 'string' 
+            ? new Date(item[0]).getTime() 
+            : item[0] instanceof Date 
+              ? item[0].getTime() 
+              : item[0];
+          
+          const yValue = parseFloat(item[1]);
+          
+          return {
+            x: xValue,
+            y: isNaN(yValue) ? 0 : yValue
+          };
+        }
+
+        else if (item && typeof item === 'object') {
+          let xField = item.x || item.date || item.time || "";
+          let yField = item.y || item.value || item.usage || 0;
+          
+          const xValue = typeof xField === 'string' 
+            ? new Date(xField).getTime() 
+            : xField instanceof Date 
+              ? xField.getTime() 
+              : xField;
+          
+          const yValue = parseFloat(yField);
+          
+          return {
+            x: xValue,
+            y: isNaN(yValue) ? 0 : yValue
+          };
+        }
+        
+        return { x: new Date().getTime(), y: 0 };
+      });
+    } catch (error) {
+      console.error("Lỗi khi xử lý dữ liệu biểu đồ:", error);
+      return dates;
+    }
+  };
+
+  const processedData = processData();
+  console.log("Dữ liệu đã xử lý:", processedData);
+
   const [state, setState] = useState({
     series: [
       {
         name: "Điện tiêu thụ",
-        data: dates,
+        data: processedData,
       },
     ],
     options: {
@@ -47,7 +124,7 @@ const DeviceChart = () => {
       markers: {
         size: 0,
       },
-      colors: ["#22c55e"], // ✅ xanh lá cây (Tailwind green-500)
+      colors: ["#22c55e"], 
       fill: {
         type: "gradient" as const,
         gradient: {
@@ -61,7 +138,7 @@ const DeviceChart = () => {
       yaxis: {
         labels: {
           formatter: function (val: number) {
-            return (val / 1000000).toFixed(0);
+            return val.toFixed(2);
           },
         },
         title: {
@@ -75,12 +152,29 @@ const DeviceChart = () => {
         shared: false,
         y: {
           formatter: function (val: number) {
-            return `${(val / 1000000).toFixed(0)} triệu`;
+            return `${val.toFixed(2)} Kwh`;
           },
         },
       },
     },
   });
+
+  // Cập nhật state khi dữ liệu thay đổi
+  useEffect(() => {
+    setState(prevState => ({
+      ...prevState,
+      series: [
+        {
+          ...prevState.series[0],
+          data: processedData,
+        },
+      ],
+    }));
+  }, [rawDeviceData]);
+
+  if(loading) {
+    return <FuseLoading />
+  }
 
   return (
     <ReactApexChart

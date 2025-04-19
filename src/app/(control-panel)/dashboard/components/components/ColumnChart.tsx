@@ -1,6 +1,8 @@
-import React from 'react';
-import ReactApexChart from 'react-apexcharts';
-import { Card, CardContent, Typography } from '@mui/material';
+import React from "react";
+import ReactApexChart from "react-apexcharts";
+import { Card, CardContent, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
+import FuseLoading from "@fuse/core/FuseLoading";
 
 interface DistrictData {
   name: string;
@@ -8,36 +10,33 @@ interface DistrictData {
 }
 
 const districts: DistrictData[] = [
-  { name: 'Quận 1', value: 120 },
-  { name: 'Quận 2', value: 140 },
-  { name: 'Quận 3', value: 110 },
-  { name: 'Quận 4', value: 90 },
-  { name: 'Quận 5', value: 130 },
-  { name: 'Quận 6', value: 85 },
-  { name: 'Quận 7', value: 150 },
-  { name: 'Quận 8', value: 95 },
-  { name: 'Quận 9', value: 170 },
-  { name: 'Quận 10', value: 100 },
-  { name: 'Quận 11', value: 105 },
-  { name: 'Quận 12', value: 160 },
-  { name: 'Bình Thạnh', value: 145 },
-  { name: 'Gò Vấp', value: 135 },
-  { name: 'Tân Bình', value: 125 },
-  { name: 'Tân Phú', value: 115 },
-  { name: 'Phú Nhuận', value: 98 },
-  { name: 'Thủ Đức', value: 155 },
-  { name: 'Bình Tân', value: 138 },
-  { name: 'Nhà Bè', value: 88 },
-  { name: 'Hóc Môn', value: 92 },
-  { name: 'Củ Chi', value: 78 },
-  { name: 'Bình Chánh', value: 108 },
-  { name: 'Cần Giờ', value: 65 },
+  { name: "Quận 1", value: 0 },
+  { name: "Quận 3", value: 0 },
+  { name: "Quận 4", value: 0 },
+  { name: "Quận 5", value: 0 },
+  { name: "Quận 6", value: 0 },
+  { name: "Quận 7", value: 0 },
+  { name: "Quận 8", value: 0 },
+  { name: "Quận 0", value: 0 },
+  { name: "Quận 11", value: 0 },
+  { name: "Quận 12", value: 0 },
+  { name: "Quận Bình Tân", value: 0 },
+  { name: "Quận Bình Thạnh", value: 0 },
+  { name: "Quận Gò Vấp", value: 0 },
+  { name: "Quận Phú Nhuận", value: 0 },
+  { name: "Quận Tân Phú", value: 0 },
+  { name: "TDUC - Quận 2", value: 0 },
+  { name: "TDUC - Quận 9", value: 0 },
 ];
 
-const ColumnChart: React.FC = () => {
+const ColumnChart: React.FC = ({loading = false}) => {
+  const cityData =
+    useSelector((state: any) => state?.dashboard?.dashboardSlice?.cityData) ||
+    districts;
+
   const chartOptions: ApexCharts.ApexOptions = {
     chart: {
-      type: 'bar',
+      type: "bar",
       height: 450,
       toolbar: { show: false },
     },
@@ -46,15 +45,17 @@ const ColumnChart: React.FC = () => {
       labels: {
         rotate: -35,
         style: {
-          fontSize: '12px',
+          fontSize: "12px",
         },
       },
     },
-    // yaxis: {
-    //   title: {
-    //     text: 'Điện tiêu thụ (kWh)',
-    //   },
-    // },
+    yaxis: {
+      labels: {
+        formatter: function (val: number) {
+          return val.toFixed(2);
+        },
+      },
+    },
     tooltip: {
       y: {
         formatter: (val: number) => `${val} kWh`,
@@ -64,29 +65,32 @@ const ColumnChart: React.FC = () => {
       bar: {
         distributed: true,
         borderRadius: 4,
-        columnWidth: '60%',
+        columnWidth: "60%",
       },
     },
-    colors: ['#3b82f6'],
+    colors: ["#3b82f6"],
   };
 
   const chartSeries = [
     {
-      name: 'Điện tiêu thụ',
-      data: districts.map((d) => d.value),
+      name: "Điện tiêu thụ",
+      data: cityData.map((d: any) => d.value),
     },
   ];
+
+ 
 
   return (
     <Card className="shadow-none rounded-6 p-4">
       <CardContent>
-        <div id="chart">
+        <div id="chart" className="min-h-80">
+          {loading  ? <FuseLoading /> : 
           <ReactApexChart
             options={chartOptions}
             series={chartSeries}
             type="bar"
             height={450}
-          />
+          />}
         </div>
       </CardContent>
     </Card>

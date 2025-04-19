@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import {
-  Tabs,
-  Tab,
   Select,
   MenuItem,
   Button,
@@ -9,29 +7,26 @@ import {
   SelectChangeEvent,
   useTheme,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router";
-import { useDispatch } from "react-redux";
-import useEnhancedEffect from "@mui/utils/useEnhancedEffect";
+import {
+  UNSAFE_getSingleFetchDataStrategy,
+  useNavigate,
+  useParams,
+} from "react-router";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
-
-const areas = [
-  { id: 0, name: "All" },
-  { id: 1, name: "area_HCMC_Q1" },
-  { id: 2, name: "area_HCMC_Q3" },
-  { id: 3, name: "area_HCMC_Q4" },
-  { id: 4, name: "area_HCMC_Q5" },
-  { id: 5, name: "area_HCMC_Q6" },
-  { id: 6, name: "area_HCMC_Q7" },
-  { id: 7, name: "area_HCMC_Q8" },
-  { id: 8, name: "area_HCMC_Q9" },
-  { id: 9, name: "area_HCMC_Q10" },
-  { id: 10, name: "area_HCMC_Q11" },
-];
+import { DatePicker } from "@mui/x-date-pickers";
+import { format } from "date-fns";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { setTimeEnd, setTimeSlot, setTimeStart } from "../store/dashboardSlice";
+import { set } from "lodash";
 
 interface HeaderProps {
   onTimeframeChange?: (timeframe: string, dateRange?: DateRange) => void;
   onTabChange?: (tab: string) => void;
   onExport?: () => void;
+  toggleReload?: () => void;
 }
 
 interface DateRange {
@@ -39,31 +34,31 @@ interface DateRange {
   to: Date | null;
 }
 
-const DashboardHeader: React.FC<HeaderProps> = ({ onExport }) => {
+const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const searchParams = new URLSearchParams(window.location.search);
-  const timeframe = searchParams.get("timeframe");
-  const source = searchParams.get("source");
+  const dashboardStore = useSelector(
+    (state: any) => state?.dashboard?.dashboardSlice
+  );
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const currentParams = new URLSearchParams(window.location.search);
-    if (!timeframe && !source) navigate(`/dashboard?timeframe=daily&source=All`);
-    else if (!timeframe && source) {
-      currentParams.set("timeframe", "daily")
-      navigate(`/dashboard?${currentParams}`);
-    }
-    else if (timeframe && !source) {
-      currentParams.set("source", "All")
-      navigate(`/dashboard?${currentParams}`);
-    }
-  }, [])
-  
-  const handleTimeframeChange = (event: SelectChangeEvent<string>) => {
-    console.log(event.target);
+    const timeStart: any =
+      new URLSearchParams(window.location.search).get("time-start") || "";
+    const timeEnd: any =
+      new URLSearchParams(window.location.search).get("time-end") || "";
+    const timeslot: any =
+      new URLSearchParams(window.location.search).get("time-slot") || "";
+    if (timeStart) dispatch(setTimeStart(timeStart));
+    if (timeEnd) dispatch(setTimeEnd(timeEnd));
+    if (timeslot) dispatch(setTimeSlot(timeslot));
+  }, []);
+
+  const handleTimeSlotChange = (event: SelectChangeEvent<string>) => {
     const updateParams = new URLSearchParams(window.location.search);
-    updateParams.set(event.target.name, event.target.value);
-    navigate(`/dashboard?${updateParams}`)
+    updateParams.set("time-slot", event.target.value);
+    navigate(`/dashboard?${updateParams}`);
+    dispatch(setTimeSlot(event.target.value));
   };
 
   return (
@@ -73,50 +68,81 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport }) => {
         backgroundColor: theme.palette.background.paper,
         overflowX: "auto",
       }}
-    > 
+    >
+      <div className="flex items-center gap-2 font-semibold">
+        <span>From:</span>
+        <DateTimePicker
+          value={
+            dashboardStore?.timeStart
+              ? new Date(dashboardStore?.timeStart)
+              : null
+          }
+          onChange={(e) => {
+            const updateParams = new URLSearchParams(window.location.search);
+            const formatted = e.toISOString().replace(".000", "");
+            updateParams.set("time-start", formatted);
+            dispatch(setTimeStart(formatted));
+            navigate(`/dashboard?${updateParams}`);
+          }}
+          slotProps={{
+            textField: { size: "medium", sx: { width: 220 } },
+          }}
+        />
+        <span>To:</span>
+        <DateTimePicker
+          value={
+            dashboardStore?.timeEnd ? new Date(dashboardStore?.timeEnd) : null
+          }
+          onChange={(e) => {
+            const updateParams = new URLSearchParams(window.location.search);
+            const formatted = e.toISOString().replace(".000", "");
+            updateParams.set("time-end", formatted);
+            dispatch(setTimeEnd(formatted));
+            navigate(`/dashboard?${updateParams}`);
+          }}
+          slotProps={{
+            textField: { size: "medium", sx: { width: 220 } },
+          }}
+        />
+        <span>Time slot:</span>
+        <Select
+          defaultValue={"1m"}
+          value={dashboardStore?.timeslot || "1m"}
+          name="timeslot"
+          onChange={handleTimeSlotChange}
+          size="medium"
+          className="rounded-sm"
+        >
+          <MenuItem value="1m">1 minute</MenuItem>
+          <MenuItem value="1h">1 hour</MenuItem>
+          <MenuItem value="1d">1 day</MenuItem>
+        </Select>
+      </div>
+      <div className="flex items-center gap-x-2  ">
+        <Button
+          variant="contained"
+          onClick={toggleReload}
+          className="rounded-sm"
+          startIcon={
+            <FuseSvgIcon className="text-7xl" size={18}>
+              heroicons-outline:arrow-path
+            </FuseSvgIcon>
+          }
+        >
+          Reload
+        </Button>
         <Button
           variant="contained"
           onClick={onExport}
           color="primary"
           className="rounded-sm"
-          endIcon={<FuseSvgIcon className="text-7xl" size={18}>heroicons-outline:arrow-trending-up</FuseSvgIcon>}
+          startIcon={
+            <FuseSvgIcon className="text-7xl" size={18}>
+              heroicons-outline:arrow-trending-up
+            </FuseSvgIcon>
+          }
         >
           Predict
-        </Button>
-      <div className="flex items-center justify-end gap-2">
-        <Select
-          defaultValue={"All"}
-          value={source}
-          name="source"
-          onChange={handleTimeframeChange}
-          size="medium"
-          className="rounded-sm"  
-        >
-          {areas.map((area) => (
-            <MenuItem value={area.name}>{area.name}</MenuItem>
-          ))}
-        </Select>
-        <Select
-          defaultValue={"daily"}
-          value={timeframe}
-          name="timeframe" 
-          onChange={handleTimeframeChange}
-          size="medium"
-          className="rounded-sm"
-        >
-          <MenuItem value="daily">Daily</MenuItem>
-          <MenuItem value="weekly">Weekly</MenuItem>
-          <MenuItem value="monthly">Monthly</MenuItem>
-          <MenuItem value="yearly">Yearly</MenuItem>
-        </Select>
-
-        <Button
-          variant="contained"
-          onClick={onExport}
-          color="secondary"
-          className="rounded-sm"
-        >
-          Export
         </Button>
       </div>
     </Box>

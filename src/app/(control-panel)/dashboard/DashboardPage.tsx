@@ -3,6 +3,9 @@ import { useMediaQuery } from '@mui/material';
 import StyledFusePageSimple from '@fuse/core/FusePageSimple';
 import DashbaordHeader from './components/DashboardHeader';
 import DashboardContent from './components/DashboardContent';
+import withReducer from '@/store/withReducer';
+import reducer from './store';
+import { useState } from 'react';
 
 const Root = styled(StyledFusePageSimple)(({ theme }) => ({
     "& .FusePageSimple-header": {
@@ -19,16 +22,22 @@ const Root = styled(StyledFusePageSimple)(({ theme }) => ({
     }
   }));
 
-function DashboardPage() {
+function DashboardPage() {  
+    const [reloadStatus, setReloadStatus] = useState(false);
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+
+    const toggleReload = () => {
+        setReloadStatus(!reloadStatus);
+    };
+    
  
     return (
         <Root
-            header={<DashbaordHeader />}
-            content={<DashboardContent />}
+            header={<DashbaordHeader toggleReload={toggleReload}/>}
+            content={<DashboardContent reloadStatus={reloadStatus} />}
             scroll={isMobile ? "normal" : "content"}
         />
     );
 }
 
-export default DashboardPage
+export default withReducer("dashboard", reducer)(DashboardPage);
