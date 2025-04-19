@@ -99,7 +99,7 @@ export default function DistrictDropdown() {
       <Select
         displayEmpty
         sx={{ width: "150px" }}
-        value={selectedDistrict || ''}
+        value={selectedDistrict || 'area-HCMC-Q1'}
         onChange={handleChange}
         input={<OutlinedInput />}
         renderValue={(selected) => {

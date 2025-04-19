@@ -29,7 +29,7 @@ const districts: DistrictData[] = [
   { name: "TDUC - Quận 9", value: 0 },
 ];
 
-const ColumnChart: React.FC = ({loading = false}) => {
+const ColumnChart = ({loading = false}) => {
   const cityData =
     useSelector((state: any) => state?.dashboard?.dashboardSlice?.cityData) ||
     districts;

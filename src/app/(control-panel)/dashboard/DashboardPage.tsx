@@ -29,7 +29,6 @@ function DashboardPage() {
     const toggleReload = () => {
         setReloadStatus(!reloadStatus);
     };
-    
  
     return (
         <Root

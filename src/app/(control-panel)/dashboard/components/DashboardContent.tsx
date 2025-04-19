@@ -7,17 +7,18 @@ import DistrictDropdown from "./components/DistrictDropdown";
 import { getCityData, getUsageDataByDeviceId, getUsageDataByDistrictId, setDeviceId } from "../store/dashboardSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 const DataMetricMainContent = (props: any) => {
   const { reloadStatus } = props
   const dispatch = useDispatch<AppDispatch>();
-  const deviceId = new URLSearchParams(window.location.search).get("device-id");
-  const districtId = new URLSearchParams(window.location.search).get("district-id");
-  const timeStart = new URLSearchParams(window.location.search).get("time-start");
-  const timeEnd = new URLSearchParams(window.location.search).get("time-end");
-  const time = new URLSearchParams(window.location.search).get("time-slot");
+  const searchParams = new URLSearchParams(window.location.search);
+  const deviceId = searchParams.get("device-id");
+  const districtId = searchParams.get("district-id");
+  const timeStart = searchParams.get("time-start");
+  const timeEnd = searchParams.get("time-end");
+  const time = searchParams.get("time-slot");
   const navigate = useNavigate();
   const [cityLoading, setCityLoading] = useState(false);
   const [districtLoading, setDistrictLoading] = useState(false);
@@ -124,7 +125,7 @@ const DataMetricMainContent = (props: any) => {
               size="small"
               placeholder="Device id"
               className="w-[300px]"
-              value={deviceId}
+              value={deviceId || "household-HCMC-Q1-0"}
               onChange={(e: any) => {
                 dispatch(setDeviceId(e.target.value));
                 const updatePrams = new URLSearchParams(window.location.search);

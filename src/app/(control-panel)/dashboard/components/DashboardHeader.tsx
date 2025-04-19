@@ -7,19 +7,13 @@ import {
   SelectChangeEvent,
   useTheme,
 } from "@mui/material";
-import {
-  UNSAFE_getSingleFetchDataStrategy,
-  useNavigate,
-  useParams,
-} from "react-router";
+import { useNavigate } from "react-router";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
-import { DatePicker } from "@mui/x-date-pickers";
-import { format } from "date-fns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
-import { setTimeEnd, setTimeSlot, setTimeStart } from "../store/dashboardSlice";
+import { setDeviceId, setDistrictId, setTimeEnd, setTimeSlot, setTimeStart } from "../store/dashboardSlice";
 import { set } from "lodash";
 
 interface HeaderProps {
@@ -43,15 +37,22 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const timeStart: any =
-      new URLSearchParams(window.location.search).get("time-start") || "";
-    const timeEnd: any =
-      new URLSearchParams(window.location.search).get("time-end") || "";
-    const timeslot: any =
-      new URLSearchParams(window.location.search).get("time-slot") || "";
+    const searchParams = new URLSearchParams(window.location.search);
+    const timeStart: any = searchParams.get("time-start") || "";
+    const timeEnd: any = searchParams.get("time-end") || "";
+    const timeslot: any = searchParams.get("time-slot") || "";
+    const deviceId: any = searchParams.get("device-id") || "";
+    const districtId: any = searchParams.get("district-id") || "";
     if (timeStart) dispatch(setTimeStart(timeStart));
+    else dispatch(setTimeStart(new Date().toISOString()));
     if (timeEnd) dispatch(setTimeEnd(timeEnd));
+    else dispatch(setTimeEnd(new Date().toISOString()));
     if (timeslot) dispatch(setTimeSlot(timeslot));
+    else dispatch(setTimeSlot("1h"));
+    if (deviceId) dispatch(setDeviceId(deviceId));
+    else dispatch(setDeviceId("household-HCMC-Q1-0"));
+    if (districtId) dispatch(setDistrictId(districtId));
+    else dispatch(setDistrictId("area-HCMC-Q3"));
   }, []);
 
   const handleTimeSlotChange = (event: SelectChangeEvent<string>) => {
