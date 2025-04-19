@@ -42,6 +42,7 @@ import { openJobDialog } from "@/dialogs/job/JobDialogSlice";
 import { showMessage } from "@fuse/core/FuseMessage/fuseMessageSlice";
 import { random } from "lodash";
 import { end } from "@popperjs/core";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const StickyHeader = styled(Box)(({ theme }) => ({
   position: "sticky",
@@ -119,14 +120,13 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     mode: "onChange",
   });
 
-  console.log("jobDetail form", watch());
-
   // Watch cron_time for live updates
   const msValue = watch("cron_time");
   const parsedMs = parseInt(msValue?.toString());
   const msValid = !isNaN(parsedMs) && parsedMs > 0;
   const detailed = msValid ? convertMillisecondsToTimeUnit(parsedMs) : null;
   const cronExpr = parsedMs % 1000 === 0 ? millisecondsToCron(parsedMs) : "";
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
 
   // Load job details when ID changes
   useEffect(() => {
@@ -155,8 +155,6 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     }
   }, [jobDetail, reset]);
 
-  console.log(jobDetail, watch());
-
   // Toggle job status
   const updateStatus = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -166,6 +164,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
       updateJobStatus({
         job: jobDetail,
         enable: jobDetail.status === "running" ? false : true,
+        date: date,
       })
     )
       .catch(() => setUpdateLoading(false))
@@ -174,7 +173,6 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
 
   // Submit form updates
   const handleJobSubmit = async (data: any) => {
-    console.log(data);
     setUpdateLoading(true);
     const payload = {
       ...data,
@@ -357,36 +355,61 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
 
           <Box>
             <form onSubmit={handleSubmit(handleJobSubmit)}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-              >
-                <Controller
-                  name="distribution_type"
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <>
-                      <Typography className="mb-2 mt-5 text-md font-medium flex items-center">
-                        📊 Distribution Method
-                      </Typography>
-                      <Select
-                        {...field}
-                        disabled={jobDetail?.status === "running"}
-                        fullWidth
-                        className="rounded-sm"
-                        error={!!errors.distribution_type}
-                      >
-                        {DISTRIBUTION_OPTIONS.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </>
-                  )}
-                />
-              </motion.div>
+              <div className="flex items-center justify-between gap-x-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="w-1/2"
+                >
+                  <Controller
+                    name="distribution_type"
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <>
+                        <Typography className="mb-2 mt-5 text-md font-medium flex items-center">
+                          📊 Distribution Method
+                        </Typography>
+                        <Select
+                          {...field}
+                          disabled={jobDetail?.status === "running"}
+                          fullWidth
+                          className="rounded-sm"
+                          error={!!errors.distribution_type}
+                        >
+                          {DISTRIBUTION_OPTIONS.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </>
+                    )}
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="w-1/2"
+                >
+                  <>
+                    <Typography className="mb-2 mt-5 text-md font-medium flex items-center">
+                      Date sent
+                    </Typography>
+                    <DatePicker
+                      value={new Date(date)}
+                      onChange={(e) => {
+                        setDate(e.toISOString());
+                      }}
+                      slotProps={{
+                        textField: { size: "medium" },
+                      }}
+                    />
+                  </>
+                </motion.div>
+              </div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

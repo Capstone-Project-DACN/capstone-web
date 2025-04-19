@@ -17,7 +17,7 @@ export const getCronJobs = createAsyncThunk<any, any>(
 
 export const updateJobStatus = createAsyncThunk<any, any>(
   "cronjob/updateStatus",
-  async (params: {job: any, enable: boolean}, { getState }: any) => {
+  async (params: {job: any, enable: boolean, date: any}, { getState }: any) => {
     try {
       const response = (await jobService.updateJobStatus(params)) as any;
       

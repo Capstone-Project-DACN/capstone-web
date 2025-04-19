@@ -30,9 +30,9 @@ class jobService extends FuseUtils.EventEmitter {
         });
     };
 
-    updateJobStatus (params: {job: any, enable: boolean}) {
+    updateJobStatus (params: {job: any, enable: boolean, date: any}) {
         return new Promise((resolve, reject) => {
-          axiosClient.post(`http://localhost:3000/jobs/trigger?cron_type=${params.job.cron_type}&city_id=${params.job.city_id}&district_id=${params.job.district_id}&enable=${params.enable}`)
+          axiosClient.post(`http://localhost:3000/jobs/trigger?cron_type=${params.job.cron_type}&city_id=${params.job.city_id}&district_id=${params.job.district_id}&enable=${params.enable}&custom_date=${params.date.split('T')[0]}`)
             .then((response) => resolve({id: params.job.id, status: params.enable ? "running" : "stopped"}))
             .catch(function (error) {
               if (error.response) {

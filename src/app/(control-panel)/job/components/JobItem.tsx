@@ -45,7 +45,8 @@ const JobItem = ({ job, index, setRightSidebarOpen }: any) => {
     dispatch(
       updateJobStatus({
         job: job,
-        enable: job.status === "running" ? false : true
+        enable: job.status === "running" ? false : true,
+        date: new Date().toISOString().split("T")[0],
       })
     ).then(() => setLoading(false));
   };
