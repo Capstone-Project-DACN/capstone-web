@@ -9,15 +9,18 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { stat } from "fs";
+import { useSelector } from "react-redux";
 
 const DataMetricMainContent = (props: any) => {
   const { reloadStatus } = props
   const dispatch = useDispatch<AppDispatch>();
   const searchParams = new URLSearchParams(window.location.search);
-  const deviceId = searchParams.get("device-id");
+  const deviceIdValue = useSelector((state: any) => state?.dashboard?.dashboardSlice?.deviceId);
   const districtId = searchParams.get("district-id");
   const timeStart = searchParams.get("time-start");
   const timeEnd = searchParams.get("time-end");
+  const deviceId = searchParams.get("device-id");
   const time = searchParams.get("time-slot");
   const navigate = useNavigate();
   const [cityLoading, setCityLoading] = useState(false);
@@ -125,7 +128,7 @@ const DataMetricMainContent = (props: any) => {
               size="small"
               placeholder="Device id"
               className="w-[300px]"
-              value={deviceId || "household-HCMC-Q1-0"}
+              value={deviceIdValue || "household-HCMC-Q1-0"}
               onChange={(e: any) => {
                 dispatch(setDeviceId(e.target.value));
                 const updatePrams = new URLSearchParams(window.location.search);

@@ -17,7 +17,7 @@ export const getCronJobs = createAsyncThunk<any, any>(
 
 export const updateJobStatus = createAsyncThunk<any, any>(
   "cronjob/updateStatus",
-  async (params: {job: any, enable: boolean, date: any}, { getState }: any) => {
+  async (params: {job: any, enable: boolean}, { getState }: any) => {
     try {
       const response = (await jobService.updateJobStatus(params)) as any;
       
@@ -109,7 +109,7 @@ const jobSlice = createSlice({
     builder.addCase(updateJobDetail.fulfilled, (state, action: any) => {
       const {cron_time, ...data } = action.payload.data;
       const formatted_time = millisecondsToCron(convertTimeToMs(cron_time));
-      state.detail = {...state.detail, ...data , cron_time: formatted_time};
+      state.detail = {...state.detail, ...data , cron_time: formatted_time, custom_date: data.date};
     });
     builder.addCase(updateJobStatus.fulfilled, (state, action: any) => {
       const newData: any = state.data.map((item: any) => {

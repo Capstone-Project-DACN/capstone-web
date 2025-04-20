@@ -40,8 +40,6 @@ import FuseLoading from "@fuse/core/FuseLoading";
 import DistributedChart from "./DistributedChart";
 import { openJobDialog } from "@/dialogs/job/JobDialogSlice";
 import { showMessage } from "@fuse/core/FuseMessage/fuseMessageSlice";
-import { random } from "lodash";
-import { end } from "@popperjs/core";
 import { DatePicker } from "@mui/x-date-pickers";
 
 const StickyHeader = styled(Box)(({ theme }) => ({
@@ -77,11 +75,8 @@ const validationSchema = yup.object().shape({
     .typeError("Must be a number")
     .positive("Must be positive")
     .required("Required"),
-
   distribution_type: yup.string().required("Distribution type is required"),
-
   start_id: yup.number().required("Start ID is required"),
-
   end_id: yup.number().required("End ID is required"),
 });
 
@@ -152,6 +147,11 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
         random_order: jobDetail.random_order === "true",
         cron_time: cronToMilliseconds(jobDetail.cron_time),
       });
+      if(jobDetail?.custom_date !== "N/A") {
+        console.log(jobDetail?.custom_date);
+        setDate(jobDetail?.custom_date);
+      }
+      else setDate(new Date().toISOString().split("T")[0]);
     }
   }, [jobDetail, reset]);
 
@@ -164,7 +164,6 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
       updateJobStatus({
         job: jobDetail,
         enable: jobDetail.status === "running" ? false : true,
-        date: date,
       })
     )
       .catch(() => setUpdateLoading(false))
@@ -179,6 +178,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
       start_id: parseInt(data.start_id),
       end_id: parseInt(data.end_id),
       cron_time: convertMillisecondsToTimeUnit(data.cron_time),
+      date: date,
     };
     dispatch(updateJobDetail({ data: payload }))
       .then(() => {
@@ -239,7 +239,10 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     String(distribution_type) !== String(jobDetail.distribution_type) ||
     String(random_order) !== String(jobDetail.random_order) ||
     String(jobDetail?.start_id) !== String(watch("start_id")) ||
-    String(jobDetail?.end_id) !== String(watch("end_id"));
+    String(jobDetail?.end_id) !== String(watch("end_id")) || 
+    String(jobDetail?.custom_date) !== String(date);
+
+  console.log(jobDetail?.custom_date, date);
 
   return (
     <div className="px-2">
@@ -401,7 +404,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                     <DatePicker
                       value={new Date(date)}
                       onChange={(e) => {
-                        setDate(e.toISOString());
+                        setDate(e.toISOString().split("T")[0]);
                       }}
                       slotProps={{
                         textField: { size: "medium" },
