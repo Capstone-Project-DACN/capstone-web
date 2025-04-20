@@ -544,13 +544,13 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                     color="secondary"
                     className="rounded-sm"
                     size="small"
-                    disabled={
-                      !isValid ||
-                      updateLoading ||
-                      !msValid ||
-                      !myIsDirty ||
-                      jobDetail.status === "running"
-                    }
+                    // disabled={
+                    //   !isValid ||
+                    //   updateLoading ||
+                    //   !msValid ||
+                    //   !myIsDirty ||
+                    //   jobDetail.status === "running"
+                    // }
                   >
                     {updateLoading ? <CircularProgress size={18} /> : "Update"}
                   </Button>

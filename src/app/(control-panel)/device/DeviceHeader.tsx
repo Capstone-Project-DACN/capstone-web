@@ -55,7 +55,7 @@ const DeviceHeader = (props: any) => {
         <Tab value={"add-device"} label="Add Device" />
         <Tab value={"produce"} label="Produce Data" />
       </Tabs>
-      {tab === "produce" && !logs && (
+      {tab === "produce" && (
         <div className="mr-4 pt-4 flex items-center gap-x-2 transition-all duration-300 ease-in">
             <>
               <DatePicker

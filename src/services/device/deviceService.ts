@@ -33,7 +33,7 @@ class deviceService extends FuseUtils.EventEmitter {
     );
   };
 
-//   curl --location 'http://localhost:3001/devices/inactive?pageNumber=1&pageSize=100&dateTime=true' \
+//   curl --location '${import.meta.env.VITE_BASE_DEVICE_SERVICE}/devices/inactive?pageNumber=1&pageSize=100&dateTime=true' \
 // --data ''
     searchInactiveDevice (params: {
       pageNumber?: number;
@@ -48,7 +48,7 @@ class deviceService extends FuseUtils.EventEmitter {
             dateTime: params?.dateTime || false
           }
           axiosClient
-            .get(`http://localhost:3001/devices/inactive`, { params: finalParams })
+            .get(`${import.meta.env.VITE_BASE_DEVICE_SERVICE}/devices/inactive`, { params: finalParams })
             .then((response) => resolve(response))
             // .then((response) => resolve(response))
             .catch(function (error) {
@@ -79,7 +79,7 @@ class deviceService extends FuseUtils.EventEmitter {
 
       return new Promise((resolve, reject) => {
         axiosClient
-          .post(`http://localhost:3001/devices/add-multiple`, payload)
+          .post(`${import.meta.env.VITE_BASE_DEVICE_SERVICE}/devices/add-multiple`, payload)
           .then((response) => resolve(response))
           .catch(function (error) {
             if (error.response) {
@@ -105,7 +105,7 @@ class deviceService extends FuseUtils.EventEmitter {
     }) {
       return new Promise((resolve, reject) => {
         axiosClient
-          .post(`http://localhost:3001/devices/add`, params)
+          .post(`${import.meta.env.VITE_BASE_DEVICE_SERVICE}/devices/add`, params)
           .then((response) => resolve(response))
           .catch(function (error) {
             if (error.response) {
@@ -129,7 +129,7 @@ class deviceService extends FuseUtils.EventEmitter {
     getDeviceTopics = () => {
       return new Promise((resolve, reject) => {
         axiosClient
-          .get(`http://localhost:3001/devices/topics/all`)
+          .get(`${import.meta.env.VITE_BASE_DEVICE_SERVICE}/devices/topics/all`)
           .then((response) => resolve(response))
           .catch(function (error) {
             if (error.response) {
@@ -153,7 +153,7 @@ class deviceService extends FuseUtils.EventEmitter {
     getDevicesByTopic = (params: {topic: string}) => {
       return new Promise((resolve, reject) => {
         axiosClient
-          .get(`http://localhost:3001/devices/get-by-topic/${params?.topic}`)
+          .get(`${import.meta.env.VITE_BASE_DEVICE_SERVICE}/devices/get-by-topic/${params?.topic}`)
           .then((response) => resolve(response))
           .catch(function (error) {
             if (error.response) {
@@ -174,12 +174,12 @@ class deviceService extends FuseUtils.EventEmitter {
       });
     };
 
-    // curl --location 'http://localhost:3001/devices/detail/household-HCMC-Q1-0'
+    // curl --location '${import.meta.env.VITE_BASE_DEVICE_SERVICE}/devices/detail/household-HCMC-Q1-0'
 
     getDeviceDetail = (params: {deviceId: any}) => {
       return new Promise((resolve, reject) => {
         axiosClient
-          .get(`http://localhost:3001/devices/detail/${params?.deviceId}`)
+          .get(`${import.meta.env.VITE_BASE_DEVICE_SERVICE}/devices/detail/${params?.deviceId}`)
           .then((response) => resolve(response))
           .catch(function (error) {
             if (error.response) {
@@ -200,13 +200,13 @@ class deviceService extends FuseUtils.EventEmitter {
       });
     };
 
-//     curl --location 'http://localhost:3001/devices/remove' \
+//     curl --location '${import.meta.env.VITE_BASE_DEVICE_SERVICE}/devices/remove' \
 // --data '{
 //     "deviceId": "id-0"
 // }'
     removeDevice = (params: {deviceId: any}) => {
       return new Promise((resolve, reject) => {
-        axiosClient.post(`http://localhost:3001/devices/remove`, params)
+        axiosClient.post(`${import.meta.env.VITE_BASE_DEVICE_SERVICE}/devices/remove`, params)
           .then((response) => resolve(response))
           .catch(function (error) {
             if (error.response) {

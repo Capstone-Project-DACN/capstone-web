@@ -127,10 +127,10 @@ const ProduceTab = () => {
       let url = "";
       if (device.type === "household") {
         url = isAnomaly
-          ? `http://localhost:3000/data/anomaly?batch_size=1&city_id=${device.city}&district_id=${device.district}&display_data=true&id=${device.householdId}&custom_date=${custom_date}`
-          : `http://localhost:3000/data/household?batch_size=1&city_id=${device.city}&district_id=${device.district}&display_data=true&id=${device.householdId}&custom_date=${custom_date}`;
+          ? `${import.meta.env.VITE_BASE_JOB_SERVICE}/data/anomaly?batch_size=1&city_id=${device.city}&district_id=${device.district}&display_data=true&id=${device.householdId}&custom_date=${custom_date}`
+          : `${import.meta.env.VITE_BASE_JOB_SERVICE}/data/household?batch_size=1&city_id=${device.city}&district_id=${device.district}&display_data=true&id=${device.householdId}&custom_date=${custom_date}`;
       } else if (device.type === "area") {
-        url = `http://localhost:3000/data/area?batch_size=1&city_id=${device.city}&district_id=${device.district}&display_data=true&custom_date=${custom_date}`;
+        url = `${import.meta.env.VITE_BASE_JOB_SERVICE}/data/area?batch_size=1&city_id=${device.city}&district_id=${device.district}&display_data=true&custom_date=${custom_date}`;
       }
 
       const response = await fetch(url);
