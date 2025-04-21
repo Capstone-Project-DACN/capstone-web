@@ -127,17 +127,22 @@ const dashboardSlice = createSlice({
     });
     builder.addCase(getUsageDataByDeviceId.fulfilled, (state, action) => {
       const formmatedData = action.payload.data.map((item: any) => {
+        const utcDate = new Date(item.x_utc_timestamp);
+        const vietnamTime = new Date(utcDate.getTime() + (7 * 60 * 60 * 1000));
         return {
-          x:  item.x_utc_timestamp,
+          x:  vietnamTime,
           y: item.electricity_usage
         }
       })
       state.deviceData = formmatedData;
     });
     builder.addCase(getUsageDataByDistrictId.fulfilled, (state, action) => {
+    
       const formmatedData = action.payload.data.map((item: any) => {
+        const utcDate = new Date(item.x_utc_timestamp);
+        const vietnamTime = new Date(utcDate.getTime() + (7 * 60 * 60 * 1000));
         return {
-          x:  item.x_utc_timestamp,
+          x:  vietnamTime,
           y: item.electricity_usage
         }
       })

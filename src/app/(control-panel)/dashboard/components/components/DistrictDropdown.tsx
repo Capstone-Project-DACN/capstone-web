@@ -41,6 +41,7 @@ const districts = [
   { label: "TDUC - Quận 9", value: "area-TDUC-Q9" },
 ];
 
+
 function getStyles(name: string, selectedValue: string | null, theme: any) {
   return {
     fontWeight:

@@ -91,7 +91,6 @@ const DistrictChart = ({loading = false}) => {
   };
 
   const processedData = processData();
-  console.log("Dữ liệu đã xử lý:", processedData);
 
   const [state, setState] = useState({
     series: [

@@ -4,35 +4,48 @@ import { Card, CardContent, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import FuseLoading from "@fuse/core/FuseLoading";
 
-interface DistrictData {
-  name: string;
-  value: number;
+const HCMC_Districts = [
+  "Q1", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q10", 
+  // "Q11", "Q12", "QTB", "QBTHANH", "QGV", "QPN", "QTP", "Q2", "Q9",
+]
+
+const districtDisplayNames = {
+  "Q1": "Quận 1", 
+  "Q3": "Quận 3",
+  "Q4": "Quận 4",
+  "Q5": "Quận 5",
+  "Q6": "Quận 6",
+  "Q7": "Quận 7",
+  "Q8": "Quận 8",
+  "Q10": "Quận 10",
+  "Q11": "Quận 11",
+  "Q12": "Quận 12",
+  "QTB": "Tân Bình",
+  "QBTHANH": "Bình Thạnh",
+  "QGV": "Gò Vấp",
+  "QPN": "Phú Nhuận",
+  "QTP": "Tân Phú",
+  "Q2": "Quận 2",
+  "Q9": "Quận 9"
 }
-
-const districts: DistrictData[] = [
-  { name: "Quận 1", value: 0 },
-  { name: "Quận 3", value: 0 },
-  { name: "Quận 4", value: 0 },
-  { name: "Quận 5", value: 0 },
-  { name: "Quận 6", value: 0 },
-  { name: "Quận 7", value: 0 },
-  { name: "Quận 8", value: 0 },
-  { name: "Quận 0", value: 0 },
-  { name: "Quận 11", value: 0 },
-  { name: "Quận 12", value: 0 },
-  { name: "Quận Bình Tân", value: 0 },
-  { name: "Quận Bình Thạnh", value: 0 },
-  { name: "Quận Gò Vấp", value: 0 },
-  { name: "Quận Phú Nhuận", value: 0 },
-  { name: "Quận Tân Phú", value: 0 },
-  { name: "TDUC - Quận 2", value: 0 },
-  { name: "TDUC - Quận 9", value: 0 },
-];
-
 const ColumnChart = ({loading = false}) => {
-  const cityData =
-    useSelector((state: any) => state?.dashboard?.dashboardSlice?.cityData) ||
-    districts;
+  const cityData = useSelector((state: any) => state?.dashboard?.dashboardSlice?.cityData) || [];
+  
+  const cityDataMap = {};
+  cityData.forEach((item) => {
+    cityDataMap[item.name] = item;
+  });
+  
+  const fullDistrictData = HCMC_Districts.map((districtCode) => {
+    const districtData = cityDataMap[districtCode];
+    
+    return {
+      name: districtDisplayNames[districtCode] || districtCode,
+      value: districtData ? Math.abs(districtData.value) : 0
+    };
+  });
+
+  console.log({ fullDistrictData });
 
   const chartOptions: ApexCharts.ApexOptions = {
     chart: {
@@ -41,7 +54,7 @@ const ColumnChart = ({loading = false}) => {
       toolbar: { show: false },
     },
     xaxis: {
-      categories: districts.map((d) => d.name),
+      categories: fullDistrictData.map((d) => d.name),
       labels: {
         rotate: -35,
         style: {
@@ -74,7 +87,7 @@ const ColumnChart = ({loading = false}) => {
   const chartSeries = [
     {
       name: "Điện tiêu thụ",
-      data: cityData.map((d: any) => d.value),
+      data: fullDistrictData.map((d: any) => d.value),
     },
   ];
 

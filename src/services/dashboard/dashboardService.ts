@@ -62,7 +62,7 @@ class dashboardService extends FuseUtils.EventEmitter {
       time_slot: string
     }) {
       return new Promise((resolve, reject) => {
-        axiosClient.get(`${import.meta.env.VITE_BASE_DATA_ACCESS_TIER}/api/meters/chart?device_id=${params?.district_id}&time_start=${params?.time_start}&time_end=${params?.time_end}&time_slot=${params?.time_slot}`)
+        axiosClient.get(`${import.meta.env.VITE_BASE_DATA_ACCESS_TIER}/api/meters/chart?device_id=${params?.district_id}&time_start=${params?.time_start}&time_end=${params?.time_end}&time_slot=${params?.time_slot}&bucket=ward`)
         .then((response) => resolve(response))
         .catch(function (error) {
           if (error.response) {

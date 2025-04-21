@@ -76,8 +76,8 @@ const validationSchema = yup.object().shape({
     .positive("Must be positive")
     .required("Required"),
   distribution_type: yup.string().required("Distribution type is required"),
-  start_id: yup.number().required("Start ID is required"),
-  end_id: yup.number().required("End ID is required"),
+  // start_id: yup.number().required("Start ID is required"),
+  // end_id: yup.number().required("End ID is required"),
 });
 
 interface JobQuickViewProps {
@@ -175,8 +175,8 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     setUpdateLoading(true);
     const payload = {
       ...data,
-      start_id: parseInt(data.start_id),
-      end_id: parseInt(data.end_id),
+      start_id: parseInt(data.start_id) || 0,
+      end_id: parseInt(data.end_id) || 10,
       cron_time: convertMillisecondsToTimeUnit(data.cron_time),
       date: date,
     };
@@ -240,9 +240,7 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
     String(random_order) !== String(jobDetail.random_order) ||
     String(jobDetail?.start_id) !== String(watch("start_id")) ||
     String(jobDetail?.end_id) !== String(watch("end_id")) || 
-    String(jobDetail?.custom_date) !== String(date);
-
-  console.log(jobDetail?.custom_date, date);
+    (String(jobDetail?.custom_date === "N/A" ? new Date().toISOString().split("T")[0] : jobDetail?.custom_date) !== String(date));
 
   return (
     <div className="px-2">
@@ -544,13 +542,13 @@ const JobQuickView: React.FC<JobQuickViewProps> = ({ setRightSidebarOpen }) => {
                     color="secondary"
                     className="rounded-sm"
                     size="small"
-                    // disabled={
-                    //   !isValid ||
-                    //   updateLoading ||
-                    //   !msValid ||
-                    //   !myIsDirty ||
-                    //   jobDetail.status === "running"
-                    // }
+                    disabled={
+                      !isValid ||
+                      updateLoading ||
+                      !msValid ||
+                      !myIsDirty ||
+                      jobDetail.status === "running"
+                    }
                   >
                     {updateLoading ? <CircularProgress size={18} /> : "Update"}
                   </Button>

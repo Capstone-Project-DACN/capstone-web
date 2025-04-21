@@ -105,7 +105,18 @@ const AddDevice = () => {
           }
         })
       );
-    });
+    }).catch(() => {
+      dispatch(
+        showMessage({
+          message: "Error adding area device",
+          variant: "error",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        })
+      );
+    })
   };
 
   const handleHouseholdSubmit = async (data: any) => {
@@ -130,7 +141,18 @@ const AddDevice = () => {
         start: 0,
         end: 100,
       });
-    });
+    }).catch(() => {
+      dispatch(
+        showMessage({
+          message: "Error adding household device",
+          variant: "error",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+        })
+      );
+    })
   };
 
   return (

@@ -248,7 +248,10 @@ const DistributedChart = (props: any) => {
         city_id: searchParams.get("city_id"),
         district_id: searchParams.get("district_id"),
       }
-      dispatch(getDistributionData({job})).then((res) => {})
+      if(job.cron_type && job.city_id && job.district_id) {
+        dispatch(getDistributionData({job})).then((res) => {
+        })
+      }
     } catch (error) {
       console.log(error)
     }
