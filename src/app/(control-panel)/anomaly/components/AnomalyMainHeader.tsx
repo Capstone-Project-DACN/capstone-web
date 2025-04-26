@@ -25,6 +25,7 @@ const AmomalyHeader = ({ rightSidebarOpen, setRightSidebarOpen }) => {
         <Tab value={"all"} label="All" />
         <Tab value={"district"} label="Districts" />
         <Tab value={"device"} label="Devices" />
+        <Tab value={"setting"} label="Settings" />
       </Tabs>
       <Typography className="text-16 font-bold mr-3">
         {anomalies?.length} {anomalies?.length === 1 ? "Anomaly" : "Anomalies"}

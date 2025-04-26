@@ -308,6 +308,7 @@ const AddDevice = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3, duration: 0.3 }}
+                      className="w-1/2"
                     >
                       <Controller
                         name="start"
@@ -333,6 +334,7 @@ const AddDevice = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4, duration: 0.3 }}
+                      className="w-1/2"
                     >
                       <Controller
                         name="end"

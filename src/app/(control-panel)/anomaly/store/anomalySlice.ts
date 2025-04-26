@@ -33,6 +33,36 @@ export const searchAnomalyDetail = createAsyncThunk<any, any>(
   }
 );
 
+export const getSettings = createAsyncThunk<any, any>(
+  "anomaly/settings",
+  async (params: any, { getState }: any) => {
+
+    try {
+      const response = (await anomalyService.getSettings({})) as any;
+      const detail = response.data.settings || {};
+
+      return detail;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const updateSetings = createAsyncThunk<any, any>(
+  "anomaly/settings/update",
+  async (params: { data: any }, { getState }: any) => {
+
+    try {
+      const response = (await anomalyService.updateSettings(params)) as any;
+      const detail = response.data.settings || {};
+
+      return detail;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 interface anomalySliceState {
   data: [];
   detail: null,
@@ -47,6 +77,7 @@ interface anomalySliceState {
     direction: string;
   };
   filter: {},
+  settings: {}
 }
 
 const initialState: anomalySliceState = {
@@ -63,6 +94,7 @@ const initialState: anomalySliceState = {
     direction: "DESC",
   },
   filter: {}, 
+  settings: {},
 };
 
 const anomalySlice = createSlice({
@@ -106,9 +138,14 @@ const anomalySlice = createSlice({
         } else return item
       });
     });
-
     builder.addCase(searchAnomalyDetail.fulfilled, (state, action: any) => {
       state.detail = action.payload;
+    });
+    builder.addCase(getSettings.fulfilled, (state, action: any) => {
+      state.settings = action.payload;
+    });
+    builder.addCase(updateSetings.fulfilled, (state, action: any) => {
+      state.settings = action.payload;
     });
   },
 }); 

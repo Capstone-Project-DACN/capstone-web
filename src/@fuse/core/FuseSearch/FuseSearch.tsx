@@ -107,7 +107,6 @@ function renderInputComponent(props: RenderInputComponentProps) {
 							input: 'FuseSearch-input py-0 px-4 h-9'
 						}
 					}}
-					variant="standard"
 					{...other}
 				/>
 			)}
@@ -292,6 +291,22 @@ function FuseSearch(props: FuseSearchProps) {
 	const buttonNode = useRef(null);
 
 	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.ctrlKey && event.key === 'k') {
+				event.preventDefault();
+				showSearch();
+			}
+		};
+	
+		window.addEventListener('keydown', handleKeyDown);
+	
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	}, []);
+	
+
+	useEffect(() => {
 		dispatch({
 			type: 'setNavigation',
 			data: navigation
@@ -431,7 +446,7 @@ function FuseSearch(props: FuseSearchProps) {
 			return (
 				<Root className={clsx('flex', className)}>
 					<Tooltip
-						title="Click to search"
+						title="Click to search (Ctrl + K)"
 						placement="bottom"
 					>
 						<div
@@ -452,7 +467,7 @@ function FuseSearch(props: FuseSearchProps) {
 								square
 							>
 								<div
-									className="flex h-full w-full items-center"
+									className="flex h-full w-1/2 mx-auto items-center"
 									ref={popperNode}
 								>
 									<Autosuggest
@@ -514,13 +529,13 @@ function FuseSearch(props: FuseSearchProps) {
 											);
 										}}
 									/>
-									<IconButton
+									{/* <IconButton
 										onClick={hideSearch}
 										className="mx-2"
 										size="large"
 									>
 										<FuseSvgIcon>heroicons-outline:x-mark</FuseSvgIcon>
-									</IconButton>
+									</IconButton> */}
 								</div>
 							</Paper>
 						</ClickAwayListener>
