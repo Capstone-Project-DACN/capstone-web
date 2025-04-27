@@ -69,7 +69,6 @@ export default function DistrictDropdown() {
     } else if (districtId) {
       const updateParams = new URLSearchParams(location.search);
       updateParams.set("district-id", districtId);
-      navigate(`/dashboard?${updateParams}`, { replace: true });
       setSelectedDistrict(districtId);
     }
   }, [location.search, districtId, dispatch, navigate]);
@@ -82,16 +81,10 @@ export default function DistrictDropdown() {
 
   const handleChange = (event: { target: { value: string } }) => {
     const newDistrictId = event.target.value;
-    
-    // Update Redux state
     dispatch(setDistrictId(newDistrictId));
-    
-    // Update URL
     const updateParams = new URLSearchParams(location.search);
     updateParams.set("district-id", newDistrictId);
     navigate(`/dashboard?${updateParams}`, { replace: true });
-    
-    // Update local state
     setSelectedDistrict(newDistrictId);
   };
 

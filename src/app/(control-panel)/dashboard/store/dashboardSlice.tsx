@@ -11,7 +11,7 @@ export interface DashboardSliceProps {
   devices: any[];
   timeStart: string;
   timeEnd: string;
-  timeslot: string;
+  timeSlot: string;
   districtId: string;
   deviceId: string;
   city: string;
@@ -25,7 +25,7 @@ const initialState: DashboardSliceProps = {
   devices: [],
   timeStart: "",
   timeEnd: "",  
-  timeslot: "",
+  timeSlot: "",
   districtId: "",
   deviceId: "",
   city: "HCMC",
@@ -60,7 +60,7 @@ export const getUsageDataByDeviceId = createAsyncThunk(
       time_start: getState()?.dashboard?.dashboardSlice?.timeStart,
       time_end: getState()?.dashboard?.dashboardSlice?.timeEnd,
       device_id: getState()?.dashboard?.dashboardSlice?.deviceId,
-      time_slot: getState()?.dashboard?.dashboardSlice?.timeslot
+      time_slot: getState()?.dashboard?.dashboardSlice?.timeSlot
     }
 
     try {
@@ -81,7 +81,7 @@ export const getUsageDataByDistrictId = createAsyncThunk(
       time_start: getState()?.dashboard?.dashboardSlice?.timeStart,
       time_end: getState()?.dashboard?.dashboardSlice?.timeEnd,
       district_id: getState()?.dashboard?.dashboardSlice?.districtId,
-      time_slot: getState()?.dashboard?.dashboardSlice?.timeslot
+      time_slot: getState()?.dashboard?.dashboardSlice?.timeSlot
     }
 
     try {
@@ -106,7 +106,7 @@ const dashboardSlice = createSlice({
       state.timeEnd = action.payload;
     },
     setTimeSlot(state, action) {
-      state.timeslot = action.payload;
+      state.timeSlot = action.payload;
     },
     setDistrictId(state, action) {
       state.districtId = action.payload;

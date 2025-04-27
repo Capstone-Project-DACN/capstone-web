@@ -7,14 +7,19 @@ import {
   SelectChangeEvent,
   useTheme,
 } from "@mui/material";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
-import { setDeviceId, setDistrictId, setTimeEnd, setTimeSlot, setTimeStart } from "../store/dashboardSlice";
-import { set } from "lodash";
+import {
+  setDeviceId,
+  setDistrictId,
+  setTimeEnd,
+  setTimeSlot,
+  setTimeStart,
+} from "../store/dashboardSlice";
 
 interface HeaderProps {
   onTimeframeChange?: (timeframe: string, dateRange?: DateRange) => void;
@@ -36,23 +41,51 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
   );
   const dispatch = useDispatch<AppDispatch>();
 
+  const camelCaseKey = (key: string) => {
+    return key.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
+  };
+
+  const defaultValues = {
+    "time-start": new Date().toISOString(),
+    "time-end": new Date().toISOString(),
+    "time-slot": "1d",
+    "device-id": "household-HCMC-Q1-0",
+    "district-id": "area-HCMC-Q1",
+  };
+
+  const paramToActionMap = {
+    "time-start": setTimeStart,
+    "time-end": setTimeEnd,
+    "time-slot": setTimeSlot,
+    "device-id": setDeviceId,
+    "district-id": setDistrictId,
+  };
+
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const timeStart: any = searchParams.get("time-start") || "";
-    const timeEnd: any = searchParams.get("time-end") || "";
-    const timeslot: any = searchParams.get("time-slot") || "";
-    const deviceId: any = searchParams.get("device-id") || "";
-    const districtId: any = searchParams.get("district-id") || "";
-    if (timeStart) dispatch(setTimeStart(timeStart));
-    else dispatch(setTimeStart(new Date().toISOString()));
-    if (timeEnd) dispatch(setTimeEnd(timeEnd));
-    else dispatch(setTimeEnd(new Date().toISOString()));
-    if (timeslot) dispatch(setTimeSlot(timeslot));
-    else dispatch(setTimeSlot("1h"));
-    if (deviceId) dispatch(setDeviceId(deviceId));
-    else dispatch(setDeviceId("household-HCMC-Q1-0"));
-    if (districtId) dispatch(setDistrictId(districtId));
-    else dispatch(setDistrictId("area-HCMC-Q3"));
+    let updated = false;
+    const fullURL = localStorage.getItem("fullURL");
+    const searchParams = fullURL.includes("?") ? new URLSearchParams(fullURL.split("?")[1]) : new URLSearchParams(window.location.search);
+
+    Object.keys(defaultValues).forEach((key) => {
+      const paramValue = searchParams.get(key) || "";
+      const storeValue = dashboardStore?.[camelCaseKey(key)];
+      console.log({ paramValue, storeValue,   ckac: camelCaseKey(key) ,key });
+
+      if (paramValue && !storeValue) {
+        searchParams.set(key, paramValue);
+        updated = true;
+        dispatch(paramToActionMap[key](paramValue));
+      } else if (storeValue && !paramValue || (storeValue && paramValue)) {
+        searchParams.set(key, storeValue);
+        updated = true;
+      } else if (!storeValue && !paramValue) {
+        dispatch(paramToActionMap[key](defaultValues[key]));
+      }
+    });
+
+    if (updated) {
+      navigate(`/dashboard?${searchParams.toString()}`);
+    }
   }, []);
 
   const handleTimeSlotChange = (event: SelectChangeEvent<string>) => {
@@ -108,8 +141,8 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
         <span>Time slot:</span>
         <Select
           defaultValue={"1m"}
-          value={dashboardStore?.timeslot || "1m"}
-          name="timeslot"
+          value={dashboardStore?.timeSlot || "1m"}
+          name="timeSlot"
           onChange={handleTimeSlotChange}
           size="medium"
           className="rounded-sm"

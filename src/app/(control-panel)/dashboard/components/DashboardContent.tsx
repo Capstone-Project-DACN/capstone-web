@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { stat } from "fs";
 import { useSelector } from "react-redux";
 
 const DataMetricMainContent = (props: any) => {
@@ -129,7 +128,7 @@ const DataMetricMainContent = (props: any) => {
               placeholder="Device id"
               className="w-[300px]"
               value={deviceIdValue || "household-HCMC-Q1-0"}
-              onChange={(e: any) => {
+              onInput={(e: any) => {
                 dispatch(setDeviceId(e.target.value));
                 const updatePrams = new URLSearchParams(window.location.search);
                 updatePrams.set("device-id", e.target.value);
