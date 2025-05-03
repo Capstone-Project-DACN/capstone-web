@@ -94,8 +94,8 @@ const ColumnChart = ({loading = false}) => {
  
 
   return (
-    <Card className="shadow-none rounded-6 p-4">
-      <CardContent>
+    <Card className="shadow-none rounded-6">
+      <CardContent className="p-0">
         <div id="chart" className="min-h-80">
           {loading  ? <FuseLoading /> : 
           <ReactApexChart

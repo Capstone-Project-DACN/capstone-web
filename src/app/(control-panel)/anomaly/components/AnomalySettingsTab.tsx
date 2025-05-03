@@ -94,19 +94,19 @@ const AnomalySettingsTab = () => {
   };
 
   return (
-    <Box className="p-4 pt-0 mx-5">
+    <Box className="px-0 md:p-4 pt-0 mx-5">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex items-center gap-x-4 w-full">
+          <div className="flex-col md:flex-row flex items-center gap-x-4 w-full">
             <Controller
               name="window_time"
               control={control}
               render={({ field }) => (
-                <div className="flex flex-col w-1/2">
+                <div className="flex flex-col w-full md:w-1/2">
                   <div className="flex items-center gap-x-2">
                     <Typography className=" text-md font-medium flex items-center">
                       ⏳ Window Time (ms)
@@ -135,7 +135,7 @@ const AnomalySettingsTab = () => {
               name="device_threshold"
               control={control}
               render={({ field }) => (
-                <div className="flex flex-col w-1/2">
+                <div className="flex flex-col w-full md:w-1/2">
                   <Typography className=" text-md font-medium flex items-center">
                     📊 Device Threshold (%)
                   </Typography>
@@ -153,18 +153,17 @@ const AnomalySettingsTab = () => {
               )}
             />
           </div>
-          <div className="flex items-center gap-x-4 mt-4">
+          <div className="flex-col md:flex-row flex items-center gap-x-4 mt-4">
             <Controller
               name="min_delta_consumption"
               control={control}
               render={({ field }) => (
-                <div className="flex flex-col w-1/2">
+                <div className="flex flex-col w-full md:w-1/2">
                   <Typography className=" text-md font-medium flex items-center">
                     📊 Min Delta Consumption (kwh)
                   </Typography>
                   <TextField
                     {...field}
-                    label="Min Delta Consumption"
                     type="number"
                     fullWidth
                     margin="normal"
@@ -181,7 +180,7 @@ const AnomalySettingsTab = () => {
               name="area_threshold"
               control={control}
               render={({ field }) => (
-                <div className="flex flex-col w-1/2">
+                <div className="flex flex-col w-full md:w-1/2">
                   <Typography className=" text-md font-medium flex items-center">
                     📊 Area Threshold (%)
                   </Typography>

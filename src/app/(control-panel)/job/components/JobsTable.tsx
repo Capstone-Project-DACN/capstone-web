@@ -153,7 +153,7 @@ const JobsTable = (props: any) => {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="w-full h-full overflow-y-auto scrollbar-hide"
+                className="w-full h-full overflow-y-auto scrollbar-hide  min-w-[700px] overflow-x-scroll"
               >
                 <StickyHeader className="border-t border-r border-l rounded-t-md">
                   <motion.div

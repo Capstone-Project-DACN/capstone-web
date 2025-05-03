@@ -147,7 +147,7 @@ const OverviewTab = () => {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="h-full flex justify-between gap-x-5 relative"
+      className="h-full p-2 md:p-0 flex justify-between gap-x-5 relative min-w-[1100px] overflow-x-scroll"
     >
       <Box className="w-1/4 h-full overflow-y-auto scrollbar-hide relative">
         <Box

@@ -8,6 +8,7 @@ import { AppDispatch } from "@/store/store";
 import { addLogs, setTab } from "./store/deviceSlice";
 import { DatePicker } from "@mui/x-date-pickers";
 import { set } from "lodash";
+import { useThemeMediaQuery } from "@fuse/hooks";
 
 interface DeviceData {
   id: string;
@@ -42,6 +43,7 @@ const DeviceHeader = (props: any) => {
   const navigation = useNavigate();
   const params = useParams();
   const dispatch = useDispatch<AppDispatch>();
+  const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("md"));
   const tab = useSelector((state: any) => state?.device?.deviceSlice?.tab);
   const logs = new URLSearchParams(window.location.search).get("logs");
   const [loading, setLoading] = useState(false);
@@ -127,53 +129,109 @@ const DeviceHeader = (props: any) => {
   const handleSenALlData = () => {
     const devices = selectedDevices.map(parseDeviceInfo);
     setLoading(true);
-    Promise.all(devices.map((device: any) => sendData(device, false))).then(() => {
-      setLoading(false);
-    })
+    Promise.all(devices.map((device: any) => sendData(device, false))).then(
+      () => {
+        setLoading(false);
+      }
+    );
   };
 
   return (
-    <div className="w-full flex items-center justify-between mb-5">
-      <Tabs value={tab || params?.tab} onChange={handleChange} centered>
-        <Tab value={"overview"} label="Overview" />
-        <Tab value={"inactive"} label="Inactive" />
-        <Tab value={"add-device"} label="Add Device" />
-        <Tab value={"produce"} label="Produce Data" />
-      </Tabs>
-      {tab === "produce" && (
-        <div className="mr-4 pt-4 flex items-center gap-x-5 transition-all duration-300 ease-in">
-          <div className="flex items-center gap-x-2">
-            <DatePicker
-              value={new Date(date)}
-              onChange={(e: any) => {
-                setDate(e.toISOString().split("T")[0]);
-                localStorage.setItem("custom_date", e.toISOString().split("T")[0]);
-              }}
-              slotProps={{
-                textField: { size: "medium" },
-              }}
-            />
+    <div className="flex flex-col items-start justify-between mb-5">
+      <div className="w-full flex items-center justify-between">
+        <Tabs value={tab || params?.tab} onChange={handleChange} centered>
+          <Tab value={"overview"} label="Overview" />
+          <Tab value={"inactive"} label="Inactive" />
+          <Tab value={"add-device"} label="Add Device" />
+          <Tab value={"produce"} label="Produce Data" />
+        </Tabs>
+        {tab === "produce" && !isMobile && (
+          <div className="mr-4 pt-4 flex items-center gap-x-5 transition-all duration-300 ease-in">
+            <div className="flex items-center gap-x-2">
+              <DatePicker
+                value={new Date(date)}
+                onChange={(e: any) => {
+                  setDate(e.toISOString().split("T")[0]);
+                  localStorage.setItem(
+                    "custom_date",
+                    e.toISOString().split("T")[0]
+                  );
+                }}
+                slotProps={{
+                  textField: { size: "medium" },
+                }}
+              />
 
-            <Button disabled={loading} color="primary" variant="contained" className="rounded-sm" onClick={handleSenALlData}>
-              Send all
+              <Button
+                disabled={loading}
+                color="primary"
+                variant="contained"
+                className="rounded-sm"
+                onClick={handleSenALlData}
+              >
+                Send all
+              </Button>
+            </div>
+
+            <Button
+              endIcon={
+                <FuseSvgIcon className="text-7xl" size={18} color="primary">
+                  heroicons-outline:arrow-right
+                </FuseSvgIcon>
+              }
+              onClick={handleShowLogs}
+              className="font-semibold"
+              size="small"
+              color="primary"
+            >
+              Responses logs
             </Button>
           </div>
+        )}
+      </div>
+      {tab === "produce" && isMobile && (
+          <div className="mr-4 pt-2 px-3 flex items-center gap-x-5 transition-all duration-300 ease-in">
+            <div className="flex items-center gap-x-2">
+              <DatePicker
+                value={new Date(date)}
+                onChange={(e: any) => {
+                  setDate(e.toISOString().split("T")[0]);
+                  localStorage.setItem(
+                    "custom_date",
+                    e.toISOString().split("T")[0]
+                  );
+                }}
+                slotProps={{
+                  textField: { size: "medium" },
+                }}
+              />
 
-          <Button
-            endIcon={
-              <FuseSvgIcon className="text-7xl" size={18} color="primary">
-                heroicons-outline:arrow-right
-              </FuseSvgIcon>
-            }
-            onClick={handleShowLogs}
-            className="font-semibold"
-            size="small"
-            color="primary"
-          >
-            Responses logs
-          </Button>
-        </div>
-      )}
+              <Button
+                disabled={loading}
+                color="primary"
+                variant="contained"
+                className="rounded-sm min-w-24"
+                onClick={handleSenALlData}
+              >
+                Send all
+              </Button>
+            </div>
+
+            <Button
+              endIcon={
+                <FuseSvgIcon className="text-7xl" size={18} color="primary">
+                  heroicons-outline:arrow-right
+                </FuseSvgIcon>
+              }
+              onClick={handleShowLogs}
+              className="font-semibold"
+              size="small"
+              color="primary"
+            >
+              {isMobile ? "Logs" : "Responses logs"}
+            </Button>
+          </div>
+        )}
     </div>
   );
 };

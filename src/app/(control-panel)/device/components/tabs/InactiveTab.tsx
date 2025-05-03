@@ -97,7 +97,7 @@ const InactiveTab = () => {
   }
 
   return (
-    <div className="flex items-start h-full gap-x-3">
+    <div className="flex items-start h-full gap-x-3  min-w-[1100px] overflow-x-scroll p-2 md:p-0">
       <motion.div
         key="inactive"
         variants={tabVariants}

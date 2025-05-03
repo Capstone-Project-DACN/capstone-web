@@ -25,7 +25,7 @@ const Root = styled(StyledFusePageSimple)(({ theme }) => ({
   }));
 
 function AnomalyPage() {
-	const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+	const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
 	const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
 	const params = useParams();
 

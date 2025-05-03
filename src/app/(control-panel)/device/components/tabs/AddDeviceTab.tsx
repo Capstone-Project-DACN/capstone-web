@@ -28,7 +28,7 @@ const AddDeviceTab = () => {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="flex flex-col md:flex-row items-start justify-center gap-4 p-4"
+      className="flex flex-col-reverse md:flex-row items-start justify-center gap-4 px-4"
     >
       <Box
         className="w-full shadow-none md:w-2/5 p-4"
@@ -66,7 +66,7 @@ const AddDeviceTab = () => {
         </pre>
       </Box>
 
-      <Box className="w-full md:w-3/5 px-6 shadow-none">
+      <Box className="w-full md:w-3/5 px-0 md:px-6 shadow-none">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

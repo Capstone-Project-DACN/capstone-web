@@ -8,6 +8,8 @@ import FuseLoading from "@fuse/core/FuseLoading";
 import { motion, AnimatePresence } from "framer-motion";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import AnomalySettingsTab from "./AnomalySettingsTab";
+import { useMediaQuery } from "@mui/system";
+import { useThemeMediaQuery } from "@fuse/hooks";
 
 const StickyHeader = styled(Box)(({ theme }) => ({
   position: "sticky",
@@ -64,6 +66,7 @@ const AnomalyMainContent = () => {
   const params = useParams();
   const theme = useTheme();
   const navigate = useNavigate();
+  const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('sm'));
   const anomalies = useSelector(
     (state: any) => state?.anomaly?.anomalySlice?.data
   );
@@ -113,7 +116,7 @@ const AnomalyMainContent = () => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className=""
+            className="min-w-[1000px] overflow-x-scroll px-2 md:px-0"
           >
             <StickyHeader className="rounded-t-lg overflow-hidden">
               <motion.div
@@ -208,7 +211,7 @@ const AnomalyMainContent = () => {
             </motion.div>
           </motion.div>
         ) : (
-            <AnomalySettingsTab />
+          <AnomalySettingsTab />
         )}
       </AnimatePresence>
     </motion.div>

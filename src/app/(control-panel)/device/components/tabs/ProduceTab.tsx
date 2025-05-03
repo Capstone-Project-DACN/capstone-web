@@ -148,7 +148,7 @@ const ProduceTab = () => {
   };
 
   return (
-    <div className="px-4 h-full overflow-y-scroll scrollbar-hide">
+    <div className="px-4 h-full overflow-y-scroll scrollbar-hide min-w-[1100px] overflow-x-scroll">
       <StickyHeader className="border-t border-r border-l rounded-t-md">
         <motion.div
           className="flex items-center font-semibold justify-between h-12 px-4 text-blue-600 uppercase"

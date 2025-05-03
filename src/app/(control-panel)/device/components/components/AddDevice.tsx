@@ -156,7 +156,7 @@ const AddDevice = () => {
   };
 
   return (
-    <div className="px-4 pt-1">
+    <div className="px-0 md:px-4 pt-1">
       <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}>
         <Tabs value={tabValue} onChange={handleTabChange} color="secondary">
           <Tab label="Household Devices" />

@@ -18,7 +18,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import InfoIcon from "@mui/icons-material/Info";
 import WarningIcon from "@mui/icons-material/Warning";
 import ErrorIcon from "@mui/icons-material/Error";
-import { time, timeStamp } from "console";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -113,7 +112,7 @@ const AnomalyDetail = ({ setRightSidebarOpen }) => {
   const severityColor = getSeverityColor(data?.severity);
 
   return (
-    <div className="w-full h-full px-4 overflow-hidden">
+    <div className="w-full h-full px-2 md:px-4 overflow-hidden">
       <motion.div
         className="flex justify-between items-center mb-2 sticky top-0 z-10 py-2"
         variants={headerVariants}

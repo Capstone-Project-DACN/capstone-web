@@ -48,7 +48,7 @@ const DataMetricMainContent = (props: any) => {
 
   return (
     <div className="pb-10">
-      <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
+      <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-2 md:mt-10">
         <StatsWidget
           title="Devices"
           value={12500}
@@ -102,13 +102,13 @@ const DataMetricMainContent = (props: any) => {
         />
       </div>
 
-      <div className="mt-10 flex flex-col gap-y-10">
+      <div className="mt-10 flex flex-col gap-y-10 p-2 md:p-0">
         <Typography className="text-xl font-semibold">City</Typography>
         <ColumnChart loading={cityLoading} />
       </div>
 
-      <div className="flex item-center justify-between gap-x-5">
-        <div className="mt-10 w-1/2 flex flex-col gap-y-10">
+      <div className="flex flex-col md:flex-row item-center justify-between gap-5">
+        <div className="mt-10 p-2 md:p-0 w-full md:w-1/2 flex flex-col gap-y-10">
           <div className="flex items-center justify-between">
             <Typography className="text-xl font-semibold w-full">
               Districts
@@ -118,7 +118,7 @@ const DataMetricMainContent = (props: any) => {
           <DistrictChart loading={districtLoading} />
         </div>
 
-        <div className="mt-10 w-1/2 flex flex-col gap-y-10">
+        <div className="mt-10 p-2 md:p-0 w-full md:w-1/2 flex flex-col gap-y-10">
           <div className="flex items-center justify-between">
             <Typography className="text-xl font-semibold w-full">
               Devices

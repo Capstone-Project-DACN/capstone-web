@@ -3,11 +3,13 @@ import { useNavigate, useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
+import { useThemeMediaQuery } from "@fuse/hooks";
 // import { updateNavigationItem } from "@/components/theme-layouts/components/navigation/store/navigationSlice";
 
 const AmomalyHeader = ({ rightSidebarOpen, setRightSidebarOpen }) => {
   const navigation = useNavigate();
   const params = useParams();
+  const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('sm'));
   const anomalies = useSelector(
     (state: any) => state?.anomaly?.anomalySlice?.data
   );
@@ -27,9 +29,9 @@ const AmomalyHeader = ({ rightSidebarOpen, setRightSidebarOpen }) => {
         <Tab value={"device"} label="Devices" />
         <Tab value={"setting"} label="Settings" />
       </Tabs>
-      <Typography className="text-16 font-bold mr-3">
+      {!isMobile &&<Typography className="text-16 font-bold mr-3">
         {anomalies?.length} {anomalies?.length === 1 ? "Anomaly" : "Anomalies"}
-      </Typography>
+      </Typography>}
       {/* {!rightSidebarOpen && <Button startIcon={<FuseSvgIcon>heroicons-outline:plus-small</FuseSvgIcon>} onClick={handleShowDetail} >Add Device</Button>} */}
     </div>
   );

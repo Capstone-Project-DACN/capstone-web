@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { use, useEffect } from "react";
 import {
   Select,
   MenuItem,
@@ -20,6 +20,8 @@ import {
   setTimeSlot,
   setTimeStart,
 } from "../store/dashboardSlice";
+import { useMediaQuery } from "@mui/system";
+import { useThemeMediaQuery } from "@fuse/hooks";
 
 interface HeaderProps {
   onTimeframeChange?: (timeframe: string, dateRange?: DateRange) => void;
@@ -39,6 +41,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
   const dashboardStore = useSelector(
     (state: any) => state?.dashboard?.dashboardSlice
   );
+	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
   const dispatch = useDispatch<AppDispatch>();
 
   const camelCaseKey = (key: string) => {
@@ -64,12 +67,11 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
   useEffect(() => {
     let updated = false;
     const fullURL = localStorage.getItem("fullURL");
-    const searchParams = fullURL.includes("?") ? new URLSearchParams(fullURL.split("?")[1]) : new URLSearchParams(window.location.search);
+    const searchParams = fullURL?.includes("?") ? new URLSearchParams(fullURL?.split("?")[1]) : new URLSearchParams(window.location.search);
 
     Object.keys(defaultValues).forEach((key) => {
       const paramValue = searchParams.get(key) || "";
       const storeValue = dashboardStore?.[camelCaseKey(key)];
-      console.log({ paramValue, storeValue,   ckac: camelCaseKey(key) ,key });
 
       if (paramValue && !storeValue) {
         searchParams.set(key, paramValue);
@@ -97,14 +99,14 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
 
   return (
     <Box
-      className="w-full flex items-center justify-between py-1 mt-2"
+      className="w-full flex-col md:flex-row items-center justify-between py-1 mt-2"
       sx={{
         backgroundColor: theme.palette.background.paper,
         overflowX: "auto",
       }}
     >
-      <div className="flex items-center gap-2 font-semibold">
-        <span>From:</span>
+      <div className="flex items-center gap-2 font-semibold mb-2 md:mb-0 px-2 md:px-0">
+        {!isMobile && <span>From:</span>}
         <DateTimePicker
           value={
             dashboardStore?.timeStart
@@ -122,7 +124,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
             textField: { size: "medium", sx: { width: 220 } },
           }}
         />
-        <span>To:</span>
+        {!isMobile && <span>To:</span>}
         <DateTimePicker
           value={
             dashboardStore?.timeEnd ? new Date(dashboardStore?.timeEnd) : null
@@ -138,7 +140,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
             textField: { size: "medium", sx: { width: 220 } },
           }}
         />
-        <span>Time slot:</span>
+        {!isMobile && <span>Time slot:</span>}
         <Select
           defaultValue={"1m"}
           value={dashboardStore?.timeSlot || "1m"}
@@ -152,7 +154,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
           <MenuItem value="1d">1 day</MenuItem>
         </Select>
       </div>
-      <div className="flex items-center gap-x-2  ">
+      <div className="flex items-center gap-x-2 px-2 md:px-0">
         <Button
           variant="contained"
           onClick={toggleReload}
