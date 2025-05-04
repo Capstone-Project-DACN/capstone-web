@@ -99,13 +99,13 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
 
   return (
     <Box
-      className="w-full flex-col md:flex-row items-center justify-between py-1 mt-2"
+      className="w-full flex-col md:flex-row flex items-center justify-between py-1 mt-2"
       sx={{
         backgroundColor: theme.palette.background.paper,
         overflowX: "auto",
       }}
     >
-      <div className="flex items-center gap-2 font-semibold mb-2 md:mb-0 px-2 md:px-0">
+      <div className="flex items-center w-full md:w-2/3 gap-2 font-semibold mb-2 md:mb-0 px-2 md:px-0">
         {!isMobile && <span>From:</span>}
         <DateTimePicker
           value={
@@ -154,7 +154,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
           <MenuItem value="1d">1 day</MenuItem>
         </Select>
       </div>
-      <div className="flex items-center gap-x-2 px-2 md:px-0">
+      <div className="flex items-center justify-start md:justify-end w-full md:w-1/3 gap-x-2 px-2 md:px-0">
         <Button
           variant="contained"
           onClick={toggleReload}
