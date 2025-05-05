@@ -1,12 +1,12 @@
 import { styled } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 import StyledFusePageSimple from "@fuse/core/FusePageSimple";
-import DashboardHeader from "./components/DashboardHeader";
-import DashboardContent from "./components/DashboardContent";
+import PredictHeader from "./components/PredictHeader";
+import PredictContent from "./components/PredictContent";
 import withReducer from "@/store/withReducer";
-import reducer from "./store";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import reducer from "./store/predict";
+import { use, useEffect } from "react";
+import { useLocation } from "react-router";
 
 const Root = styled(StyledFusePageSimple)(({ theme }) => ({
   "& .FusePageSimple-header": {
@@ -23,26 +23,22 @@ const Root = styled(StyledFusePageSimple)(({ theme }) => ({
   },
 }));
 
-function DashboardPage() {
-  const [reloadStatus, setReloadStatus] = useState(false);
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+function PredictPage() {
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const location = useLocation();
-
+  
   useEffect(() => {
-    localStorage.setItem("fullURL", location.pathname + location.search);
+    localStorage.setItem("fullURL_predict", location.pathname + location.search);
   }, [location?.pathname, location?.search]);
-
-  const toggleReload = () => {
-    setReloadStatus(!reloadStatus);
-  };
 
   return (
     <Root
-      header={<DashboardHeader toggleReload={toggleReload} />}
-      content={<DashboardContent reloadStatus={reloadStatus} />}
+      header={<PredictHeader/>}
+      content={<PredictContent />}
       scroll={isMobile ? "normal" : "content"}
     />
   );
 }
 
-export default withReducer("dashboard", reducer)(DashboardPage);
+export default withReducer("predict", reducer)(PredictPage);
+

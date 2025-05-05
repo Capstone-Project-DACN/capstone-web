@@ -1,8 +1,8 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import dashboardSlice from "../store/dashboardSlice";
+import predictSlice from "./predictSlice";
 
 const reducer = combineReducers({
-  dashboardSlice,
+    predictSlice,
 });
 
 export default reducer;

@@ -91,8 +91,6 @@ const ColumnChart = ({loading = false}) => {
     },
   ];
 
- 
-
   return (
     <Card className="shadow-none rounded-6">
       <CardContent className="p-0">

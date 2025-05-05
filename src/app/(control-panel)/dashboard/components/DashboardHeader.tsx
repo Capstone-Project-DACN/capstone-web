@@ -20,7 +20,6 @@ import {
   setTimeSlot,
   setTimeStart,
 } from "../store/dashboardSlice";
-import { useMediaQuery } from "@mui/system";
 import { useThemeMediaQuery } from "@fuse/hooks";
 
 interface HeaderProps {
@@ -38,9 +37,7 @@ interface DateRange {
 const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const dashboardStore = useSelector(
-    (state: any) => state?.dashboard?.dashboardSlice
-  );
+  const dashboardStore = useSelector((state: any) => state?.dashboard?.dashboardSlice);
 	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
   const dispatch = useDispatch<AppDispatch>();
 
@@ -72,7 +69,6 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
     Object.keys(defaultValues).forEach((key) => {
       const paramValue = searchParams.get(key) || "";
       const storeValue = dashboardStore?.[camelCaseKey(key)];
-
       if (paramValue && !storeValue) {
         searchParams.set(key, paramValue);
         updated = true;
@@ -169,7 +165,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
         </Button>
         <Button
           variant="contained"
-          onClick={onExport}
+          onClick={() => navigate("/dashboard/predict")}
           color="primary"
           className="rounded-sm"
           startIcon={
