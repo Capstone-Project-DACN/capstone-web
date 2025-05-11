@@ -76,6 +76,9 @@ const predictSlice = createSlice({
     },
     setAllDate(state, action) {
       state.allDate = action.payload;
+    }, 
+    resetPredictData(state) {
+      state.predictDailyData = [];
     }
   },
   extraReducers: (builder) => {
@@ -100,6 +103,6 @@ const predictSlice = createSlice({
   }
 });
 
-export const { setTimeStart, setTimeEnd, setDeviceId, setAllDate } = predictSlice.actions;
+export const { setTimeStart, setTimeEnd, setDeviceId, setAllDate, resetPredictData } = predictSlice.actions;
 export default predictSlice.reducer;
 

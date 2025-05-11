@@ -5,8 +5,9 @@ import { useSelector } from "react-redux";
 import FuseLoading from "@fuse/core/FuseLoading";
 
 const HCMC_Districts = [
-  "Q1", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q10", 
-  // "Q11", "Q12", "QTB", "QBTHANH", "QGV", "QPN", "QTP", "Q2", "Q9",
+  "Q1","Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12", 
+  // "QBTHANH", "QGV",
+  // "QPN", "QTP", 
 ]
 
 const districtDisplayNames = {

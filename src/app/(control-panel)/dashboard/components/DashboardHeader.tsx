@@ -163,19 +163,19 @@ const DashboardHeader: React.FC<HeaderProps> = ({ onExport, toggleReload }) => {
         >
           Reload
         </Button>
-        <Button
+        {/* <Button
           variant="contained"
           onClick={() => navigate("/dashboard/predict")}
-          color="primary"
+          color="success"
           className="rounded-sm"
-          startIcon={
-            <FuseSvgIcon className="text-7xl" size={18}>
-              heroicons-outline:arrow-trending-up
-            </FuseSvgIcon>
-          }
+          // startIcon={
+          //   <FuseSvgIcon className="text-7xl" size={18}>
+          //     heroicons-outline:arrow-trending-up
+          //   </FuseSvgIcon>
+          // }
         >
-          Predict
-        </Button>
+          District Usage
+        </Button> */}
       </div>
     </Box>
   );

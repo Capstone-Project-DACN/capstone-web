@@ -6,6 +6,7 @@ import { AppDispatch } from "@/store/store";
 import {
   getDailyData,
   getPredictDailyData,
+  resetPredictData,
 } from "../store/predict/predictSlice";
 import PredictChart from "./components/PredictChart";
 
@@ -18,8 +19,10 @@ const PredictContent = () => {
   useEffect(() => {
     if(!allDate || allDate.length === 1) return
     dispatch(getDailyData({}));
-    dispatch(getPredictDailyData({}));
+    // dispatch(getPredictDailyData({}));
   }, [allDate]);
+
+  useEffect(() => {dispatch(resetPredictData())}, []);
 
   return (
     <>
