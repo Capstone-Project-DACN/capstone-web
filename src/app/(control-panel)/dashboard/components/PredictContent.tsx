@@ -11,18 +11,21 @@ import {
 import PredictChart from "./components/PredictChart";
 
 const PredictContent = () => {
+  const predictStore = useSelector((state: any) => state?.predict?.predictSlice);
   const dispatch = useDispatch<AppDispatch>();
   const allDate = useSelector(
     (state: any) => state?.predict?.predictSlice?.allDate
   );
 
   useEffect(() => {
+    dispatch(resetPredictData());
+  }, [predictStore?.deviceId]);
+  
+  useEffect(() => {
     if(!allDate || allDate.length === 1) return
     dispatch(getDailyData({}));
     // dispatch(getPredictDailyData({}));
-  }, [allDate]);
-
-  useEffect(() => {dispatch(resetPredictData())}, []);
+  }, [allDate, predictStore?.deviceId]);
 
   return (
     <>

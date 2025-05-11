@@ -21,9 +21,8 @@ import {
   setTimeEnd,
   setTimeStart,
 } from "../store/predict/predictSlice";
-import { end } from "@popperjs/core";
 
-const districts = [{ label: "Quận 10", value: "area-HCMC-Q10" }];
+const districts = [{ label: "Quận 10", value: "area-HCMC-Q10" }, { label: "Quận 11", value: "area-HCMC-Q11" }];
 
 function getStyles(name: string, selectedValue: string | null, theme: any) {
   return {
@@ -100,7 +99,6 @@ const PredictHeader = () => {
         end_time_value = defaultValues[key];
       }
 
-      // ✅ FIX: Properly compare ISO date strings by converting to Date
       if (
         key === "end-date" &&
         new Date(end_time_value as string) > new Date("2025-05-31")
