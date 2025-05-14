@@ -89,6 +89,9 @@ const PredictChart = () => {
           xaxis: {
             type: "datetime",
             categories: allDate,
+            labels: {
+              format: 'dd MMM' 
+            }
           },
           tooltip: {
             x: {
